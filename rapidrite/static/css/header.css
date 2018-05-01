@@ -1,0 +1,73 @@
+
+#header {
+	//background-color: yellow;
+	height: 150px;
+}
+
+#logo img {
+	//background-color: lightgray;
+	float: left;
+	width: 311px;
+	height: 80px;
+	padding: 10px;
+}
+
+#acc_info {
+	//background-color: lightgreen;
+	float: right;
+	width: 20%;
+	height: 60px;
+	//padding: 10px;
+	//border: 1px solid black;
+}
+
+#acc_info a {
+	float: right;
+	padding: 0px 20px;
+	margin: 10px 4px;
+	font-weight: bold;	
+	text-decoration: none;
+}
+
+#acc_info a:hover { 
+	background-color: #A3C2E5;
+}
+
+#login {
+	color: #11519B;
+	border: 3px solid #11519B;
+	background-color: white;
+}
+
+#signup {
+	color: white;
+	border: 3px solid #11519B;
+	background-color: #11519B;
+}
+
+nav {
+	clear: both;
+	width: 100%;
+	//min-width: 1200px;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+nav a {
+	float: left;
+	margin: 0;
+	padding: 10px 0px;
+	background-color: #666;
+	width: 20%;
+	color: white;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+nav a:hover {
+	background-color: #333;
+	color: white;
+	text-decoration: none;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapid Rite Comics</title>
+    <link rel="stylesheet" href= "{% static 'css/homepage.css' %}">
+    <link rel="stylesheet" href= "{% static 'css/header.css' %}">
+    <link rel="stylesheet" href= "{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'scripts/getNews.js' %}"></script>
+
+</head>
+<body>
+	<!-- CONTAINER -->
+	<div id="container">
+	
+		<!-- HEADER -->
+        <div id="header">
+            <div id="logo"><img src="{% static 'images/logo.png' %}"</div>
+            <div id="acc_info">
+                <a href="signup.html" id="signup">Sign Up</a>
+                <a href="login.html" id="login">Log In</a>
+            </div>
+            <nav>
+                <a href="homepage.html">Home</a>
+                <a href="#news.html">News</a>
+                <a href="comic.html">Comics</a>
+                <a href="account.html">Account</a>
+                <a href="#about.html">About</a>
+            </nav>
+        </div>
+    	
+    	<!-- BODY CONTENT -->
+    	<div id="content">
+    		<div id="left_col" class="news"></div>
+    		
+    		<div id="right_col">
+    			<h3>Top Ranking Comic Here</h3>
+    			<ol class="top_comic">
+    				<li>Name</li>
+    				<li>Name</li>
+    				<li>Name</li>
+    			</ol>
+    		</div>
+    	</div>
+    	
+    </div>
+	<!-- END CONTAINER -->
+	
+	<!-- FOOTER -->
+        <div id="footer"><script src="{% static 'scripts/footer.js' %}"></script></div>
+</body>
+</html>
+
+
