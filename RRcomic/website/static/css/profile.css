@@ -1,0 +1,89 @@
+
+.usernameBar {
+  margin: 10px;
+  padding: 5px;
+}
+
+.userImage {
+  margin: 10px;
+  height: 150px;
+  width: 20%;
+  display: inline-block;
+  border: 2px solid steelblue;
+}
+
+.bio {
+  border: 2px solid steelblue;
+  display: inline-block;
+  position: relative;
+  width: 70%;
+  float: right;
+  margin: 10px 40px;
+  height: 250px;
+  overflow: scroll;
+  
+}
+
+.messagebttn{
+  background-color: white;
+  border-color: blue;
+  border: 2px solid steelblue;
+  margin: 10px;
+  padding: 2px;
+  width: 75px;
+  text-align: center;
+  font-weight: bold;
+  color: steelblue;
+  height: 28px;
+}
+
+.followRequest {
+  background-color: white;
+  border-color: blue;
+  border: 2px solid steelblue;
+  margin: 10px;
+  padding: 2px;
+  width: 75px;
+  text-align: center;
+  font-weight: bold;
+  color: steelblue;
+  font-size: 14px;
+  height: 28px;
+}
+
+.following {
+  margin: 10px;
+  height: 50px;
+  width: 20%;
+  display: inline-block;
+  border: 2px solid steelblue;
+  float: left;
+  padding: 5px;
+  height: 300px;
+  overflow: scroll;
+}
+
+.timeline {
+  border: 2px solid steelblue;
+  display: inline-block;
+  position: relative;
+  width: 70%;
+  float: right;
+  margin: 10px 40px;
+  padding-left: 5px;
+  height: 500px;
+  overflow: scroll;
+  
+}
+
+.comment {
+  border: 2px solid steelblue;
+  display: inline-block;
+  position: relative;
+  width: 90%;
+  float: right;
+  margin: 10px 40px;
+  padding-left: 5px;
+  height: 100px;
+}
+

@@ -1,0 +1,76 @@
+
+#header {
+	height: 120px;
+}
+
+#logo img {
+	float: left;
+	width: 311px;
+	height: 80px;
+	padding: 10px;
+}
+
+#acc_info {
+	float: right;
+	width: 31%;
+	//border: 1px solid black;
+}
+
+#username, #password {
+	float: left;
+	width: 40%;
+	height: 50px;
+	padding: 2px;
+}
+
+#username span, #password span {
+	padding-right: 5px;
+	font-weight: bold;
+	width: 50%;
+}
+
+#login_button {
+	float: left;
+	width: 20%;
+	height: 50px;
+	text-align: center;
+}
+
+#login_button button {
+	margin-top: 23px;
+}
+
+#signup_rec {
+	float: right;
+}
+
+#signup {
+	font-weight: bold;	
+	padding-right: 7px;
+}
+
+nav {
+	clear: both;
+	width: 100%;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+nav a {
+	float: left;
+	margin: 0;
+	padding: 10px 0px;
+	width: 20%;
+	color: white;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: bold;
+	background-color: var(--main_theme_color);
+}
+
+nav a:hover {
+	background-color: #444;
+	color: white;
+	text-decoration: none;
+}

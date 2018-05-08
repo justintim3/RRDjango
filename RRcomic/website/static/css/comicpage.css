@@ -1,0 +1,29 @@
+
+#info_section {
+	border: 2px solid #11519B;
+	min-height: 400px;
+}
+
+#syp {
+	clear: both;
+	border: 1px solid #11519B;
+	margin: 10px;
+	padding: 10px;
+}
+
+#image {
+	float: left;
+	width: 200px;
+	height: 300px;
+	border: 1px solid #11519B;
+	margin: 20px;
+	background-color: lightblue;
+}
+
+#Review {
+	width: 80%;
+	border: 2px solid #11519B;
+	min-height: 300px;
+	padding: 10px;
+	margin: 10px auto;
+}

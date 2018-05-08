@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapid Rite Comics</title>
+    <link rel="stylesheet" href= "{% static 'css/homepage.css' %}">
+    <link rel="stylesheet" href= "{% static 'css/header.css' %}">
+    <link rel="stylesheet" href=" {% static 'css/container.css' %} ">
+    <link rel="stylesheet" href= "{% static 'css/footer.css'%}">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/static/scripts/main.js"></script>
+</head>
+<body>
+    <!-- CONTAINER -->
+    <div id="container">
+
+        <!-- HEADER -->
+
+      <!--  <div id="header"><script src="static/scripts/header.js"></script></div> -->
+        <div id="header">
+            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="acc_info">
+                <div id="error" style = "display:none; color:red">
+                </div>
+                {% if RRID is None %}
+                    <div id="username">
+                        <span>Username:</span>
+                        <input type="text" name="username" id="login_username" maxlength=20 size=15>
+                    </div>
+                    <div id="password">
+                        <span>Password:</span>
+                        <input type="password" name="password" id="login_password" maxlength=20 size=15>
+                    </div>
+                    <div id="login_button">
+                        <button type="submit" id="login">Log in</button>
+                    </div>
+                    <div id="signup_rec">
+                        <span>Don't have an account? </span> 
+                        <a id="signup" href="signup.html">Sign Up</a>
+                    </div> 
+                {% else %}
+                    <div>
+                        <p>{{ RRName }} </p>
+                    </div>
+                {% endif %}
+            </div> 
+            <nav>    		
+            <a href={% url 'homepage' %}>Home</a>
+            <a href="#news.html">News</a>
+            <a href={% url 'comic' %}>Comics</a>
+            <a href="profile.html">Account</a>    	
+            <a href="#about.html">About</a>
+            </nav>
+        </div>
+
+
+        <!-- BODY CONTENT -->
+        <div id="content">
+            <div id="left_col">
+                {% for newsfeed in newsfeeds %}
+                <div>
+                    <h1><a href="">{{ newsfeed.Title }}</a></h1> <p>published: {{ newsfeed.Date }} </p>
+                    <p>{{ newsfeed.Text|linebreaksbr }} </p>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="right_col">
+                <h3>Top Ranking Comic Here</h3>
+                <ol class="top_comic">
+                    {% for comic in comics  %}
+                    <li><a href="/comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+    </div>
+    <!-- END CONTAINER -->
+
+    <!-- FOOTER -->
+    <div id = footer>
+        <ul>
+  	    	<li><a href={% url 'homepage'  %}>Home</a></li>
+  		    <li><a href="#about.html">About</a></li>
+    	    <li><a href="#contacts">Contacts</a></li>
+    	    <li><a href="#faq">FAQ</a></li>
+            <li><a href="#privacy">Privacy</a></li>	
+    	</ul>
+    </div>
+ </body>
+</html>
+
+

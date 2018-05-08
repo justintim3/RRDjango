@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  	<meta charset="UTF-8">
+  	<title>Account Profile</title>
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  	<link href="{% static 'css/header.css' %}" rel="stylesheet">
+    <link href="{% static 'css/container.css' %}" rel="stylesheet">
+    <link href="{% static 'css/footer.css' %}" rel="stylesheet">
+    <link href= "{% static 'css/profile.css' %}">
+  	<script src="getNews.js"></script>
+
+
+</head>
+<body>
+	<!-- CONTAINER -->
+	<div id="container">
+	
+
+  		<!-- HEADER -->
+  		<!-- <div id="header"><script src="scripts/header.js"></script></div> -->
+  		<div id="header">
+            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="acc_info">
+                <div id="username">
+                    <span>Username:</span>
+                    <input type="text" name="username" maxlength=20 size=15>
+                </div>
+                <div id="password">
+                    <span>Password:</span>
+                    <input type="password" name="password" maxlength=20 size=15>
+                </div>
+                <div id="login_button">
+                    <button type="submit">Log in</button>
+                </div>
+                <div id="signup_rec">
+                    <span>Don't have an account? </span> 
+                    <a id="signup" href="signup.html">Sign Up</a>
+                </div> 
+            </div> 
+            <nav>    		
+            <a href={% url 'homepage' %}>Home</a>
+            <a href="#news.html">News</a>
+            <a href={% url 'comic' %}>Comics</a>
+            <a href="profile.html">Account</a>    	
+            <a href="#about.html">About</a>
+            </nav>
+        </div>
+  
+  		<!-- BODY CONTENT -->
+  		<div id="content">
+    		<div>
+    			<h3 class="usernameBar">
+        			[Username] Profile
+      			</h3>
+    		</div>
+    
+    		<div class="userImage">
+     			<img src="#" alt="Image of User">
+    		</div>
+    
+    		<div class="bio">
+      			<ul style="list-style-type:none">
+					<br/>
+        			<li><h5 id="bio">Biography: </h5></li>
+					<br/>
+        			<li><h5 id="favCom">Favorite Comic: </h5></li>
+					<br/>
+        			<li><h5 id="favChar">Favorite Character: </h5></li>
+      			</ul>
+    		</div>
+    
+    		<div>
+      			<span class="messagebttn">Message</span>
+      			<span class="followRequest">Follow User</span>
+    		</div>
+    
+    		<div class="following">
+      			<h4>Following: </h4>
+    		</div>
+    
+    		<div class="timeline">
+      			<h4>Timeline: </h4>
+    		</div>
+
+
+    		<!--<div class="comment">
+      			<h4>Comments: </h4>
+    		</div> -->
+  		</div>
+  		
+  	</div>
+	<!-- END CONTAINER -->
+	
+	<!-- FOOTER -->
+  	<!-- <div id="footer"><script src="scripts/footer.js"></script></div> -->
+  	<div id = footer>
+        <ul>
+  	    	<li><a href={% url 'homepage'  %}>Home</a></li>
+  		    <li><a href="#about.html">About</a></li>
+    	    <li><a href="#contacts">Contacts</a></li>
+    	    <li><a href="#faq">FAQ</a></li>
+            <li><a href="#privacy">Privacy</a></li>	
+    	</ul>
+    </div>
+
+</body>
+</html>
+
