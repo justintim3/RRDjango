@@ -39,7 +39,7 @@
                     </div>
                     <div id="signup_rec">
                         <span>Don't have an account? </span> 
-                        <a id="signup" href="signup.html">Sign Up</a>
+                        <a id="signup" href={% url 'signup' %}>Sign Up</a>
                     </div> 
                 {% else %}
                     <div>
@@ -51,7 +51,7 @@
             <a href={% url 'homepage' %}>Home</a>
             <a href="#news.html">News</a>
             <a href={% url 'comic' %}>Comics</a>
-            <a href="profile.html">Account</a>    	
+            <a href={% url 'profile' %}>Account</a>
             <a href="#about.html">About</a>
             </nav>
         </div>

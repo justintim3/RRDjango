@@ -8,7 +8,7 @@
     <link href="{% static 'css/header.css' %}" rel="stylesheet">
     <link href="{% static 'css/container.css' %}" rel="stylesheet">
     <link href="{% static 'css/footer.css' %}" rel="stylesheet">
-    <link href= "{% static 'css/comic.css' %}">
+    <link href= "{% static 'css/comic.css' %}" rel="stylesheet">
     <script src="getNews.js"></script>
 
 </head>
@@ -33,14 +33,14 @@
                 </div>
                 <div id="signup_rec">
                     <span>Don't have an account? </span> 
-                    <a id="signup" href="signup.html">Sign Up</a>
+                    <a id="signup" href={% url 'signup' %}>Sign Up</a>
                 </div> 
             </div> 
             <nav>    		
             <a href={% url 'homepage' %}>Home</a>
             <a href="#news.html">News</a>
             <a href={% url 'comic' %}>Comics</a>
-            <a href="profile.html">Account</a>    	
+            <a href={% url 'profile' %}>Account</a>
             <a href="#about.html">About</a>
             </nav>
         </div>
@@ -56,7 +56,7 @@
     			</tr>
                 {% for comic in comics %}
 				<tr>  
-  					<td>Book ID</td>
+  					<td>{{comic.ComicID}}</td>
                     <td><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
     				<td>Rating Number (1.0 to 10)</td>
     			</tr>

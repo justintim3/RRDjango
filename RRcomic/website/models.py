@@ -21,9 +21,9 @@ class Comic (models.Model):
     ComicRating = models.IntegerField(db_column = 'ComicRating')
     ComicViewRanking = models.IntegerField()
 
-
     def __str__(self):
         return "ID: " + str(self.ComicID) + "\tTitle: " + self.ComicIssueTitle 
+
 
 class NewsFeed(models.Model):
     ID = models.IntegerField(db_column = 'ID', primary_key = True)
@@ -33,6 +33,7 @@ class NewsFeed(models.Model):
 
     def __str__ (self):
         return "Title " + self.Title
+
 
 class Users(models.Model):
     UserID = models.IntegerField(db_column = 'UserID', primary_key= True)

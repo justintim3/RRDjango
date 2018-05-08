@@ -25,7 +25,7 @@ SECRET_KEY = 'h-+j4q7_-eyxiiw(+3r)7b(4j2t$_xu10#krda)gcy^zub1mbw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'http://rapidcomics.us-east-2.elasticbeanstalk.com/']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
 
 # Application definition
@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rrdb',
-        'USER': 'djangoAccess',
-        'PASSWORD': 'username',
+        'USER': 'rradmin',
+        'PASSWORD': 'Bananacreampie',
         'HOST': 'rrdatabase.c49pg9uv4mfe.us-east-2.rds.amazonaws.com',
         'PORT': '3306',
     }

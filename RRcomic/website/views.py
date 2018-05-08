@@ -16,12 +16,13 @@ def homepage(request):
     
 def get_comic_page(request):
     comicId = request.GET.get('id')
-    comics = Comic.objects.raw('select ComicIssueTitle from Comics where ComicID = %d', [comicId])
+    #comics = Comic.objects.raw('select ComicIssueTitle, ComicID from Comics where ComicID = %d', [comicId])
+    comics = Comic.objects.raw('select * from Comics')
     #comics = Comic.objects.raw('select ComicID,ComicIssueTitle,ComicIssueNumber,ComicImage,ComicCoverDate,ComicPrice,ComicSynopisis,(ComicRatingSum/ComicNumberOfRaters) as ComicRating, ComicViewRanking from Comics where ComicID = %d', [comicId])
-    return render(request, 'comicpage.html', {'comic': comics} )
+    return render(request, 'comicpage.html', {'comicpage':comics} )
 
 def get_comic(request):
-    comics = Comic.objects.raw('select ComicID,ComicIssueTitle,ComicIssueNumber,ComicImage,ComicCoverDate,ComicPrice,ComicSynopisis,(ComicRatingSum/ComicNumberOfRaters) as ComicRating, ComicViewRanking from Comics')
+    comics = Comic.objects.raw('select ComicID,ComicIssueTitle from Comics')
     return render(request, 'comic.html',{'comics':comics})
 
 def verify_user(request):
@@ -31,3 +32,9 @@ def verify_user(request):
 
 def create_user(request):
     return render(request, 'json.html', {'data':data})
+
+def get_profile(request):
+    return render(request, 'profile.html')
+
+def get_signuppage(request):
+    return render(request, 'signup.html')
