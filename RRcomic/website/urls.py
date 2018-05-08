@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import include
 
 from . import views
 
@@ -9,5 +10,7 @@ urlpatterns = [
     path('ajax/verifyUser', views.verify_user, name='verify_user'),
     path('ajax/dosignup', views.create_user, name='create_user'),
     path('profile', views.get_profile, name='profile'),
-    path('signup', views.get_signuppage, name='signup')
+    path('signup', views.get_signuppage, name='signup'),
+    path('accounts/', include('django.contrib.auth.urls'))
 ]
+

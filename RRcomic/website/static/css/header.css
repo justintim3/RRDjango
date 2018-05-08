@@ -29,15 +29,15 @@
 	width: 50%;
 }
 
-#login_button {
-	float: left;
-	width: 20%;
-	height: 50px;
-	text-align: center;
+#login_part {
+	float: right;
 }
 
-#login_button button {
-	margin-top: 23px;
+#login {
+	float: right;
+	font-weight: bold;
+	padding: 7px;
+	border: 1px solid var(--main_theme_color);
 }
 
 #signup_rec {
@@ -45,8 +45,10 @@
 }
 
 #signup {
-	font-weight: bold;	
-	padding-right: 7px;
+	float: right;
+	font-weight: bold;
+	padding: 7px;
+	border: 1px solid var(--main_theme_color);
 }
 
 nav {

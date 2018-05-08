@@ -24,6 +24,7 @@
   		<div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
+                <!--
                 <div id="username">
                     <span>Username:</span>
                     <input type="text" name="username" maxlength=20 size=15>
@@ -32,12 +33,13 @@
                     <span>Password:</span>
                     <input type="password" name="password" maxlength=20 size=15>
                 </div>
-                <div id="login_button">
-                    <button type="submit">Log in</button>
-                </div>
-                <div id="signup_rec">
-                    <span>Don't have an account? </span> 
-                    <a id="signup" href={% url 'signup' %}>Sign Up</a>
+                -->
+                <div id="login_part">
+                    <a id="login" href={% url 'login' %}>Log In</a>
+                    <!--
+                        <br />
+                        <span>Don't have an account? </span>
+                        <a id="signup" href={% url 'signup' %}>Sign Up</a>-->
                 </div> 
             </div> 
             <nav>    		
@@ -51,9 +53,10 @@
   
   		<!-- BODY CONTENT -->
   		<div id="content">
+
     		<div>
     			<h3 class="usernameBar">
-        			[Username] Profile
+        			{{request.user.username}} Profile
       			</h3>
     		</div>
     
@@ -84,7 +87,6 @@
     		<div class="timeline">
       			<h4>Timeline: </h4>
     		</div>
-
 
     		<!--<div class="comment">
       			<h4>Comments: </h4>

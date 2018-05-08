@@ -41,3 +41,5 @@ class Users(models.Model):
 
     def __str__(self):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
+
+
