@@ -25,7 +25,7 @@ SECRET_KEY = 'h-+j4q7_-eyxiiw(+3r)7b(4j2t$_xu10#krda)gcy^zub1mbw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'http://rapidcomics.us-east-2.elasticbeanstalk.com/']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'rapidcomics.us-east-2.elasticbeanstalk.com/', 'rrcomics.us-east-2.elasticbeanstalk.com']
 
 
 # Application definition
