@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rrdb',
-        'USER': 'rradmin',
-        'PASSWORD': 'Bananacreampie',
+        'USER': 'djangoAccess',
+        'PASSWORD': 'username',
         'HOST': 'rrdatabase.c49pg9uv4mfe.us-east-2.rds.amazonaws.com',
         'PORT': '3306',
     }
