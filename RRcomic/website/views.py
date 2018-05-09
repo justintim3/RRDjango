@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import Comic
 from django.http import HttpResponse
 from .models import NewsFeed
+from django.shortcuts import render_to_response
+
 from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Rapid Rite Comics</title>
-    <link rel="stylesheet" href= "{% static 'css/signup.css' %}">
+    <link rel="stylesheet" href= "{% static 'css/login.css' %}">
     <link rel="stylesheet" href= "{% static 'css/header.css' %}">
     <link rel="stylesheet" href=" {% static 'css/container.css' %} ">
     <link rel="stylesheet" href= "{% static 'css/footer.css'%}">
@@ -20,7 +21,7 @@
 		<!-- HEADER -->
     	<!-- <div id="header"><script src="scripts/header.js"></script></div> -->
     	<div id="header">
-            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="logo"><img src="{% static 'images/logo.png' %}"></div>
             <div id="acc_info">
                 <!--
                 <div id="username">
@@ -33,7 +34,17 @@
                 </div>
                 -->
                 <div id="login_part">
+                    {% block authentication %}
+
+                    {% if request.user.username %}
+                    <a id="logout" href={% url 'logout' %}>Log Out</a>
+                    <p><a href={% url 'profile' %}>{{request.user.username}}</a></p>
+
+                    {% else %}
                     <a id="login" href={% url 'login' %}>Log In</a>
+
+                    {% endif %}
+                    {% endblock %}
                     <!--
                         <br />
                         <span>Don't have an account? </span>
@@ -50,11 +61,11 @@
         </div>
 
 
-
     	<!-- BODY CONTENT -->
     	<div id="content">
-
+        <div id="login_block">
             {% block content %}
+                <h2> Welcome to RapidComics</h2>
             {% if form.errors %}
                 <p>Your username and password didn't match. Please try again.</p>
             {% endif %}
@@ -85,8 +96,7 @@
                 <input type="hidden" name="next" value="{{ next }}" />
             </div>
             </form>
-
-
+                </div>
             <!--
     		<div id="email">
     			<p>Email</p>

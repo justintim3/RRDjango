@@ -35,7 +35,17 @@
                 </div>
                 -->
                 <div id="login_part">
+                    {% block authentication %}
+
+                    {% if request.user.username %}
+                    <a id="logout" href={% url 'logout' %}>Log Out</a>
+                    <p><a href={% url 'profile' %}>{{request.user.username}}</a></p>
+
+                    {% else %}
                     <a id="login" href={% url 'login' %}>Log In</a>
+
+                    {% endif %}
+                    {% endblock %}
                     <!--
                         <br />
                         <span>Don't have an account? </span>
@@ -53,10 +63,11 @@
   
   		<!-- BODY CONTENT -->
   		<div id="content">
-
+        {% block content %}
+            {% if request.user.username %}
     		<div>
     			<h3 class="usernameBar">
-        			{{request.user.username}} Profile
+        			"{{request.user.username}}" Profile
       			</h3>
     		</div>
     
@@ -87,10 +98,13 @@
     		<div class="timeline">
       			<h4>Timeline: </h4>
     		</div>
-
+                {% else %}
+                <h2>You are not logged in</h2>
     		<!--<div class="comment">
       			<h4>Comments: </h4>
     		</div> -->
+                {% endif %}
+            {%  endblock %}
   		</div>
   		
   	</div>

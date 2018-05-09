@@ -1,0 +1,20 @@
+#content {
+	width: 50%;
+	min-height: 450px;
+	margin: 10px auto;
+	padding: 20px;
+	border: 2px solid #11519B;
+	text-align: center;
+}
+
+#login_block {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid black;
+}
+
+h5 {
+    font-weight: bold;
+    color: var(--main_theme_color);
+
+}

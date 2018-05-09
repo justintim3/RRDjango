@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Rapid Rite Comics</title>
-    <link rel="stylesheet" href= "{% static 'css/signup.css' %}">
+    <link rel="stylesheet" href= "{% static 'css/login.css' %}">
     <link rel="stylesheet" href= "{% static 'css/header.css' %}">
     <link rel="stylesheet" href=" {% static 'css/container.css' %} ">
     <link rel="stylesheet" href= "{% static 'css/footer.css'%}">
@@ -20,7 +21,7 @@
 		<!-- HEADER -->
     	<!-- <div id="header"><script src="scripts/header.js"></script></div> -->
     	<div id="header">
-            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="logo"><img src="{% static 'images/logo.png' %}"></div>
             <div id="acc_info">
                 <!--
                 <div id="username">
@@ -33,7 +34,17 @@
                 </div>
                 -->
                 <div id="login_part">
+                    {% block authentication %}
+
+                    {% if request.user.username %}
+                    <a id="logout" href={% url 'logout' %}>Log Out</a>
+                    <p><a href={% url 'profile' %}>{{request.user.username}}</a></p>
+
+                    {% else %}
                     <a id="login" href={% url 'login' %}>Log In</a>
+
+                    {% endif %}
+                    {% endblock %}
                     <!--
                         <br />
                         <span>Don't have an account? </span>
@@ -53,8 +64,9 @@
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-
+        <div id="login_block">
             {% block content %}
+                <h4> You have logged out</h4>
             {% if form.errors %}
                 <p>Your username and password didn't match. Please try again.</p>
             {% endif %}
@@ -81,33 +93,16 @@
             </div>
 
             <div>
+                <p>Do you want to log back in?</p>
                 <input type="submit" value="login" />
                 <input type="hidden" name="next" value="{{ next }}" />
             </div>
             </form>
+                </div>
 
-
-            <!--
-    		<div id="email">
-    			<p>Email</p>
-    			<input type="text" name="email" maxlength=20>
-    		</div>
-
-    		<div id="user">
-    			<p>Username</p>
-    			<input type="text" name="username" maxlength=20>
-    		</div>
-
-    		<div id="pw">
-    			<p>Password</p>
-    			<input type="password" name="password" maxlength=20>
-    		</div>
-
-    		<br>
-    		<button type="submit" value="login">Log In</button>
-    		-->
 
     	</div>
+
 
     </div>
 	<!-- END CONTAINER -->

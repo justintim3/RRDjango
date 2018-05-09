@@ -1,5 +1,7 @@
 from django.urls import path
 from django.conf.urls import include
+from django import urls
+from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -11,6 +13,11 @@ urlpatterns = [
     path('ajax/dosignup', views.create_user, name='create_user'),
     path('profile', views.get_profile, name='profile'),
     path('signup', views.get_signuppage, name='signup'),
-    path('accounts/', include('django.contrib.auth.urls'))
+    #url(r'^login/$', auth_views.login)
+    #path('accounts/', include('django.contrib.auth.urls'))
+]
+
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 

@@ -31,7 +31,17 @@
                 </div>
                 -->
                 <div id="login_part">
+                    {% block authentication %}
+
+                    {% if request.user.username %}
+                    <a id="logout" href={% url 'logout' %}>Log Out</a>
+                    <p><a href={% url 'profile' %}>{{request.user.username}}</a></p>
+
+                    {% else %}
                     <a id="login" href={% url 'login' %}>Log In</a>
+
+                    {% endif %}
+                    {% endblock %}
                     <!--
                         <br />
                         <span>Don't have an account? </span>

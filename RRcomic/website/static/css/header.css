@@ -12,7 +12,8 @@
 
 #acc_info {
 	float: right;
-	width: 31%;
+	width: 25%;
+	height: 80px;
 	//border: 1px solid black;
 }
 
@@ -31,13 +32,54 @@
 
 #login_part {
 	float: right;
+	text-align: right;
+	padding: 10px;
+	padding-right: 0;
+	//border: 1px solid black;
 }
 
 #login {
-	float: right;
 	font-weight: bold;
 	padding: 7px;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	background-color: var(--main_theme_color);
 	border: 1px solid var(--main_theme_color);
+}
+
+#logout {
+	font-weight: bold;
+	padding: 7px;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	background-color: var(--main_theme_color);
+	border: 1px solid var(--main_theme_color);
+}
+
+#login:hover, #logout:hover {
+	background-color: #444;
+	color: white;
+}
+
+#login_part p a {
+	color: white;
+}
+
+#login_part p {
+	clear: both;
+	margin-top: 10px;
+	background-color: darkcyan;
+	text-decoration: none;
+	text-align: center;
+	font-size: 20px;
+	//border: 1px solid black;
+}
+
+#login_part p:hover {
+	color: white;
+	text-decoration: none;
 }
 
 #signup_rec {
