@@ -25,13 +25,13 @@ SECRET_KEY = 'h-+j4q7_-eyxiiw(+3r)7b(4j2t$_xu10#krda)gcy^zub1mbw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'rapidcomics.us-east-2.elasticbeanstalk.com/', 'rrcomic.us-east-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', '18.217.53.245', 'localhost', 'rapidcomics.us-east-2.elasticbeanstalk.com/', 'rrcomic.us-east-2.elasticbeanstalk.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'website',
+    'website.apps.WebsiteConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['./templates',],
+        'DIRS': [ os.path.join(BASE_DIR, 'website', 'templates') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,7 +65,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
@@ -81,7 +81,7 @@ DATABASES = {
         'USER': 'djangoAccess',
         'PASSWORD': 'username',
         'HOST': 'rrdatabase.c49pg9uv4mfe.us-east-2.rds.amazonaws.com',
-        'PORT': '3306',
+        'PORT': '3306'
     }
 }
 
@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    }
 ]
 
 
@@ -119,10 +119,16 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
+#Static files (CSS, JavaScript, Images)
+#https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STAIC_ROOT = os.path.join (BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'website', 'static')
+
+STATICFILES_DIRS = [
+    ('css', os.path.join(BASE_DIR, 'website', 'static', 'css')),
+    ('images', os.path.join(BASE_DIR, 'website', 'static', 'images')),
+    ('scripts', os.path.join(BASE_DIR, 'website', 'static', 'scripts'))
+]
 
 LOGIN_REDIRECT_URL = '/'
