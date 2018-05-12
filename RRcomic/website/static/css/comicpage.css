@@ -1,7 +1,31 @@
+#content {
+	//border: 2px solid #11519B;
+}
 
 #info_section {
 	border: 2px solid #11519B;
 	min-height: 400px;
+	//padding: 20px;
+}
+
+#imgCol {
+	float: left;
+	width: 20%;
+	//border: 3px solid black;
+}
+
+#infoCol {
+	float: left;
+	width: 60%;
+	padding: 10px;
+	//border: 3px solid black;
+}
+
+#rateCol {
+	float: left;
+	width: 20%;
+	padding: 10px;
+	//border: 3px solid black;
 }
 
 #syp {
@@ -16,7 +40,7 @@
 	width: 200px;
 	height: 300px;
 	border: 1px solid #11519B;
-	margin: 20px;
+	margin: 10px;
 	background-color: lightblue;
 }
 

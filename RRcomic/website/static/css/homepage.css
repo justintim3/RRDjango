@@ -4,12 +4,36 @@
 	float: left;
 	border: 1px solid black;
 	width: 70%;
-	padding: 20px;
+	padding: 5px;
 }
 
 #right_col {
 	float: right;
 	border: 1px solid gray;
 	width: 30%;
-	padding: 20px;
+	padding: 10px;
+}
+
+#news_header {
+	text-align: left;
+	padding: 10px;
+	float: left;
+}
+
+tr {
+	//border: 2px solid #11519B;
+
+}
+
+#imgCol {
+	width: 300px;
+}
+
+#news_table img {
+	float: left;
+	width: 290px;
+	height: 200px;
+	//border: 1px solid #11519B;
+	margin: 5px;
+	background-color: lightblue;
 }

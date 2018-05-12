@@ -17,18 +17,6 @@
 	//border: 1px solid black;
 }
 
-#username, #password {
-	float: left;
-	width: 40%;
-	height: 50px;
-	padding: 2px;
-}
-
-#username span, #password span {
-	padding-right: 5px;
-	font-weight: bold;
-	width: 50%;
-}
 
 #login_part {
 	float: right;
@@ -38,9 +26,17 @@
 	//border: 1px solid black;
 }
 
-#login {
+#login_part p {
+	display: inline;
+	width: 200px;
+	//border: 1px solid black;
+}
+
+#login, #signup, #logout {
+	width: 100px;
+	margin: 5px 0px 5px 5px;
 	font-weight: bold;
-	padding: 7px;
+	padding: 2px;
 	color: white;
 	text-decoration: none;
 	font-weight: bold;
@@ -48,29 +44,21 @@
 	border: 1px solid var(--main_theme_color);
 }
 
-#logout {
-	font-weight: bold;
-	padding: 7px;
-	color: white;
-	text-decoration: none;
-	font-weight: bold;
-	background-color: var(--main_theme_color);
-	border: 1px solid var(--main_theme_color);
-}
-
-#login:hover, #logout:hover {
+#login:hover, #logout:hover, #signup:hover{
 	background-color: #444;
 	color: white;
 }
 
+/*
 #login_part p a {
-	color: white;
+	color: var(--main_theme_color);
 }
 
 #login_part p {
 	clear: both;
 	margin-top: 10px;
-	background-color: darkcyan;
+	padding: 2px;
+	//background-color: darkcyan;
 	text-decoration: none;
 	text-align: center;
 	font-size: 20px;
@@ -81,17 +69,7 @@
 	color: white;
 	text-decoration: none;
 }
-
-#signup_rec {
-	float: right;
-}
-
-#signup {
-	float: right;
-	font-weight: bold;
-	padding: 7px;
-	border: 1px solid var(--main_theme_color);
-}
+*/
 
 nav {
 	clear: both;
@@ -105,7 +83,7 @@ nav a {
 	float: left;
 	margin: 0;
 	padding: 10px 0px;
-	width: 20%;
+	width: calc(100% / 6);
 	color: white;
 	text-transform: uppercase;
 	text-decoration: none;

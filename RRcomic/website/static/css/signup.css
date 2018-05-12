@@ -1,27 +1,8 @@
 #content {
 	width: 50%;
-	min-height: 450px;
+	//min-height: 450px;
 	margin: 10px auto;
 	padding: 20px;
 	border: 2px solid #11519B;
 	text-align: center;
-}
-
-#email, #user, #pw {
-	border: 1px solid #11519B;
-	width: 50%;
-	margin: 10px auto;
-	padding: 10px;
-	text-align: left;
-}
-
-#email input, #user input, #pw input {
-	padding-right: 0;
-	width: 100%;
-	line-height: 25px;
-}
-
-p {
-	font-weight: bold;
-	font-family: "Times New Roman", Times, serif;
 }
