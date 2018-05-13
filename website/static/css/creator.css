@@ -1,0 +1,14 @@
+.table-bordered {
+	margin: 0 auto;
+	text-align: center;
+}
+
+th {
+	font-weight: bold;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+#id, #birthday {
+	width: 25%;
+}

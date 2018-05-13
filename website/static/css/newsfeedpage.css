@@ -1,0 +1,13 @@
+#content {
+    border: 2px solid #11519B;
+    padding: 20px;
+}
+
+#newsimg {
+    width: 100%;
+    //border: 5px solid black;
+}
+
+p {
+    font-size: 20px;
+}
