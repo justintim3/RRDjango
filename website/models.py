@@ -89,6 +89,17 @@ class Character(models.Model):
     CharacterWeaknesses = models.CharField(max_length=255)
 
 
+class ComicStoryArcs(models.Model):
+    ComicID = models.IntegerField(db_column='ComicID', primary_key=True)
+    StoryArcID = models.IntegerField(db_column='CharacterID', primary_key=True)
+
+
+class StoryArcs(models.Model):
+    StoryArcID = models.IntegerField(db_column='StoryArcID', primary_key=True)
+    StoryArcTitle = models.CharField(max_length=255)
+    StoryArcNotes = models.TextField()
+
+
 class NewsFeed(models.Model):
     ID = models.IntegerField(db_column = 'ID', primary_key = True)
     Title = models.CharField(max_length = 200)

@@ -50,14 +50,74 @@
             <div id="info_section">
 
             <div id="imgCol">
-    		    <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
+                {% if creator.CreatorPicture %}
+    		        <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
+                {% else %}
+                    <img id="image" src="static/images/default-profile.png">
+                {% endif %}
+
             </div>
 
             <div id ="infoCol">
                 <p><b>Name:</b> {{ creator.CreatorName }}</p>
                 <p><b>Birth Date:</b> {{ creator.CreatorDOB }}</p>
                 <p><b>Birth Place:</b> {{ creator.CreatorBirthplace}}</p>
-
+                {% if writerList.0.ComicIssueTitle %}
+                    <p><b>Writer:</b>
+                    {% for comic in writerList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% if pencillerList.0.ComicIssueTitle %}
+                    <p><b>Penciller:</b>
+                    {% for comic in pencillerList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% if inkerList.0.ComicIssueTitle %}
+                    <p><b>Inker:</b>
+                    {% for comic in inkerList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% if coloristList.0.ComicIssueTitle %}
+                    <p><b>Colorist:</b>
+                    {% for comic in coloristList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% if lettererList.0.ComicIssueTitle %}
+                    <p><b>Letterer:</b>
+                    {% for comic in lettererList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% if editorList.0.ComicIssueTitle %}
+                    <p><b>Editor:</b>
+                    {% for comic in editorList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
+                {% if coverArtistList.0.ComicIssueTitle %}
+                    <p><b>Cover Artist:</b>
+                    {% for comic in coverArtistList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                    </p>
+                {% endif %}
             </div>
 
 				<div id="bio">

@@ -58,7 +58,12 @@
                 <p><b>Real Name:</b> {{ character.CharacterRealName }}</p>
                 <p><b>Powers:</b> {{ character.CharacterPowers }}</p>
                 <p><b>Weaknesses:</b> {{ character.CharacterWeaknesses }}</p>
-
+                <p><b>Appearances:</b>
+                    {% for comic in comicList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {{ "," }}
+                    {% endfor %}
+                </p>
             </div>
 
             <div id="rateCol">

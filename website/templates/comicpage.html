@@ -49,24 +49,42 @@
            		<!-- link img from images folder -->
             <div id="info_section">
 
-            <div id="imgCol">
+            <div id="leftCol">
     		    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
+                <div id = "rating">
+                    <p><b>Rating:</b></p>
+				    <p><b>Numbers of Raters:</b></p>
+				    <p><b>Number of Views:</b></p>
+                </div>
             </div>
 
             <div id ="infoCol">
-                <p><b>Series:</b> {{ series.SeriesName }}</p>
+                <p><b>Series:</b>
+                     <a href="seriespage?id={{ series.SeriesID }}">{{ series.SeriesName }}</a>
+                </p>
 
-                <p><b>Title:</b> {{ comic.ComicIssueTitle }}</p>
+                <p><b>Issue Title:</b> {{ comic.ComicIssueTitle }}</p>
 
-				<p><b>Issue:</b> {{ comic.ComicIssueNumber }}</p>
+				<p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
 
-                <p><b>Publisher:</b> {{ publisher.PublisherName }}</p>
+                <p><b>Publisher:</b>
+                    <a href="publisherpage?id={{ publisher.PublisherID }}">{{ publisher.PublisherName }}</a>
+                </p>
+
+                <p><b>Story Arc(s):</b>
+                {% for storyArc in storyArcList %}
+                    <a href="storyarcpage?id={{ storyArc.StoryArcID }}">{{ storyArc.StoryArcTitle }}</a>
+                    {{ "," }}
+                {% endfor %}
+                </p>
+
+                <p><b></b> {{ storyArc.StoryArcTitle }}</p>
 
 				<p><b>Price:</b> {{ comic.ComicPrice }} </p>
 
 				<p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
 
-                <p><b>Cover Date:</b> {{ comic.ComicFormat }}</p>
+                <p><b>Cover Format:</b> {{ comic.ComicFormat }}</p>
 
                 <p><b>Characters:</b>
                 {% for character in characterList %}
@@ -74,20 +92,52 @@
                  {{ "," }}
                 {% endfor %}
                 </p>
-
-				<p><b>Creators:</b>
-                {% for creator in creatorList %}
-                    <a href="creatorpage?id={{ creator.CreatorID }}">{{ creator.CreatorName }}</a>
-                 {{ "," }}
-                {% endfor %}
-                </p>
             </div>
 
-            <div id="rateCol">
-				<p><b>Rating:</b></p>
-
-				<p><b>Numbers of Raters:</b></p>
-				<p><b>Number of Views:</b></p>
+            <div id="creatorCol">
+                <p><b>Creators</b></p>
+                <p><b>Writer(s):</b>
+                    {% for writer in writerList %}
+                        <a href="creatorpage?id={{ writer.CreatorID }}">{{ writer.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
+                <p><b>Penciller(s):</b>
+                    {% for penciller in pencillerList %}
+                        <a href="creatorpage?id={{ penciller.CreatorID }}">{{ penciller.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
+                <p><b>Inker(s):</b>
+                    {% for inker in inkerList %}
+                        <a href="creatorpage?id={{ inker.CreatorID }}">{{ inker.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
+                <p><b>Colorist(s):</b>
+                    {% for colorist in coloristList %}
+                        <a href="creatorpage?id={{ colorist.CreatorID }}">{{ colorist.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
+                <p><b>Letterer(s):</b>
+                    {% for letterer in lettererList %}
+                        <a href="creatorpage?id={{ letterer.CreatorID }}">{{ letterer.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
+                <p><b>Editor(s):</b>
+                    {% for editor in editorList %}
+                        <a href="creatorpage?id={{ editor.CreatorID }}">{{ editor.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
+                <p><b>Cover Artist(s):</b>
+                    {% for coverArtist in coverArtistList %}
+                        <a href="creatorpage?id={{ coverArtist.CreatorID }}">{{ coverArtist.CreatorName }}</a>
+                        <br>
+                    {% endfor %}
+                </p>
             </div>
 
 				<div id="syp">
