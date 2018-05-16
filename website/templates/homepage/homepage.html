@@ -54,7 +54,9 @@
                     {% for newsFeed in newsFeeds %}
                     <tr>
                         <td id="imgCol">
-                            <img src="static/images/NewsImages/{{ newsFeed.Image }}">
+                            <a href="/newsfeedpage?id={{ newsFeed.ID }}">
+                                <img src="static/images/NewsImages/{{ newsFeed.Image }}">
+                            </a>
                         </td>
                         <td id="news_header">
                             <h3><a href="/newsfeedpage?id={{ newsFeed.ID }}">{{ newsFeed.Title }}</a></h3>

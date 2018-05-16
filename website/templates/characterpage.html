@@ -50,7 +50,12 @@
             <div id="info_section">
 
             <div id="imgCol">
-    		    <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+
+                {% if character.CharacterPicture %}
+    		        <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                {% else %}
+                    <img id="image" src="static/images/default-batman.jpg">
+                {% endif %}
             </div>
 
             <div id ="infoCol">
@@ -58,7 +63,12 @@
                 <p><b>Real Name:</b> {{ character.CharacterRealName }}</p>
                 <p><b>Powers:</b> {{ character.CharacterPowers }}</p>
                 <p><b>Weaknesses:</b> {{ character.CharacterWeaknesses }}</p>
-
+                <p><b>Appearances:</b>
+                    {% for comic in comicList %}
+                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
+                        {%if not forloop.last%},{%endif%}
+                    {% endfor %}
+                </p>
             </div>
 
             <div id="rateCol">

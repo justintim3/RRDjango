@@ -27,9 +27,9 @@
 #image {
 	float: left;
 	width: 200px;
-	height: 300px;
-	border: 1px solid #11519B;
+	//height: 300px;
+	//border: 1px solid #11519B;
 	margin: 10px;
-	background-color: lightblue;
+	background-color: white;
 }
 
