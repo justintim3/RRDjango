@@ -74,7 +74,7 @@
                 <p><b>Story Arc(s):</b>
                 {% for storyArc in storyArcList %}
                     <a href="storyarcpage?id={{ storyArc.StoryArcID }}">{{ storyArc.StoryArcTitle }}</a>
-                    {{ "," }}
+                    {%if not forloop.last%},{%endif%}
                 {% endfor %}
                 </p>
 
@@ -89,9 +89,10 @@
                 <p><b>Characters:</b>
                 {% for character in characterList %}
                     <a href="characterpage?id={{ character.CharacterID }}">{{ character.CharacterName }}</a>
-                 {{ "," }}
+                    {%if not forloop.last%},{%endif%}
                 {% endfor %}
                 </p>
+
             </div>
 
             <div id="creatorCol">

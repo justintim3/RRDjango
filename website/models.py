@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 # Create your models here.
 
@@ -120,3 +121,7 @@ class Users(models.Model):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
 
 
+class CommentForm(forms.Form):
+    name = forms.CharField()
+    url = forms.URLField()
+    comment = forms.CharField(widget=forms.Textarea)
