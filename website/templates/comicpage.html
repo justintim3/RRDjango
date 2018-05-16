@@ -52,6 +52,26 @@
             <div id="leftCol">
     		    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
                 <div id = "rating">
+                    {% if request.user.username %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <select name="rating">
+                                <option>Select</option>
+                                <option value="10">10 - Masterpiece</option>
+                                <option value="9">9 - Great</option>
+                                <option value="8">8 - Very Good</option>
+                                <option value="7">7 - Good</option>
+                                <option value="6">6 - Fine</option>
+                                <option value="5">5 - Average</option>
+                                <option value="4">4 - Bad</option>
+                                <option value="3">3 - Very Bad</option>
+                                <option value="2">2 - Horrible</option>
+                                <option value="1">1 - Appalling</option>
+                            </select>
+
+                            <input type = "submit" value = "Rate">
+                        </form>
+                    {% endif %}
                     <p><b>Rating:</b></p>
 				    <p><b>Numbers of Raters:</b></p>
 				    <p><b>Number of Views:</b></p>
@@ -148,7 +168,10 @@
 			</div>
 
             <div id="Review">
-				<h4>Review section ...</h4>
+                <h4>Review section ...</h4>
+                <textarea name="message" rows="8" cols="120" style="resize:none">
+                </textarea>
+
 			</div>
 
     		

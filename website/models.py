@@ -116,12 +116,21 @@ class NewsFeed(models.Model):
 class Users(models.Model):
     UserID = models.IntegerField(db_column = 'UserID', primary_key= True)
     UserDisplayName = models.CharField(max_length = 200)
+    UserFirstName = models.CharField(max_length=255)
+    UserLastName = models.CharField(max_length=255)
+    UserDOB = models.DateField()
+    UserAddress = models.CharField(max_length=255)
+    UserBiography = models.TextField()
+    UserInterest = models.CharField(max_length=255)
+    UserPicture = models.CharField(max_length=255)
+    UserPassword = models.CharField(max_length=255)
+    UserEmail = models.CharField(max_length=255)
 
     def __str__(self):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
 
 
-class CommentForm(forms.Form):
-    name = forms.CharField()
-    url = forms.URLField()
-    comment = forms.CharField(widget=forms.Textarea)
+#class CommentForm(forms.Form):
+#    name = forms.CharField()
+#    url = forms.URLField()
+#    comment = forms.CharField(widget=forms.Textarea)

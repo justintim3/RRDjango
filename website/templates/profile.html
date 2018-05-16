@@ -13,19 +13,11 @@
 <body>
 	<!-- CONTAINER -->
 	<div id="container">
-	
 
   		<!-- HEADER -->
   		<!-- <div id="header"><script src="scripts/header.js"></script></div> -->
   		<div id="header">
-
-            <div id="logo">
-                {% if creator.CreatorPicture %}
-    		        <img id="image" src="static/images/UserImages/{{ user.UserPicture }}">
-                {% else %}
-                    <img id="image" src="static/images/default-profile.png">
-                {% endif %}
-            </div>
+            <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
 
                 <div id="login_part">
@@ -65,7 +57,13 @@
 
 
     		<div class="userImage">
-     			<img src="#">
+                <div id="profilepic">
+                    {% if creator.CreatorPicture %}
+    		            <img id="image" src="static/images/UserImages/{{ user.UserPicture }}">
+                    {% else %}
+                        <img id="image" src="static/images/default-profile.png" height="125" width="125">
+                    {% endif %}
+                </div>
     		</div>
     
     		<div class="bio">

@@ -175,6 +175,8 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
+#def rate_comic(request, rating):
+#    pass
 #def post_comment():
 
 
