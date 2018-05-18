@@ -19,7 +19,7 @@ urlpatterns = [
     path('profile', views.get_profile, name='profile'),
     path('signup',views.signup, name = 'signup'),
     path('about', views.get_about, name = 'about'),
-
+    #path('', views.rate_comic, name = 'rate'),
     path('newsfeed', views.get_newsfeed, name = 'newsfeed')
 
     #url(r'^login/$', auth_views.login)
