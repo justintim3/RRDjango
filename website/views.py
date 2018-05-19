@@ -77,6 +77,7 @@ def get_comicpage(request):
         review = Reviews(ComicID=comicId, username=user, ReviewDate=revDate, ReviewText=reviewtext)
         review.save()
 
+
     return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
                                               'series': series[0], 'publisher': publisher[0],
                                               'storyArcList': storyArcList, 'writerList': writerList,
@@ -185,17 +186,6 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
-
-
-def get_review(request):
-    if request.method == 'POST':
-        review = ReviewsForm(request.POST)
-        if review.is_valid():
-            review = request.POST.get('review', '')
-            review.save()
-    else:
-        review = ReviewsForm()
-    return render(request, 'comicpage.html', {'review': review})
 
 
 def get_profile(request):

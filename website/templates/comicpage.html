@@ -85,7 +85,7 @@
 
                 <p><b>Issue Title:</b> {{ comic.ComicIssueTitle }}</p>
 
-				<p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
+				        <p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
 
                 <p><b>Publisher:</b>
                     <a href="publisherpage?id={{ publisher.PublisherID }}">{{ publisher.PublisherName }}</a>
@@ -100,9 +100,9 @@
 
                 <p><b></b> {{ storyArc.StoryArcTitle }}</p>
 
-				<p><b>Price:</b> {{ comic.ComicPrice }} </p>
+				        <p><b>Price:</b> {{ comic.ComicPrice }} </p>
 
-				<p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
+				        <p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
 
                 <p><b>Cover Format:</b> {{ comic.ComicFormat }}</p>
 
@@ -170,6 +170,7 @@
 
             <div id="Review">
                 <h4>Review section ...</h4>
+
                 {% for review in reviewList %}
                     <p><b>{{ review.username }} on {{ review.ReviewDate }}:</b></p>
                     <p> {{ review.ReviewText }} </p>
