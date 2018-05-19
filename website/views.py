@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
+from django.utils import timezone
 
 # Create your views here.
 
@@ -14,7 +15,7 @@ def homepage(request):
 
 def get_comicpage(request):
     comicId = request.GET.get('id')
-  
+
     comicList = Comic.objects.raw('select ComicID,ComicIssueTitle,ComicIssueNumber,ComicImage,ComicCoverDate,ComicPrice,ComicFormat,ComicSynopisis,(ComicRatingSum/ComicNumberOfRaters) as ComicRating, ComicViewRanking from Comics where ComicID = %s', [comicId])
     characterList = Character.objects.raw('SELECT DISTINCT Characters.CharacterID, CharacterName FROM Comics '
                                        'INNER JOIN ComicCharacters ON Comics.ComicID = ComicCharacters.ComicID '
@@ -66,12 +67,23 @@ def get_comicpage(request):
                                  'INNER JOIN Creators ON ComicCreators.CreatorID = Creators.CreatorID '
                                  'WHERE Comics.ComicID = %s AND CreatorTypeName = "Cover Artist";', [comicId])
 
+    reviewList = Reviews.objects.raw('SELECT * FROM website_reviews '
+                                     'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
+
+    reviewtext = request.POST.get("textfield", None)
+    revDate = timezone.now()
+    user = request.user.username
+    if "review" in request.POST:
+        review = Reviews(ComicID=comicId, username=user, ReviewDate=revDate, ReviewText=reviewtext)
+        review.save()
+
     return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
                                               'series': series[0], 'publisher': publisher[0],
                                               'storyArcList': storyArcList, 'writerList': writerList,
                                               'pencillerList': pencillerList, 'inkerList': inkerList,
                                               'coloristList': coloristList, 'lettererList': lettererList,
-                                              'editorList': editorList, 'coverArtistList': coverArtistList})
+                                              'editorList': editorList, 'coverArtistList': coverArtistList,
+                                              'reviewList': reviewList})
 
 
 def get_characterpage(request):
@@ -175,12 +187,19 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
-#def rate_comic(request, rating):
-#    pass
-#def post_comment():
+def get_review(request):
+    if request.method == 'POST':
+        review = ReviewsForm(request.POST)
+        if review.is_valid():
+            review = request.POST.get('review', '')
+            review.save()
+    else:
+        review = ReviewsForm()
+    return render(request, 'comicpage.html', {'review': review})
 
 
 def get_profile(request):
+
     return render(request, 'profile.html')
 
 

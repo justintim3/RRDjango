@@ -130,7 +130,12 @@ class Users(models.Model):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
 
 
-#class CommentForm(forms.Form):
-#    name = forms.CharField()
-#    url = forms.URLField()
-#    comment = forms.CharField(widget=forms.Textarea)
+class Reviews(models.Model):
+    ComicID = models.IntegerField()
+    username = models.CharField(max_length = 255)
+    ReviewText = models.TextField()
+    ReviewDate = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.user)
+
