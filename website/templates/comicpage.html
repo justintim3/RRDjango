@@ -167,10 +167,24 @@
 
 			</div>
 
+
             <div id="Review">
                 <h4>Review section ...</h4>
-                <textarea name="message" rows="8" cols="120" style="resize:none">
-                </textarea>
+                {% for review in reviewList %}
+                    <p><b>{{ review.username }} on {{ review.ReviewDate }}:</b></p>
+                    <p> {{ review.ReviewText }} </p>
+
+                {% endfor %}
+
+                {% if request.user.username %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <textarea name="textfield" rows="8" cols="120" style="resize:none"></textarea>
+                    <button type="submit" name ="review">Upload Review</button>
+
+                </form>
+                {% endif %}
+
 
 			</div>
 
