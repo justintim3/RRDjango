@@ -153,8 +153,3 @@ class UserRatings(models.Model):
     UserRating = models.IntegerField()
     #def __str__(self):
      #   return str(self.user)
-
-#class CommentForm(forms.Form):
-#    name = forms.CharField()
-#    url = forms.URLField()
-#    comment = forms.CharField(widget=forms.Textarea)
