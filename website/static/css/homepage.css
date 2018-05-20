@@ -3,15 +3,19 @@
 #left_col {
 	float: left;
 	border: 1px solid black;
-	width: 70%;
+	width: 75%;
 	padding: 5px;
 }
 
 #right_col {
 	float: right;
 	border: 1px solid gray;
-	width: 30%;
+	width: 25%;
 	padding: 10px;
+}
+
+#comic_title {
+	text-align: center
 }
 
 #news_header {
@@ -22,7 +26,6 @@
 
 tr {
 	//border: 2px solid #11519B;
-
 }
 
 #imgCol {

@@ -53,7 +53,7 @@
     		    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
                 <div id = "rating">
                     {% if request.user.username %}
-                        <form method="post">
+                        <form method="POST">
                             {% csrf_token %}
                             <select name="rating">
                                 <option>Select</option>
@@ -69,12 +69,12 @@
                                 <option value="1">1 - Appalling</option>
                             </select>
 
-                            <input type = "submit" value = "Rate">
+                            <button type = "submit" name="rate">Rate</button>
                         </form>
                     {% endif %}
-                    <p><b>Rating:</b></p>
-				    <p><b>Numbers of Raters:</b></p>
-				    <p><b>Number of Views:</b></p>
+                    <p><b>Rating: </b>{{ comic.ComicRating }}</p>
+				    <p><b>Numbers of Raters: </b>{{ comic.ComicNumberOfRaters }}</p>
+				    <p><b>Number of Views: </b></p>
                 </div>
             </div>
 
@@ -116,7 +116,7 @@
             </div>
 
             <div id="creatorCol">
-                <p><b>Creators</b></p>
+                <div id="creatorTitle"><p><b>Creators</b></p></div>
                 <p><b>Writer(s):</b>
                     {% for writer in writerList %}
                         <a href="creatorpage?id={{ writer.CreatorID }}">{{ writer.CreatorName }}</a>
@@ -162,21 +162,38 @@
             </div>
 
 				<div id="syp">
-					<p><b>Synopsis:</b> {{ comic.ComicSynopisis }}</p>
+					<p><b>Synopsis:</b> {{ comic.ComicSynopsis|linebreaksbr }}</p>
 				</div>
 
+                <div id="Review">
+                    <h4>Reviews</h4>
+                    {% for review in reviewList %}
+                        <p>
+                            {% for user in userList %}
+                                {% if review.UserID == user.id %}
+                                    {% if user.UserPicture %}
+                                        <img id="userimage" src="static/images/UserImages/{{ user.UserPicture }}">
+                                    {% else %}
+                                        <img id="userimage" src="static/images/default-profile.png">
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            <a href="profilepage?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b></p>
+                        <p> {{ review.ReviewText }} </p>
+
+                    {% endfor %}
+
+                    {% if request.user.username %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <textarea name="textfield" rows="8" cols="120" style="resize:none"></textarea>
+                            <button type="submit" name ="review">Upload Review</button>
+
+                            </form>
+                    {% endif %}
+			    </div>
 			</div>
-
-            <div id="Review">
-                <h4>Review section ...</h4>
-                <textarea name="message" rows="8" cols="120" style="resize:none">
-                </textarea>
-
-			</div>
-
-    		
     	</div>
-    	
     </div>
 	<!-- END CONTAINER -->
 	

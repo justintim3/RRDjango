@@ -1,26 +1,25 @@
 from django.db import models
-from django import forms
 
 # Create your models here.
 
 
 class Comic (models.Model):
     ComicID = models.IntegerField(db_column='ComicID', primary_key=True)
-    PublisherID = models.IntegerField()
     SeriesID = models.IntegerField()
-    ComicIssueTitle = models.CharField(max_length = 500)
-    CommicIssueNumber = models.IntegerField()
+    SeriesName = models.CharField(max_length=500)
+    ComicIssueTitle = models.CharField(max_length=500)
+    ComicIssueNumber = models.IntegerField()
+    PublisherID = models.IntegerField()
+    PublisherName = models.CharField(max_length = 500)
     ComicImage = models.CharField(max_length = 500)
     ComicCoverDate = models.DateField()
     ComicPrice = models.DecimalField(max_digits = 15 , decimal_places = 2)
-    StoryArcId = models.IntegerField()
-    CharacterID = models.IntegerField()
-    ReviewID = models.IntegerField()
     TimelineItemID = models.IntegerField()
-    ComicVolumeID = models.IntegerField()
     ComicFormat = models.CharField(max_length = 500)
-    ComicSynopisis = models.TextField()
-    ComicRating = models.IntegerField(db_column = 'ComicRating')
+    ComicSynopsis = models.TextField()
+    ComicRating = models.DecimalField(max_digits=15 , decimal_places=2)
+    ComicTotalRating = models.IntegerField(db_column='ComicTotalRating')
+    ComicNumberOfRaters = models.IntegerField(db_column = 'ComicNumberOfRaters')
     ComicViewRanking = models.IntegerField()
 
     def __str__(self):
@@ -114,21 +113,46 @@ class NewsFeed(models.Model):
 
 
 class Users(models.Model):
-    UserID = models.IntegerField(db_column = 'UserID', primary_key= True)
-    UserDisplayName = models.CharField(max_length = 200)
-    UserFirstName = models.CharField(max_length=255)
-    UserLastName = models.CharField(max_length=255)
-    UserDOB = models.DateField()
-    UserAddress = models.CharField(max_length=255)
-    UserBiography = models.TextField()
-    UserInterest = models.CharField(max_length=255)
+    id = models.IntegerField(db_column='id', primary_key=True)
+    last_login = models.DateField()
+    is_superuser = models.BinaryField()
+    username = models.CharField(max_length = 200)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    is_staff = models.BinaryField()
+    date_joined = models.CharField(max_length=255)
+    DOB = models.DateField()
+    biography = models.TextField()
     UserPicture = models.CharField(max_length=255)
-    UserPassword = models.CharField(max_length=255)
-    UserEmail = models.CharField(max_length=255)
+    #UserAddress = models.CharField(max_length=255)
+    #UserInterest = models.CharField(max_length=255)
+    #UserPassword = models.CharField(max_length=255)
 
     def __str__(self):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
 
+
+class Reviews(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    ComicID = models.IntegerField()
+    UserID = models.IntegerField()
+    username = models.CharField(max_length = 255)
+    ReviewText = models.TextField()
+    ReviewDate = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.user)
+
+class UserRatings(models.Model):
+    #class Meta:
+    #    unique_together = (('id', 'ComicID'),)
+
+    id = models.IntegerField(db_column='id')
+    ComicID = models.IntegerField(db_column='ComicID', primary_key=True)
+    UserRating = models.IntegerField()
+    #def __str__(self):
+     #   return str(self.user)
 
 #class CommentForm(forms.Form):
 #    name = forms.CharField()
