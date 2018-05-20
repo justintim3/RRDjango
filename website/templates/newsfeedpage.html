@@ -50,7 +50,7 @@
             <h1>{{ newsFeed.Title }}</h1>
             <h4>Published on <i>{{ newsFeed.Date }}</i> by {{ newsFeed.Author }}</h4>
             <img id="newsimg" src="static/images/NewsImages/{{ newsFeed.Image }}">
-            <p>{{ newsFeed.TEXT }}</p>
+            <p>{{ newsFeed.TEXT|linebreaksbr }}</p>
 
     	</div>
 
