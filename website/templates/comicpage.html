@@ -165,6 +165,7 @@
 					<p><b>Synopsis:</b> {{ comic.ComicSynopsis|linebreaksbr }}</p>
 				</div>
 
+
                 <div id="Review">
                     <h4>Reviews</h4>
                     {% for review in reviewList %}
@@ -186,8 +187,7 @@
                             {% csrf_token %}
                             <textarea name="textfield" rows="8" cols="120" style="resize:none"></textarea>
                             <button type="submit" name ="review">Upload Review</button>
-
-                            </form>
+                        </form>
                     {% endif %}
 			    </div>
 			</div>

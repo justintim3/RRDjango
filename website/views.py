@@ -16,6 +16,7 @@ def homepage(request):
 
 def get_comicpage(request):
     comicId = request.GET.get('id')
+
     userId = request.user.id
     if 'rate' in request.POST:
         userRating = int(request.POST.get("rating", None))
@@ -130,6 +131,16 @@ def get_comicpage(request):
         review.save()
 
 
+    reviewList = Reviews.objects.raw('SELECT * FROM website_reviews '
+                                     'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
+
+    reviewtext = request.POST.get("textfield", None)
+    revDate = timezone.now()
+    user = request.user.username
+    if "review" in request.POST:
+        review = Reviews(ComicID=comicId, username=user, ReviewDate=revDate, ReviewText=reviewtext)
+        review.save()
+
     return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
                                               'series': series[0], 'publisher': publisher[0],
                                               'storyArcList': storyArcList, 'writerList': writerList,
@@ -138,6 +149,7 @@ def get_comicpage(request):
                                               'editorList': editorList, 'coverArtistList': coverArtistList,
                                               'reviewList': reviewList, 'userList': userList})
 
+  
 def get_characterpage(request):
     characterId = request.GET.get('id')
     characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterID = %s', [characterId])
