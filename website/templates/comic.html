@@ -50,14 +50,16 @@
     		<table class="table table-bordered">
     			<tr>
     				<th id="id">Number</th>
+                    <th id="series">Series</th>
 					<th id="name">Title</th>
     				<th id="rating">Rating</th>
     			</tr>
                 {% for comic in comics %}
-				<tr>  
+				<tr>
   					<td>{{ forloop.counter }}</td>
+                    <td><a href="seriespage?id={{comic.SeriesID}}">{{ comic.SeriesName }}</a></td>
                     <td><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    				<td>Rating Number (1.0 to 10)</td>
+    				<td>{{ comic.ComicRating }}</td>
     			</tr>
                 {% endfor %}
     		</table>

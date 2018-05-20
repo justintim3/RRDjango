@@ -72,7 +72,7 @@
             </div>
             <div id="right_col">
                 <div>
-                    <h3>Top Ranking Comic Here</h3>
+                    <h3 id="comic_title">Top 10 Comic Issues</h3>
                     <ol class="top_comic">
                         {% for comic in comics  %}
                         <li><a href="/comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>

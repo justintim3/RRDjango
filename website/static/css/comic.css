@@ -15,5 +15,8 @@ th {
 }
 
 #id, #rating {
-	width: 25%;
+	width: 10%;
+}
+#name {
+	width: 40%;
 }
