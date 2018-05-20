@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
+
 # Create your views here.
 
 
@@ -118,6 +119,17 @@ def get_comicpage(request):
                                  'INNER JOIN Creators ON ComicCreators.CreatorID = Creators.CreatorID '
                                  'WHERE website_comic.ComicID = %s AND CreatorTypeName = "Cover Artist";', [comicId])
 
+    reviewList = Reviews.objects.raw('SELECT * FROM website_reviews '
+                                     'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
+
+    reviewtext = request.POST.get("textfield", None)
+    revDate = timezone.now()
+    user = request.user.username
+    if "review" in request.POST:
+        review = Reviews(ComicID=comicId, username=user, ReviewDate=revDate, ReviewText=reviewtext)
+        review.save()
+
+
     return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
                                               'series': series[0], 'publisher': publisher[0],
                                               'storyArcList': storyArcList, 'writerList': writerList,
@@ -125,7 +137,6 @@ def get_comicpage(request):
                                               'coloristList': coloristList, 'lettererList': lettererList,
                                               'editorList': editorList, 'coverArtistList': coverArtistList,
                                               'reviewList': reviewList, 'userList': userList})
-
 
 def get_characterpage(request):
     characterId = request.GET.get('id')
@@ -239,17 +250,12 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
-#def rate_comic(request, rating):
-#    pass
-#def post_comment():
-
-
 def get_profile(request):
     userId = request.GET.get('id')
     user = Users.objects.raw('SELECT * FROM auth_user WHERE id = 10')
     return render(request, 'profile.html', {'user': user[0]})
 
-
+  
 def get_signuppage(request):
     return render(request, 'signup.html')
 
