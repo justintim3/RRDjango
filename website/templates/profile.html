@@ -58,10 +58,10 @@
 
     		<div class="userImage">
                 <div id="profilepic">
-                    {% if creator.CreatorPicture %}
+                    {% if user.UserPicture %}
                         <img id="image" src="static/images/UserImages/{{ user.UserPicture }}">
                     {% else %}
-                        <img id="image" src="static/images/default-profile.png" height="125" width="125">
+                        <img id="image" src="static/images/default-profile.png">
                     {% endif %}
                 </div>
     		</div>
