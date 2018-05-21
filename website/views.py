@@ -24,12 +24,12 @@ def get_comicpage(request):
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
         try:
-            rate = UserRatings.objects.get(id=userId, ComicID=comicId)
+            UserRatings.objects.get(id=userId, ComicID=comicId)
             cursor = connection.cursor()
             cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE id = %s AND ComicID = %s;", (userRating, userId, comicId))
             cursor.close()
         except:
-            rate = UserRatings.objects.create(id=userId, ComicID=comicId, UserRating=userRating)
+            UserRatings.objects.create(id=userId, ComicID=comicId, UserRating=userRating)
 
         raters = UserRatings.objects.raw('SELECT id, ComicID, UserRating FROM website_userratings '
                                          'WHERE ComicID = %s;', [comicId])
@@ -224,9 +224,31 @@ def signup(request):
 
 
 def get_profile(request):
-    userId = request.GET.get('id')
-    user = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [userId])
-    return render(request, 'profile.html', {'user': user[0]})
+    userId = request.user.id
+    profileId = request.GET.get('id')
+
+    following = True
+    try:
+        UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+        if 'unfollow' in request.POST:
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM website_userfollowings WHERE UserID = %s AND FollowedUserID = %s;",
+                           (userId, profileId))
+            cursor.close()
+    except:
+        following = False
+        if 'follow' in request.POST:
+            UserFollowings.objects.create(UserID=userId, FollowedUserID=profileId)
+
+    #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
+    #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
+    if 'message' in request.POST:
+        pass
+    if 'editProfile' in request.POST:
+        pass
+
+    profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
+    return render(request, 'profile.html', {'profile': profile[0], 'following': following})
 
 
 def get_signuppage(request):
@@ -243,11 +265,11 @@ def get_publisherpage(request):
     seriesList = Series.objects.raw('SELECT Series.SeriesID, Series.SeriesName FROM Publishers '
                                     'INNER JOIN SeriesPublishers ON Publishers.PublisherID = SeriesPublishers.PublisherID '
                                     'INNER JOIN Series ON SeriesPublishers.SeriesID = Series.SeriesID '
-                                    'WHERE Publishers.PublisherID = %s', [publisherId])
+                                    'WHERE Publishers.PublisherID = %s ORDER BY Series.SeriesName ASC', [publisherId])
     comicList = Comic.objects.raw('SELECT Publishers.PublisherID, website_comic.ComicID, website_comic.ComicIssueTitle ' 
                                   'FROM website_comic INNER JOIN ComicPublishers ON website_comic.ComicID = ComicPublishers.ComicID '
                                   'INNER JOIN Publishers ON ComicPublishers.PublisherID = Publishers.PublisherID '
-                                  'WHERE Publishers.PublisherID = %s', [publisherId])
+                                  'WHERE Publishers.PublisherID = %s ORDER BY website_comic.ComicIssueTitle ASC', [publisherId])
     return render(request, 'publisherpage.html', {'publisher': publisherList[0], 'seriesList': seriesList, 'comics': comicList})
 
 
@@ -257,10 +279,10 @@ def get_seriespage(request):
     comicList = Comic.objects.raw('SELECT Series.SeriesID, website_comic.ComicID, website_comic.ComicIssueTitle '
                                   'FROM website_comic INNER JOIN ComicSeries ON website_comic.ComicID = ComicSeries.ComicID '
                                   'INNER JOIN Series ON ComicSeries.SeriesID = Series.SeriesID '
-                                  'WHERE Series.SeriesID = %s', [seriesId])
+                                  'WHERE Series.SeriesID = %s ORDER BY website_comic.ComicIssueTitle ASC', [seriesId])
     publisherList = Publishers.objects.raw('SELECT Publishers.PublisherID, PublisherName FROM Publishers '
                                            'INNER JOIN SeriesPublishers ON Publishers.PublisherID = SeriesPublishers.PublisherID '
                                            'INNER JOIN Series ON SeriesPublishers.SeriesID = Series.SeriesID '
-                                           'WHERE Series.SeriesID = %s', [seriesId])
+                                           'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})

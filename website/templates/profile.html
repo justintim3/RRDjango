@@ -46,61 +46,84 @@
   
   		<!-- BODY CONTENT -->
   		<div id="content">
-
             <div id="info_section">
                 <div id="leftCol">
-
                     <h3 class="usernameBar">
-                        "{{user.username}}" Profile
+                        {{profile.username}}'s Profile
                     </h3>
 
                     <div id="profilepic">
-                        {% if user.UserPicture %}
-                            <img id="image" src="static/images/UserImages/{{ user.UserPicture }}">
+                        {% if profile.user_picture %}
+                            <img id="image" src="static/images/UserImages/{{ profile.user_picture }}">
                         {% else %}
                             <img id="image" src="static/images/default-profile.png">
                         {% endif %}
-                        <p><b>Date Joined: </b>{{ user.date_joined }}</p>
-                        <p><b>Last Login: </b>{{ user.last_login }}</p>
-
-                        {% if user.is_staff %}
-                            <p><b>User Type: </b>Admin</p>
-                        {% else %}
-                            <p><b>User Type: </b>Normal</p>
-                        {% endif %}
                     </div>
+                    {% if request.user.username %}
+                        <div id = "leftButtons">
+                            <p>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="message" id="profileButtons">Message</button>
+                            </form>
+                            {% if profile.id != request.user.id %}
+                                {% if not following %}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" name="follow" id="profileButtons">Follow</button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <button type="submit" name="follow" id="profileButtons" disabled>Follow</button>
+                            {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
+                    <p><b>Date Joined: </b>{{ profile.date_joined }}</p>
+                    <p><b>Last Login: </b>{{ profile.last_login }}</p>
+
+                    {% if profile.is_staff %}
+                        <p><b>User Type: </b>Admin</p>
+                    {% else %}
+                        <p><b>User Type: </b>Normal</p>
+                    {% endif %}
 
                 </div>
 
                 <div id="rightCol">
-                    <h2>About</h2>
+                    <h4>About</h4>
                     <div class="about">
                         <ul style="list-style-type: none">
-                            <li><p><b>First Name: </b>{{ user.first_name }}</p></li>
-                            <li><p><b>Last Name: </b>{{ user.last_name }}</p></li>
-                            <li><p><b>Email: </b>{{ user.email }}</p></li>
-                            <li><p><b>Birth Date: </b>{{ user.DOB }}</p></li>
+                            <li><p><b>First Name: </b>{{ profile.first_name }}</p></li>
+                            <li><p><b>Last Name: </b>{{ profile.last_name }}</p></li>
+                            <li><p><b>Email: </b>{{ profile.email }}</p></li>
+                            <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
                         </ul>
                     </div>
 
-                    <h2>Biography</h2>
+                    <h4>Biography</h4>
                     <div class="bio">
                         <ul style="list-style-type:none">
-                            <li><p><b>Biography: </b>{{ user.biography }}</p></li>
+                            <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
                             <li><p><b>Interest: </b></p></li>
                             <li><p><b>Favorite Comic: </b></p></li>
                             <li><p><b>Favorite Character: </b></p></li>
                         </ul>
                     </div>
 
-                    <h2>Timeline</h2>
+                    <h4>Timeline</h4>
                     <div class="timeline">
                         <p>TimeLine items here</p>
                     </div>
                 </div>
 
                 <div id="edit">
-                    <input type="submit" value="Edit Profile" />
+                    <form method="POST">{% csrf_token %}<button type="submit" name="editProfile">Edit Profile</button></form>
                 </div>
 
             </div>
