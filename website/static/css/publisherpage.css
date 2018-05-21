@@ -17,12 +17,6 @@
 	//border: 3px solid black;
 }
 
-#bio {
-	clear: both;
-	border: 1px solid #11519B;
-	margin: 10px;
-	padding: 10px;
-}
 
 #image {
 	float: left;
@@ -33,3 +27,9 @@
 	background-color: white;
 }
 
+#pubinfo {
+	clear: both;
+	border: 1px solid #11519B;
+	margin: 10px;
+	padding: 10px;
+}

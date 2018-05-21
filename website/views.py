@@ -37,6 +37,9 @@ def get_comicpage(request):
             else:
                 comic.ComicNumberOfRaters = 1
 
+        print(type(comic.ComicTotalRating))
+        print(type(comic.ComicNumberOfRaters))
+
         #rate = UserRatings(id=userId, ComicID=comicId, UserRating=userRating)
 
 
@@ -120,14 +123,6 @@ def get_comicpage(request):
     reviewList = Reviews.objects.raw('SELECT * FROM website_reviews '
                                      'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
 
-    reviewtext = request.POST.get("textfield", None)
-    revDate = timezone.now()
-    user = request.user.username
-    if "review" in request.POST:
-        review = Reviews(ComicID=comicId, username=user, ReviewDate=revDate, ReviewText=reviewtext)
-        review.save()
-
-
     return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
                                               'series': series[0], 'publisher': publisher[0],
                                               'storyArcList': storyArcList, 'writerList': writerList,
@@ -136,6 +131,7 @@ def get_comicpage(request):
                                               'editorList': editorList, 'coverArtistList': coverArtistList,
                                               'reviewList': reviewList, 'userList': userList})
 
+  
 def get_characterpage(request):
     characterId = request.GET.get('id')
     characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterID = %s', [characterId])
@@ -262,4 +258,26 @@ def get_about(request):
     return render(request, 'about.html')
 
 
+def get_publisherpage(request):
+    publisherId = request.GET.get('id')
+    publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherID = %s', [publisherId])
+    comicList = Comic.objects.raw('SELECT Publishers.PublisherID, website_comic.ComicID, website_comic.ComicIssueTitle ' 
+                                  'FROM website_comic INNER JOIN ComicPublishers ON website_comic.ComicID = ComicPublishers.ComicID '
+                                  'INNER JOIN Publishers ON ComicPublishers.PublisherID = Publishers.PublisherID '
+                                  'WHERE Publishers.PublisherID = %s', [publisherId])
+    return render(request, 'publisherpage.html', {'publisher': publisherList[0], 'comics': comicList})
 
+
+def get_seriespage(request):
+    seriesId = request.GET.get('id')
+    seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesID = %s', [seriesId])
+    comicList = Comic.objects.raw('SELECT Series.SeriesID, website_comic.ComicID, website_comic.ComicIssueTitle '
+                                  'FROM website_comic INNER JOIN ComicSeries ON website_comic.ComicID = ComicSeries.ComicID '
+                                  'INNER JOIN Series ON ComicSeries.SeriesID = Series.SeriesID '
+                                  'WHERE Series.SeriesID = %s', [seriesId])
+    publisherList = Publishers.objects.raw('SELECT Publishers.PublisherID, PublisherName FROM Publishers '
+                                           'INNER JOIN SeriesPublishers ON Publishers.PublisherID = SeriesPublishers.PublisherID '
+                                           'INNER JOIN Series ON SeriesPublishers.SeriesID = Series.SeriesID '
+                                           'WHERE Series.SeriesID = %s', [seriesId])
+    return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
+                                               'publisher': publisherList[0]})

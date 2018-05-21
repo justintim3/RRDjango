@@ -3,15 +3,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>  </title>
+    <title>{{ series.SeriesName }}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{% static 'css/header.css' %}" rel="stylesheet">
     <link href="{% static 'css/container.css' %}" rel="stylesheet">
     <link href="{% static 'css/footer.css' %}" rel="stylesheet">
-    <link href= "{% static 'css/characterpage.css' %}" rel="stylesheet">
+    <link href= "{% static 'css/seriespage.css' %}" rel="stylesheet">
 </head>
 <body>
-    <!-- CONTAINER -->
+<!-- CONTAINER -->
 	<div id="container">
 
 		<!-- HEADER -->
@@ -46,44 +46,30 @@
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-           		<!-- link img from images folder -->
             <div id="info_section">
-
-            <div id="imgCol">
-
-                {% if character.CharacterPicture %}
-    		        <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
-                {% else %}
-                    <img id="image" src="static/images/default-batman.jpg">
-                {% endif %}
-            </div>
-
-            <div id ="infoCol">
-                <p><b>Name:</b> {{ character.CharacterName }}</p>
-                <p><b>Real Name:</b> {{ character.CharacterRealName }}</p>
-                <p><b>Powers:</b> {{ character.CharacterPowers|linebreaksbr }}</p>
-                <p><b>Weaknesses:</b> {{ character.CharacterWeaknesses|linebreaksbr }}</p>
-                <p><b>Appearances:</b>
-                    {% for comic in comicList %}
-                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
-                        {%if not forloop.last%},{%endif%}
+                <div id="mainCol">
+                    <h1>{{ series.SeriesName }}</h1>
+                    <p><b>Published</b> on <i>{{ series.PublicationDate }}</i></p>
+                    <p><b>Country:</b> {{ series.SeriesCountry }}</p>
+                    <p><b>Language:</b> {{ series.SeriesLanguage }}</p>
+                    <p><b>Publisher:</b> {{ publisher.PublisherName }}</p>
+                    <ul><b>Comics:</b>
+                    {% for comic in comics %}
+                        <li><a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>
                     {% endfor %}
-                </p>
-            </div>
+                    </ul>
+                </div>
 
-				<div id="bio">
-					<p><b>Biography:</b> {{ character.CharacterBiography|linebreaksbr }}</p>
-				</div>
+                <div id="notes">
+                    <p><b>Series Notes:</b> {{ series.SeriesNotes }}</p>
+                </div>
 
 			</div>
-
     	</div>
-
     </div>
 	<!-- END CONTAINER -->
 
 	<!-- FOOTER -->
-    <!-- <div id="footer"><script src="scripts/footer.js"></script></div> -->
     <div id = footer>
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
