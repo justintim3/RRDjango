@@ -225,10 +225,10 @@ def signup(request):
 
 def get_profile(request):
     userId = request.GET.get('id')
-    user = Users.objects.raw('SELECT * FROM auth_user WHERE id = 10')
+    user = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [userId])
     return render(request, 'profile.html', {'user': user[0]})
 
-  
+
 def get_signuppage(request):
     return render(request, 'signup.html')
 

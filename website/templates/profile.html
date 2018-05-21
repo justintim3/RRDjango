@@ -15,7 +15,6 @@
 	<div id="container">
 
   		<!-- HEADER -->
-  		<!-- <div id="header"><script src="scripts/header.js"></script></div> -->
   		<div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
@@ -24,7 +23,7 @@
                     {% block authentication %}
 
                     {% if request.user.username %}
-                    <a id="username" href={% url 'profile' %}>{{request.user.username}}</a>
+                    <a id="username" href="/profile?id={{ request.user.id }}">{{request.user.username}}</a>
                     <a id="logout" href={% url 'logout' %}>Log Out</a>
 
                     {% else %}
@@ -41,69 +40,76 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href={% url 'profile' %}>Account</a>
+                <a href="">Search</a>
             </nav>
         </div>
   
   		<!-- BODY CONTENT -->
   		<div id="content">
-        {% block content %}
-            {% if request.user.username %}
-    		<div>
-    			<h3 class="usernameBar">
-        			"{{request.user.username}}" Profile
-      			</h3>
-    		</div>
 
+            <div id="info_section">
+                <div id="leftCol">
 
-    		<div class="userImage">
-                <div id="profilepic">
-                    {% if user.UserPicture %}
-                        <img id="image" src="static/images/UserImages/{{ user.UserPicture }}">
-                    {% else %}
-                        <img id="image" src="static/images/default-profile.png">
-                    {% endif %}
+                    <h3 class="usernameBar">
+                        "{{user.username}}" Profile
+                    </h3>
+
+                    <div id="profilepic">
+                        {% if user.UserPicture %}
+                            <img id="image" src="static/images/UserImages/{{ user.UserPicture }}">
+                        {% else %}
+                            <img id="image" src="static/images/default-profile.png">
+                        {% endif %}
+                        <p><b>Date Joined: </b>{{ user.date_joined }}</p>
+                        <p><b>Last Login: </b>{{ user.last_login }}</p>
+
+                        {% if user.is_staff %}
+                            <p><b>User Type: </b>Admin</p>
+                        {% else %}
+                            <p><b>User Type: </b>Normal</p>
+                        {% endif %}
+                    </div>
+
                 </div>
-    		</div>
-    
-    		<div class="bio">
-      			<ul style="list-style-type:none">
-					<br/>
-        			<li><h5 id="bio">Biography: {{ user.biography }}</h5></li>
-					<br/>
-        			<li><h5 id="favCom">Favorite Comic: </h5></li>
-                    <li><h5 id="favCom">Date Joined: {{ user.date_joined }}</h5></li>
-					<br/>
-        			<li><h5 id="favChar">Favorite Character: </h5></li>
-      			</ul>
-    		</div>
-    
-    		<div>
-      			<span class="messagebttn">Message</span>
-      			<span class="followRequest">Follow User</span>
-    		</div>
-    
-    		<div class="following">
-      			<h4>Following: </h4>
-    		</div>
-    
-    		<div class="timeline">
-      			<h4>Timeline: </h4>
-    		</div>
-                {% else %}
-                <h2>You are not logged in</h2>
-    		<!--<div class="comment">
-      			<h4>Comments: </h4>
-    		</div> -->
-                {% endif %}
-            {%  endblock %}
-  		</div>
-  		
+
+                <div id="rightCol">
+                    <h2>About</h2>
+                    <div class="about">
+                        <ul style="list-style-type: none">
+                            <li><p><b>First Name: </b>{{ user.first_name }}</p></li>
+                            <li><p><b>Last Name: </b>{{ user.last_name }}</p></li>
+                            <li><p><b>Email: </b>{{ user.email }}</p></li>
+                            <li><p><b>Birth Date: </b>{{ user.DOB }}</p></li>
+                        </ul>
+                    </div>
+
+                    <h2>Biography</h2>
+                    <div class="bio">
+                        <ul style="list-style-type:none">
+                            <li><p><b>Biography: </b>{{ user.biography }}</p></li>
+                            <li><p><b>Interest: </b></p></li>
+                            <li><p><b>Favorite Comic: </b></p></li>
+                            <li><p><b>Favorite Character: </b></p></li>
+                        </ul>
+                    </div>
+
+                    <h2>Timeline</h2>
+                    <div class="timeline">
+                        <p>TimeLine items here</p>
+                    </div>
+                </div>
+
+                <div id="edit">
+                    <input type="submit" value="Edit Profile" />
+                </div>
+
+            </div>
+        </div>
+        <!-- END BODY CONTENT -->
   	</div>
 	<!-- END CONTAINER -->
 	
 	<!-- FOOTER -->
-  	<!-- <div id="footer"><script src="scripts/footer.js"></script></div> -->
   	<div id = footer>
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
