@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
+from django.db import connection
 
 # Create your views here.
 
@@ -20,34 +21,25 @@ def get_comicpage(request):
     if 'rate' in request.POST:
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
-        #rate, created = UserRatings.objects.update_or_create(id=userId, ComicID=comicId, defaults={'UserRating': userRating})
         try:
             rate = UserRatings.objects.get(id=userId, ComicID=comicId)
-            comic.ComicTotalRating = int(comic.ComicTotalRating) + userRating - int(rate.UserRating)
-            rate.UserRating = userRating
-            rate.save(update_fields=["UserRating"])
+            print("update")
+            cursor = connection.cursor()
+            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE id = %s AND ComicID = %s;", (userRating, userId, comicId))
+            cursor.close()
         except:
+            print("create")
             rate = UserRatings.objects.create(id=userId, ComicID=comicId, UserRating=userRating)
-            if comic.ComicTotalRating:
-                comic.ComicTotalRating = int(comic.ComicTotalRating) + userRating
-            else:
-                comic.ComicTotalRating = userRating
-            if comic.ComicNumberOfRaters:
-                comic.ComicNumberOfRaters = comic.ComicNumberOfRaters + 1
-            else:
-                comic.ComicNumberOfRaters = 1
 
-        #rate = UserRatings(id=userId, ComicID=comicId, UserRating=userRating)
-
-
-        #raters = UserRatings.objects.raw('SELECT id, UserRating, ComicID FROM website_userratings '
-        #                                 'WHERE ComicID = %s;', [comicId])
-        #numRaters = len(list(raters))
-        #totalRating = 0
-        #for rating in raters:
-        #    totalRating = totalRating + rating.UserRating
+        raters = UserRatings.objects.raw('SELECT id, ComicID, UserRating FROM website_userratings '
+                                         'WHERE ComicID = %s;', [comicId])
+        comic.ComicNumberOfRaters = len(list(raters))
+        totalRating = 0
+        for rating in raters:
+            totalRating = totalRating + rating.UserRating
+        comic.ComicTotalRating = totalRating
         if comic.ComicNumberOfRaters != 0:
-            comic.ComicRating = int(comic.ComicTotalRating) / comic.ComicNumberOfRaters
+            comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
         else:
             comic.ComicRating = 0
 
@@ -116,17 +108,6 @@ def get_comicpage(request):
                                  'INNER JOIN CreatorTypes ON ComicCreators.CreatorTypeID = CreatorTypes.CreatorTypeID '
                                  'INNER JOIN Creators ON ComicCreators.CreatorID = Creators.CreatorID '
                                  'WHERE website_comic.ComicID = %s AND CreatorTypeName = "Cover Artist";', [comicId])
-
-    reviewList = Reviews.objects.raw('SELECT * FROM website_reviews '
-                                     'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
-
-    reviewtext = request.POST.get("textfield", None)
-    revDate = timezone.now()
-    user = request.user.username
-    if "review" in request.POST:
-        review = Reviews(ComicID=comicId, username=user, ReviewDate=revDate, ReviewText=reviewtext)
-        review.save()
-
 
     return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
                                               'series': series[0], 'publisher': publisher[0],
