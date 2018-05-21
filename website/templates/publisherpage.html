@@ -3,15 +3,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>  </title>
+    <title>{{ publisher.PublisherName }}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{% static 'css/header.css' %}" rel="stylesheet">
     <link href="{% static 'css/container.css' %}" rel="stylesheet">
     <link href="{% static 'css/footer.css' %}" rel="stylesheet">
-    <link href= "{% static 'css/characterpage.css' %}" rel="stylesheet">
+    <link href= "{% static 'css/publisherpage.css' %}" rel="stylesheet">
 </head>
 <body>
-    <!-- CONTAINER -->
+<!-- CONTAINER -->
 	<div id="container">
 
 		<!-- HEADER -->
@@ -46,33 +46,32 @@
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-           		<!-- link img from images folder -->
+            <!-- link img from images folder -->
             <div id="info_section">
 
-            <div id="imgCol">
+                <div id="imgCol">
+                    <h3 style="text-align: center"><b> {{ publisher.PublisherName }} </b></h3>
+                    {% if publisher.PublisherPicture %}
+                        <img id="image" src="static/images/PublishersImages/{{publisher.PublisherPicture }}">
+                    {% else %}
+                        <img id="image" src="static/images/default-batman.png">
+                    {% endif %}
+                    <p style="text-align: center"><a href="{{ publisher.PublisherWebsite }}">
+                        {{ publisher.PublisherWebsite }}</a></p>
 
-                {% if character.CharacterPicture %}
-    		        <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
-                {% else %}
-                    <img id="image" src="static/images/default-batman.jpg">
-                {% endif %}
-            </div>
+                </div>
 
-            <div id ="infoCol">
-                <p><b>Name:</b> {{ character.CharacterName }}</p>
-                <p><b>Real Name:</b> {{ character.CharacterRealName }}</p>
-                <p><b>Powers:</b> {{ character.CharacterPowers|linebreaksbr }}</p>
-                <p><b>Weaknesses:</b> {{ character.CharacterWeaknesses|linebreaksbr }}</p>
-                <p><b>Appearances:</b>
-                    {% for comic in comicList %}
-                        <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
-                        {%if not forloop.last%},{%endif%}
+                <div id ="infoCol">
+                    <p><b>Comic Books:</b></p>
+                    <ul>
+                    {% for comic in comics %}
+                        <li><a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>
                     {% endfor %}
-                </p>
-            </div>
+                    </ul>
+                </div>
 
-				<div id="bio">
-					<p><b>Biography:</b> {{ character.CharacterBiography|linebreaksbr }}</p>
+                <div id="pubinfo">
+					<p><b>Publisher Information:</b> {{ publisher.PublisherInformation }}</p>
 				</div>
 
 			</div>
@@ -83,7 +82,6 @@
 	<!-- END CONTAINER -->
 
 	<!-- FOOTER -->
-    <!-- <div id="footer"><script src="scripts/footer.js"></script></div> -->
     <div id = footer>
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>

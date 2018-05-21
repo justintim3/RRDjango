@@ -4,7 +4,7 @@
 
 #info_section {
 	border: 2px solid #11519B;
-	min-height: 400px;
+	min-height: 100px;
 	//padding: 20px;
 }
 
@@ -16,17 +16,11 @@
 
 #infoCol {
 	float: left;
-	width: 60%;
+	width: 80%;
 	padding: 10px;
 	//border: 3px solid black;
 }
 
-#rateCol {
-	float: left;
-	width: 20%;
-	padding: 10px;
-	//border: 3px solid black;
-}
 
 #bio {
 	clear: both;
