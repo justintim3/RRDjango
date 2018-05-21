@@ -166,13 +166,13 @@
 				</div>
 
                 <div id="Review">
-                    <h4>Reviews</h4>
+                    <h4 style="text-align: center">Reviews</h4>
                     {% for review in reviewList %}
                         <p>
                             {% for user in userList %}
                                 {% if review.UserID == user.id %}
-                                    {% if user.UserPicture %}
-                                        <img id="userimage" src="static/images/UserImages/{{ user.UserPicture }}">
+                                    {% if user.user_picture %}
+                                        <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
                                     {% else %}
                                         <img id="userimage" src="static/images/default-profile.png">
                                     {% endif %}
@@ -181,15 +181,16 @@
                             <a href="profile?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b></p>
                         <p> {{ review.ReviewText }} </p>
                     {% endfor %}
-                    {% if request.user.username %}
-                        <form method="POST">
-                            {% csrf_token %}
-                            <textarea name="textfield" rows="8" cols="120" style="resize:none"></textarea>
-                            <button type="submit" name ="review">Upload Review</button>
-
+                    <div id="WriteReview">
+                        {% if request.user.username %}
+                            <h5>Write a Review</h5>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <textarea name="textfield" style="width:100%; height: 200px; resize:none"></textarea>
+                                <button type="submit" name="review">Submit</button>
                             </form>
-
-                    {% endif %}
+                        {% endif %}
+                    </div>
 			    </div>
 			</div>
     	</div>

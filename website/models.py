@@ -124,7 +124,7 @@ class Users(models.Model):
     date_joined = models.CharField(max_length=255)
     DOB = models.DateField()
     biography = models.TextField()
-    UserPicture = models.CharField(max_length=255)
+    user_picture = models.CharField(max_length=255)
     #UserAddress = models.CharField(max_length=255)
     #UserInterest = models.CharField(max_length=255)
     #UserPassword = models.CharField(max_length=255)
@@ -146,12 +146,10 @@ class Reviews(models.Model):
 
       
 class UserRatings(models.Model):
-    #class Meta:
-    #    unique_together = (('id', 'ComicID'),)
-
     id = models.IntegerField(db_column='id')
     ComicID = models.IntegerField(db_column='ComicID', primary_key=True)
     UserRating = models.IntegerField()
-    #def __str__(self):
-     #   return str(self.user)
 
+class UserFollowings(models.Model):
+    UserID = models.IntegerField(db_column='UserID', primary_key=True)
+    FollowedUserID = models.IntegerField(db_column='FollowedUserID')

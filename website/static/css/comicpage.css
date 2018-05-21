@@ -69,3 +69,14 @@
 	padding: 10px;
 	margin: 10px;
 }
+
+#WriteReview {
+	text-align: center;
+}
+
+button {
+	background-color: var(--main_theme_color);
+	border: none;
+	color: white;
+	font-weight: bold;
+}
