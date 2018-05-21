@@ -19,8 +19,9 @@ urlpatterns = [
     path('profile', views.get_profile, name='profile'),
     path('signup',views.signup, name = 'signup'),
     path('about', views.get_about, name = 'about'),
-    #path('', views.rate_comic, name = 'rate'),
-    path('newsfeed', views.get_newsfeed, name = 'newsfeed')
+    path('newsfeed', views.get_newsfeed, name = 'newsfeed'),
+    path('publisherpage', views.get_publisherpage, name = 'publisherpage'),
+    path('seriespage', views.get_seriespage, name = 'seriespage')
 
     #url(r'^login/$', auth_views.login)
     #path('accounts/', include('django.contrib.auth.urls'))

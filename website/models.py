@@ -144,7 +144,7 @@ class Reviews(models.Model):
     def __str__(self):
         return str(self.user)
 
-
+      
 class UserRatings(models.Model):
     #class Meta:
     #    unique_together = (('id', 'ComicID'),)

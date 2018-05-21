@@ -74,7 +74,7 @@
                     {% endif %}
                     <p><b>Rating: </b>{{ comic.ComicRating }}</p>
 				    <p><b>Numbers of Raters: </b>{{ comic.ComicNumberOfRaters }}</p>
-				    <p><b>Number of Views: </b></p>
+
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
 
                 <p><b>Story Arc(s):</b>
                 {% for storyArc in storyArcList %}
-                    <a href="storyarcpage?id={{ storyArc.StoryArcID }}">{{ storyArc.StoryArcTitle }}</a>
+                    {{ storyArc.StoryArcTitle }}
                     {%if not forloop.last%},{%endif%}
                 {% endfor %}
                 </p>
@@ -165,7 +165,6 @@
 					<p><b>Synopsis:</b> {{ comic.ComicSynopsis|linebreaksbr }}</p>
 				</div>
 
-
                 <div id="Review">
                     <h4>Reviews</h4>
                     {% for review in reviewList %}
@@ -187,7 +186,9 @@
                             {% csrf_token %}
                             <textarea name="textfield" rows="8" cols="120" style="resize:none"></textarea>
                             <button type="submit" name ="review">Upload Review</button>
-                        </form>
+
+                            </form>
+
                     {% endif %}
 			    </div>
 			</div>
