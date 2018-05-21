@@ -24,7 +24,7 @@
                     {% block authentication %}
 
                     {% if request.user.username %}
-                    <a id="username" href={% url 'profile' %}>{{request.user.username}}</a>
+                    <a id="username" href="/profile?id={{ request.user.id }}">{{request.user.username}}</a>
                     <a id="logout" href={% url 'logout' %}>Log Out</a>
 
                     {% else %}
@@ -41,7 +41,7 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href={% url 'profile' %}>Account</a>
+                <a href="">Search</a>
             </nav>
         </div>
 
