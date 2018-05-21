@@ -39,6 +39,7 @@ def get_comicpage(request):
 
         print(type(comic.ComicTotalRating))
         print(type(comic.ComicNumberOfRaters))
+
         #rate = UserRatings(id=userId, ComicID=comicId, UserRating=userRating)
 
 
