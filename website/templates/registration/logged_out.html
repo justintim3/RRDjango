@@ -27,7 +27,7 @@
 
                     {% if request.user.username %}
                     <a id="logout" href={% url 'logout' %}>Log Out</a>
-                    <p><a href={% url 'profile' %}>{{request.user.username}}</a></p>
+                    <a id="username" href="/profile?id={{ request.user.id }}">{{request.user.username}}</a>
 
                     {% else %}
                     <a id="login" href={% url 'login' %}>Log In</a>
@@ -43,7 +43,7 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href={% url 'profile' %}>Account</a>
+                <a href="">Search</a>
             </nav>
         </div>
 
