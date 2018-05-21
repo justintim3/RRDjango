@@ -240,11 +240,15 @@ def get_about(request):
 def get_publisherpage(request):
     publisherId = request.GET.get('id')
     publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherID = %s', [publisherId])
+    seriesList = Series.objects.raw('SELECT Series.SeriesID, Series.SeriesName FROM Publishers '
+                                    'INNER JOIN SeriesPublishers ON Publishers.PublisherID = SeriesPublishers.PublisherID '
+                                    'INNER JOIN Series ON SeriesPublishers.SeriesID = Series.SeriesID '
+                                    'WHERE Publishers.PublisherID = %s', [publisherId])
     comicList = Comic.objects.raw('SELECT Publishers.PublisherID, website_comic.ComicID, website_comic.ComicIssueTitle ' 
                                   'FROM website_comic INNER JOIN ComicPublishers ON website_comic.ComicID = ComicPublishers.ComicID '
                                   'INNER JOIN Publishers ON ComicPublishers.PublisherID = Publishers.PublisherID '
                                   'WHERE Publishers.PublisherID = %s', [publisherId])
-    return render(request, 'publisherpage.html', {'publisher': publisherList[0], 'comics': comicList})
+    return render(request, 'publisherpage.html', {'publisher': publisherList[0], 'seriesList': seriesList, 'comics': comicList})
 
 
 def get_seriespage(request):
