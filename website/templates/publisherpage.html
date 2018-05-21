@@ -62,7 +62,13 @@
                 </div>
 
                 <div id ="infoCol">
-                    <p><b>Comic Books:</b></p>
+                    <b>Comic Series:</b>
+                    <ul>
+                    {% for series in seriesList %}
+                        <li><a href="seriespage?id={{ series.SeriesID }}">{{ series.SeriesName }}</a></li>
+                    {% endfor %}
+                    </ul>
+                    <b>Comic Issues:</b>
                     <ul>
                     {% for comic in comics %}
                         <li><a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>
@@ -71,7 +77,7 @@
                 </div>
 
                 <div id="pubinfo">
-					<p><b>Publisher Information:</b> {{ publisher.PublisherInformation }}</p>
+					<p><b>Publisher Information:</b> {{ publisher.PublisherInformation|linebreaksbr }}</p>
 				</div>
 
 			</div>

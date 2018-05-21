@@ -49,11 +49,11 @@
             <div id="info_section">
                 <div id="mainCol">
                     <h1>{{ series.SeriesName }}</h1>
-                    <p><b>Published</b> on <i>{{ series.PublicationDate }}</i></p>
-                    <p><b>Country:</b> {{ series.SeriesCountry }}</p>
-                    <p><b>Language:</b> {{ series.SeriesLanguage }}</p>
-                    <p><b>Publisher:</b> {{ publisher.PublisherName }}</p>
-                    <ul><b>Comics:</b>
+                    <p><b>Publisher: </b><a href="publisherpage?id={{ publisher.PublisherID }}">{{ publisher.PublisherName }}</a></p>
+                    <p><b>Publication Date: </b>{{ series.PublicationDate }}</p>
+                    <p><b>Country: </b>{{ series.SeriesCountry }}</p>
+                    <p><b>Language: </b>{{ series.SeriesLanguage }}</p>
+                    <ul><b>Comic Issues:</b>
                     {% for comic in comics %}
                         <li><a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>
                     {% endfor %}
