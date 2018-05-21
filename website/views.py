@@ -18,17 +18,17 @@ def homepage(request):
 def get_comicpage(request):
     comicId = request.GET.get('id')
     userId = request.user.id
+
+    #Rating
     if 'rate' in request.POST:
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
         try:
             rate = UserRatings.objects.get(id=userId, ComicID=comicId)
-            print("update")
             cursor = connection.cursor()
             cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE id = %s AND ComicID = %s;", (userRating, userId, comicId))
             cursor.close()
         except:
-            print("create")
             rate = UserRatings.objects.create(id=userId, ComicID=comicId, UserRating=userRating)
 
         raters = UserRatings.objects.raw('SELECT id, ComicID, UserRating FROM website_userratings '
@@ -179,13 +179,6 @@ def get_creatorpage(request):
 
 def get_newsfeedpage(request):
     newsFeedID = request.GET.get('id')
-
-
-    news = NewsFeed.objects.get(ID=newsFeedID)
-
-    news.Text = news.Text.replace("||||", "\n")
-    #print(news.Text)
-    news.save(update_fields=["Text"])
     newsFeed = NewsFeed.objects.raw('select * from website_newsfeed where ID = %s', [newsFeedID])
     return render(request, 'newsfeedpage.html', {'newsFeed': newsFeed[0]})
 
