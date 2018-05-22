@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
+from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
@@ -286,3 +287,18 @@ def get_seriespage(request):
                                            'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
+def searchComic(request):
+    if request.method == 'POST':
+        form = ComicSearchForm(request.POST)
+        if form.is_valid():
+            form.save()
+            searchParam = form.cleaned_data.get('searchParam')
+            comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Comics WHERE ComicIssueTitle = %s',
+                                       [searchParam]) + Comic.objects.raw(
+                'SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName = %s',
+                [searchParam]) + Comic.objects.raw(
+                'SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName = %s', [searchParam])
+            return render(request, 'comicsearchresults.html', {'comics': comics})
+    else:
+        form = ComicSearchForm(request.Post)
+    return
