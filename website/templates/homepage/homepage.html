@@ -9,7 +9,7 @@
     <link rel="stylesheet" href=" {% static 'css/container.css' %} ">
     <link rel="stylesheet" href= "{% static 'css/footer.css'%}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script>
+    <!-- <script>
         var x = document.getElementById("ddl");
         var y = x.options[x.selectedIndex].value;
         if(y == "title") {
@@ -24,7 +24,7 @@
             document.getElementById("search").action = "/creacsres";
             console.log("changed to creator");
         }
-    </script>
+    </script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
@@ -72,7 +72,6 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
             </nav>
         </div>
 
