@@ -15,10 +15,9 @@
 	<div id="container">
 	
 		<!-- HEADER -->
-    	<div id="header">
+        <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
@@ -33,14 +32,29 @@
                     {% endblock %}
                 </div>
 
-            </div> 
+            </div>
             <nav>
                 <a href={% url 'homepage' %}>Home</a>
                 <a href={% url 'comic' %}>Comics</a>
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
+                <div id="search_bar">
+                <form type="get" action="/csres" id="search">
+                    <input id="csearch" type="text" name = "csearch" placeholder="Search for comics by">
+                    <select name="type" id="ddl">
+						<option value="title" selected>Title</option>
+						<!-- <option value="creator">Creator</option>
+						<option value="character">Character</option> -->
+					 </select>
+                    <button id="search-submit" type="submit">Submit</button>
+                </form>
+				<!--<form action="/comicsearchresults/" method="POST">
+					{% csrf_token %}
+					<input type="text" name="search_bar" placeholder="Search..">
+					<button type = "submit" name="search">Search</button>
+				</form> -->
+			    </div>
             </nav>
         </div>
     	

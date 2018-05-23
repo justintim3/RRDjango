@@ -83,7 +83,7 @@ nav a {
 	float: left;
 	margin: 0;
 	padding: 10px 0px;
-	width: calc(100% / 6);
+	width: calc(100% / 7);
 	color: white;
 	text-transform: uppercase;
 	text-decoration: none;
@@ -95,4 +95,14 @@ nav a:hover {
 	background-color: #444;
 	color: white;
 	text-decoration: none;
+}
+
+#search_bar {
+	background-color: var(--main_theme_color);
+	height: 40px;
+	box-sizing: border-box;
+	padding: 7px;
+
+	//padding-top: 6px;
+	//padding-bottom: 0px;
 }

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
+from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
@@ -286,3 +287,25 @@ def get_seriespage(request):
                                            'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
+def search_Comic_by_Title(request):
+    if request.method == 'GET':
+        form = request.GET.get('csearch', None)
+        #comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle = %s UNION SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName = %s UNION SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName = %s', [form])
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
+
+    return render(request, 'csres.html', {'comics': comics})
+
+def search_Comic_by_Character(request):
+    if request.method == 'GET':
+        form = request.GET.get('csearch', None)
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
+
+    return render(request, 'charcsres.html', {'comics': comics})
+
+def search_Comic_by_Creator(request):
+    if request.method == 'GET':
+        form = request.GET.get('csearch', None)
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
+
+    return render(request, 'creacsres.html', {'comics': comics})
+
