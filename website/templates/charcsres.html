@@ -46,7 +46,7 @@
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-            <h3>Search Results</h3>>
+            <h3>Search Results</h3>
     		<table class="table table-bordered">
     			<tr>
     				<th id="id">Number</th>
@@ -56,8 +56,8 @@
                 {% for comic in comics %}
 				<tr>
   					<td>{{ forloop.counter }}</td>
-                    <td><a href="csearchres?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    				<td>Rating Number (1.0 to 10)</td>
+                    <td><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
+    				<td>{{ comic.ComicRating }}</td>
     			</tr>
                 {% endfor %}
     		</table>
