@@ -288,17 +288,12 @@ def get_seriespage(request):
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
 def searchComic(request):
-    if request.method == 'POST':
-        form = ComicSearchForm(request.POST)
-        if form.is_valid():
-            form.save()
-            searchParam = form.cleaned_data.get('searchParam')
-            comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Comics WHERE ComicIssueTitle = %s',
-                                       [searchParam]) + Comic.objects.raw(
-                'SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName = %s',
-                [searchParam]) + Comic.objects.raw(
-                'SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName = %s', [searchParam])
-            return render(request, 'comicsearchresults.html', {'comics': comics})
-    else:
-        form = ComicSearchForm(request.Post)
-    return
+    if request.method == 'GET':
+        form = request.GET.get('csearch', None)
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Comics WHERE ComicIssueTitle = %s',
+                                    [form]) + Comic.objects.raw(
+            'SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName = %s',
+            [form]) + Comic.objects.raw(
+            'SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName = %s', [form])
+        return render(request, 'comicsearchresults.html', {'comics': comics})
+

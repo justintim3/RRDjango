@@ -18,8 +18,18 @@
         <!-- HEADER -->
         <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
+			<div id="search_bar">
+                <form type="get" action="/comicsearchresults/">
+                    <input id="csearch" type="text" name = "csearch" placeholder="Search for comics by creator name, title, or character">
+                    <button id="search-submit" type=""submit>Submit</button>
+                </form>
+				<!--<form action="/comicsearchresults/" method="POST">
+					{% csrf_token %}
+					<input type="text" name="search_bar" placeholder="Search..">
+					<button type = "submit" name="search">Search</button>
+				</form> -->
+			</div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
