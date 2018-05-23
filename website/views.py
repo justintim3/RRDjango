@@ -291,21 +291,21 @@ def search_Comic_by_Title(request):
     if request.method == 'GET':
         form = request.GET.get('csearch', None)
         #comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle = %s UNION SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName = %s UNION SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName = %s', [form])
-        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', [form])
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
 
     return render(request, 'csres.html', {'comics': comics})
 
 def search_Comic_by_Character(request):
     if request.method == 'GET':
         form = request.GET.get('csearch', None)
-        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName LIKE %s', [form])
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
 
     return render(request, 'charcsres.html', {'comics': comics})
 
 def search_Comic_by_Creator(request):
     if request.method == 'GET':
         form = request.GET.get('csearch', None)
-        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName LIKE %s', [form])
+        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
 
     return render(request, 'creacsres.html', {'comics': comics})
 
