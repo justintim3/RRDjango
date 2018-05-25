@@ -249,7 +249,7 @@ def get_profile(request):
         pass
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
-    return render(request, 'profile.html', {'profile': profile[0], 'following': following})
+    return render(request, 'profile.html', {'following': following, 'profile': profile[0]})
 
 
 def get_signuppage(request):
@@ -287,13 +287,17 @@ def get_seriespage(request):
                                            'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
-def search_Comic_by_Title(request):
-    if request.method == 'GET':
-        form = request.GET.get('csearch', None)
-        #comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle = %s UNION SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName = %s UNION SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName = %s', [form])
-        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
-
-    return render(request, 'csres.html', {'comics': comics})
+def search(request):
+    if 'search' in request.GET:
+        form = request.GET.get('search', None)
+        comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
+        characterList = Character.objects.raw('SELECT CharacterID, CharacterName FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
+        creatorList = Creator.objects.raw('SELECT CreatorID, CreatorName FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
+        seriesList = Series.objects.raw('SELECT SeriesID, SeriesName FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
+        publisherList = Publishers.objects.raw('SELECT PublisherID, PublisherName FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
+        newsList = NewsFeed.objects.raw('SELECT ID, Title FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
+    return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
+                                           'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})
 
 def search_Comic_by_Character(request):
     if request.method == 'GET':

@@ -1,0 +1,155 @@
+<DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="{% static 'css/header.css' %}" rel="stylesheet">
+    <link href="{% static 'css/container.css' %}" rel="stylesheet">
+    <link href="{% static 'css/footer.css' %}" rel="stylesheet">
+    <link href= "{% static 'css/comic.css' %}" rel="stylesheet">
+</head>
+<body>
+	<!-- CONTAINER -->
+	<div id="container">
+
+		<!-- HEADER -->
+        <div id="header">
+            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="acc_info">
+                <div id="login_part">
+                    {% block authentication %}
+
+                    {% if request.user.username %}
+                    <a id="username" href="/profile?id={{ request.user.id }}">{{request.user.username}}</a>
+                    <a id="logout" href={% url 'logout' %}>Log Out</a>
+
+                    {% else %}
+                    <a id="login" href={% url 'login' %}>Log In</a>
+                    <a id="signup" href={% url 'signup' %}>Sign up</a>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+
+            </div>
+            <nav>
+                <a href={% url 'homepage' %}>Home</a>
+                <a href={% url 'comic' %}>Comics</a>
+                <a href={% url 'character' %}>Characters</a>
+                <a href={% url 'creator' %}>Creators</a>
+                <a href={% url 'newsfeed' %}>News</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
+            </nav>
+        </div>
+
+    	<!-- BODY CONTENT -->
+    	<div id="content">
+            <h3><b>Search Results</b></h3>
+            <br>
+            {% for series in seriesList|slice:":1" %}
+                <h4><b>Series</b></h4>
+                <table class="table">
+                {% for series in seriesList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="../seriespage?id={{series.SeriesID}}">{{ series.SeriesName }}</a></td>
+                        <td>{{ series.SeriesName }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for comic in comicList|slice:":1" %}
+                <h4><b>Comic Issues</b></h4>
+                <table class="table">
+                {% for comic in comicList %}
+				    <tr>
+  				    	<td>{{ forloop.counter }}</td>
+                        <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
+    			    	<td>{{ comic.ComicRating }}</td>
+    			    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for character in characterList|slice:":1" %}
+                <h4><b>Characters</b></h4>
+                <table class="table">
+                {% for character in characterList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
+                        <td>{{ character.CharacterName }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for creator in creatorList|slice:":1" %}
+                <h4><b>Creators</b></h4>
+                <table class="table">
+                {% for creator in creatorList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
+                        <td>{{ creator.CreatorName }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for publisher in publisherList|slice:":1" %}
+                <h4><b>Publishers</b></h4>
+                <table class="table">
+                {% for publisher in publisherList %}
+                    <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
+                            <td>{{ publisher.PublisherName }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for news in newsList|slice:":1" %}
+            <h4><b>News</b></h4>
+                <table class="table">
+                {% for news in newsList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="../newsfeedpage?id={{news.ID}}">{{ news.Title }}</a></td>
+                        <td>{{ news.Preview }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+    	</div>
+
+	</div>
+	<!-- END CONTAINER -->
+
+	<!-- FOOTER -->
+    <div id = footer>
+        <ul>
+  	    	<li><a href={% url 'homepage'  %}>Home</a></li>
+  		    <li><a href={% url 'about' %}>About</a></li>
+    	    <li><a href="#contacts">Contacts</a></li>
+    	    <li><a href="#faq">FAQ</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+    	</ul>
+    </div>
+
+</body>
+</html>

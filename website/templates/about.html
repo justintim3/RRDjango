@@ -40,20 +40,10 @@
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
                 <div id="search_bar">
-                <form type="get" action="/csres" id="search">
-                    <input id="csearch" type="text" name = "csearch" placeholder="Search for comics by">
-                    <select name="type" id="ddl">
-						<option value="title" selected>Title</option>
-						<!-- <option value="creator">Creator</option>
-						<option value="character">Character</option> -->
-					 </select>
-                    <button id="search-submit" type="submit">Submit</button>
-                </form>
-				<!--<form action="/comicsearchresults/" method="POST">
-					{% csrf_token %}
-					<input type="text" name="search_bar" placeholder="Search..">
-					<button type = "submit" name="search">Search</button>
-				</form> -->
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
 			    </div>
             </nav>
         </div>
