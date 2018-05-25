@@ -18,7 +18,6 @@
         <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
@@ -33,14 +32,19 @@
                     {% endblock %}
                 </div>
 
-            </div> 
+            </div>
             <nav>
                 <a href={% url 'homepage' %}>Home</a>
                 <a href={% url 'comic' %}>Comics</a>
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
             </nav>
         </div>
     	

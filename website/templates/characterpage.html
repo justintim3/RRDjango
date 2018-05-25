@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>  </title>
+    <title>{{ character.CharacterName }}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{% static 'css/header.css' %}" rel="stylesheet">
     <link href="{% static 'css/container.css' %}" rel="stylesheet">
@@ -15,10 +15,9 @@
 	<div id="container">
 
 		<!-- HEADER -->
-    	<div id="header">
+        <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
@@ -40,7 +39,12 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
             </nav>
         </div>
 
