@@ -24,15 +24,16 @@ def get_comicpage(request):
     if 'rate' in request.POST:
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
+        ratingDate = timezone.now()
         try:
-            UserRatings.objects.get(id=userId, ComicID=comicId)
+            UserRatings.objects.get(UserID=userId, ComicID=comicId)
             cursor = connection.cursor()
-            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE id = %s AND ComicID = %s;", (userRating, userId, comicId))
+            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
             cursor.close()
         except:
-            UserRatings.objects.create(id=userId, ComicID=comicId, UserRating=userRating)
+            UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
 
-        raters = UserRatings.objects.raw('SELECT id, ComicID, UserRating FROM website_userratings '
+        raters = UserRatings.objects.raw('SELECT * FROM website_userratings '
                                          'WHERE ComicID = %s;', [comicId])
         comic.ComicNumberOfRaters = len(list(raters))
         totalRating = 0
@@ -43,8 +44,9 @@ def get_comicpage(request):
             comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
         else:
             comic.ComicRating = 0
-
         comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
+        TimelineItemTypeId = UserRatings.objects.get(UserID=userId, ComicID=comicId).UserRatingID
+        TimelineItems.objects.create(UserID=userId, TimelineItemTypeName="Rating", TimelineItemTypeID=TimelineItemTypeId, TimelineItemDatePosted=ratingDate)
 
 
     #Reviews
@@ -52,12 +54,15 @@ def get_comicpage(request):
                                      'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
     userList = Users.objects.raw('SELECT * FROM auth_user')
     if "review" in request.POST:
-        reviewtext = request.POST.get("textfield", None)
-        revDate = timezone.now()
+        reviewText = request.POST.get("textfield", None)
+        reviewDate = timezone.now()
         user = request.user.username
-        review = Reviews(ComicID=comicId, UserID=userId, username=user, ReviewDate=revDate,
-                         ReviewText=reviewtext)
+        review = Reviews(ComicID=comicId, UserID=userId, username=user, ReviewDate=reviewDate,
+                         ReviewText=reviewText)
         review.save()
+        timelineItemTypeId = Reviews.objects.latest('id').id
+        TimelineItems.objects.create(UserID=userId, TimelineItemTypeName="Review",
+                                     TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=reviewDate)
 
     comicList = Comic.objects.raw('select * from website_comic where ComicID = %s', [comicId])
     characterList = Character.objects.raw('SELECT DISTINCT Characters.CharacterID, CharacterName FROM website_comic '
@@ -298,18 +303,3 @@ def search(request):
         newsList = NewsFeed.objects.raw('SELECT ID, Title FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
     return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
                                            'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})
-
-def search_Comic_by_Character(request):
-    if request.method == 'GET':
-        form = request.GET.get('csearch', None)
-        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
-
-    return render(request, 'charcsres.html', {'comics': comics})
-
-def search_Comic_by_Creator(request):
-    if request.method == 'GET':
-        form = request.GET.get('csearch', None)
-        comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
-
-    return render(request, 'creacsres.html', {'comics': comics})
-

@@ -86,11 +86,8 @@
                 <p><b>Series:</b>
                      <a href="seriespage?id={{ series.SeriesID }}">{{ series.SeriesName }}</a>
                 </p>
-
                 <p><b>Issue Title:</b> {{ comic.ComicIssueTitle }}</p>
-
-				        <p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
-
+                <p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
                 <p><b>Publisher:</b>
                     <a href="publisherpage?id={{ publisher.PublisherID }}">{{ publisher.PublisherName }}</a>
                 </p>
@@ -103,11 +100,8 @@
                 </p>
 
                 <p><b></b> {{ storyArc.StoryArcTitle }}</p>
-
-				        <p><b>Price:</b> {{ comic.ComicPrice }} </p>
-
-				        <p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
-
+                <p><b>Price:</b> {{ comic.ComicPrice }} </p>
+                <p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
                 <p><b>Cover Format:</b> {{ comic.ComicFormat }}</p>
 
                 <p><b>Characters:</b>
@@ -172,8 +166,10 @@
                 <div id="Review">
                     <h4 style="text-align: center">Reviews</h4>
                     {% for review in reviewList %}
+                        <div id = "Review{{ review.id }}">
                         <p>
                             {% for user in userList %}
+
                                 {% if review.UserID == user.id %}
                                     {% if user.user_picture %}
                                         <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
@@ -184,6 +180,7 @@
                             {% endfor %}
                             <a href="profile?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b></p>
                         <p> {{ review.ReviewText }} </p>
+                        </div>
                     {% endfor %}
                     <div id="WriteReview">
                         {% if request.user.username %}

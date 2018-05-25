@@ -146,10 +146,20 @@ class Reviews(models.Model):
 
       
 class UserRatings(models.Model):
-    id = models.IntegerField(db_column='id')
-    ComicID = models.IntegerField(db_column='ComicID', primary_key=True)
+    UserRatingID = models.AutoField(db_column='UserRatingID', primary_key=True)
+    UserID = models.IntegerField(db_column='UserID')
+    ComicID = models.IntegerField(db_column='ComicID')
     UserRating = models.IntegerField()
+
 
 class UserFollowings(models.Model):
     UserID = models.IntegerField(db_column='UserID', primary_key=True)
     FollowedUserID = models.IntegerField(db_column='FollowedUserID')
+
+
+class TimelineItems(models.Model):
+    TimelineItemID = models.AutoField(db_column='TimelineItemID', primary_key=True)
+    UserID = models.IntegerField()
+    TimelineItemTypeName = models.CharField(max_length = 255)
+    TimelineItemTypeID = models.IntegerField()
+    TimelineItemDatePosted = models.DateTimeField()
