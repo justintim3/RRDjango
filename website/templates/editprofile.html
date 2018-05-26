@@ -58,9 +58,9 @@
 
                     <div id="profilepic">
                         {% if profile.user_picture %}
-                            <img id="image" src="static/images/UserImages/{{ profile.user_picture }}">
+                            <img id="profileImage" src="static/images/UserImages/{{ profile.user_picture }}">
                         {% else %}
-                            <img id="image" src="static/images/default-profile.png">
+                            <img id="profileImage" src="static/images/default-profile.png">
                         {% endif %}
                     </div>
                     {% if request.user.username %}
