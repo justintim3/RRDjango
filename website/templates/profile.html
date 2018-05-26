@@ -68,7 +68,11 @@
                             <p>
                             <form method="POST">
                                 {% csrf_token %}
+                            {% if profile.id != request.user.id %}
                                 <button type="submit" name="message" id="profileButtons">Message</button>
+                            {% else %}
+                                <button type="submit" name="message" id="profileButtons" disabled>Message</button>
+                            {% endif %}
                             </form>
                             {% if profile.id != request.user.id %}
                                 {% if not following %}
@@ -151,8 +155,11 @@
                 </div>
 
                 <div id="edit">
-                    <a href="/editprofile?id={{ request.user.id }}">Edit Profile</a>
-                    <button type="submit" name="editProfile">Edit Profile</button>
+                    {% if request.user.id %}
+                        <form action="{% url 'editprofile' %}">
+                            <button type="submit">Edit Profile</button>
+                        </form>
+                    {% endif %}
                 </div>
                 </div>
             </div>

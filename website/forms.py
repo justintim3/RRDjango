@@ -1,4 +1,6 @@
 from django import forms
 
-class ComicSearchForm(forms.Form):
-    searchParam = forms.CharField(label='Search for comics by title, characters, or creators', max_length=255)
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()
+

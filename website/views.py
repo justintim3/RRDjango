@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
-from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
+from .forms import UploadFileForm
+from django.http import HttpResponseRedirect
+
 
 # Create your views here.
 
@@ -233,6 +235,17 @@ def get_profile(request):
     userId = request.user.id
     profileId = request.GET.get('id')
 
+    if "saveProfile" in request.POST:
+        fname = request.POST.get("firstname", None)
+        lname = request.POST.get("lastname", None)
+        useremail = request.POST.get("email", None)
+        address = request.POST.get("address", None)
+        interests = request.POST.get("interests", None)
+        biography = request.POST.get("biography", None)
+        cursor = connection.cursor()
+        cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, biography = %s WHERE id = %s;", (fname, lname, useremail, address, userId, interests, biography))
+        cursor.close()
+
     following = True
     try:
         UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
@@ -250,8 +263,6 @@ def get_profile(request):
     #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
     if 'message' in request.POST:
         pass
-    if 'editProfile' in request.POST:
-        pass
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
     timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
@@ -263,22 +274,9 @@ def get_profile(request):
 
 def get_editprofile(request):
     userId = request.user.id
-    profileId = request.GET.get('id')
-    profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
-
-    print(userId)
-    if "editProfile" in request.POST:
-        fname = request.POST.get("firstname", None)
-        print(fname)
-        print(type(request.POST.get("firstname", None)))
-        lname = request.POST.get("lastname", None)
-        useremail = request.POST.get("email", None)
-        profile = Users("UPDATE auth_user SET first_name = %s WHERE id = %s;", fname, userId)
-        profile.save()
-        return render(request, 'profile.html', {'profile': profile[0]})
+    profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [userId])
 
     return render(request, 'editprofile.html', {'profile': profile[0]})
-
 
 
 def get_signuppage(request):
