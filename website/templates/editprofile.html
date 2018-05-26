@@ -100,7 +100,7 @@
                 </div>
 
                 <div id="rightCol">
-                    <form method="POST">
+                    <form method="POST" action="/profile?id={{ request.user.id }}">
                         {% csrf_token %}
                         <h4>About</h4>
                         <div class="about">
@@ -134,20 +134,11 @@
                             </ul>
                         </div>
 
-                        <h4>Timeline</h4>
-                        <div class="timeline">
-                            <p>TimeLine items here</p>
+                        <div id="edit">
+                            <button type="submit" name="saveProfile">Save Changes</button>
                         </div>
                     </form>
                 </div>
-
-                <div id="edit">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <button type="submit" name="editProfile">Save Changes</button>
-                    </form>
-                </div>
-
             </div>
         </div>
         <!-- END BODY CONTENT -->

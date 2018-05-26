@@ -151,8 +151,11 @@
                 </div>
 
                 <div id="edit">
-                    <a href="/editprofile?id={{ request.user.id }}">Edit Profile</a>
-                    <button type="submit" name="editProfile">Edit Profile</button>
+                    {% if request.user.id %}
+                        <form action="{% url 'editprofile' %}">
+                            <button type="submit">Edit Profile</button>
+                        </form>
+                    {% endif %}
                 </div>
                 </div>
             </div>
