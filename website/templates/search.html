@@ -78,7 +78,7 @@
                         <th>Comic Title</th>
                     </tr>
                 {% for comic in comicList %}
-				    <tr>
+                    <tr>
   				    	<td>{{ forloop.counter }}</td>
                         <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
                         <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
@@ -101,9 +101,9 @@
                         <td>{{ forloop.counter }}</td>
                         <td>
                             {% if character.CharacterPicture %}
-                            <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                                <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
                             {% else %}
-                            <img id="image" src="static/images/default-batman.jpg">
+                                <img id="image" src="static/images/default-batman.jpg">
                             {% endif %}
                         </td>
                         <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
@@ -194,6 +194,5 @@
     	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
-
 </body>
 </html>

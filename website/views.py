@@ -254,7 +254,11 @@ def get_profile(request):
         pass
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
-    return render(request, 'profile.html', {'following': following, 'profile': profile[0]})
+    timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
+    ratingList = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s', [profileId])
+    reviewList = Reviews.objects.raw('SELECT * FROM website_reviews WHERE UserID = %s', [profileId])
+
+    return render(request, 'profile.html', {'following': following, 'profile': profile[0], 'timelineItemList': timelineItemList, 'ratingList': ratingList, 'reviewList': reviewList})
 
 
 def get_editprofile(request):
@@ -275,6 +279,7 @@ def get_editprofile(request):
         return render(request, 'profile.html', {'profile': profile[0]})
 
     return render(request, 'editprofile.html', {'profile': profile[0]})
+
 
 
 def get_signuppage(request):
