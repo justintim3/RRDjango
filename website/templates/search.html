@@ -101,9 +101,9 @@
                         <td>{{ forloop.counter }}</td>
                         <td>
                             {% if character.CharacterPicture %}
-                            <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                                <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
                             {% else %}
-                            <img id="image" src="static/images/default-batman.jpg">
+                                <img id="image" src="static/images/default-batman.jpg">
                             {% endif %}
                         </td>
                         <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
@@ -182,7 +182,6 @@
             {% empty %}
             {% endfor %}
     	</div>
-
 	</div>
 	<!-- END CONTAINER -->
 

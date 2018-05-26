@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
-from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
