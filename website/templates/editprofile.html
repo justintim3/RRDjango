@@ -47,7 +47,7 @@
 			    </div>
             </nav>
         </div>
-  
+
   		<!-- BODY CONTENT -->
   		<div id="content">
             <div id="info_section">
@@ -100,35 +100,52 @@
                 </div>
 
                 <div id="rightCol">
-                    <h4>About</h4>
-                    <div class="about">
-                        <ul style="list-style-type: none">
-                            <li><p><b>First Name: </b>{{ profile.first_name }}</p></li>
-                            <li><p><b>Last Name: </b>{{ profile.last_name }}</p></li>
-                            <li><p><b>Email: </b>{{ profile.email }}</p></li>
-                            <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
-                        </ul>
-                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <h4>About</h4>
+                        <div class="about">
+                            <ul style="list-style-type: none">
+                                <li>
+                                    <p><b>First Name: </b>
+                                        <input type="text" name="firstname">
+                                    </p>
+                                </li>
+                                <li>
+                                    <p><b>Last Name: </b>
+                                        <input type="text" name="lastname">
+                                    </p>
+                                </li>
+                                <li>
+                                    <p><b>Email: </b>
+                                        <input type="text" name="email">
+                                    </p>
+                                </li>
+                                <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
+                            </ul>
+                        </div>
 
-                    <h4>Biography</h4>
-                    <div class="bio">
-                        <ul style="list-style-type:none">
-                            <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
-                            <li><p><b>Interest: </b></p></li>
-                            <li><p><b>Favorite Comic: </b></p></li>
-                            <li><p><b>Favorite Character: </b></p></li>
-                        </ul>
-                    </div>
+                        <h4>Biography</h4>
+                        <div class="bio">
+                            <ul style="list-style-type:none">
+                                <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
+                                <li><p><b>Interest: </b></p></li>
+                                <li><p><b>Favorite Comic: </b></p></li>
+                                <li><p><b>Favorite Character: </b></p></li>
+                            </ul>
+                        </div>
 
-                    <h4>Timeline</h4>
-                    <div class="timeline">
-                        <p>TimeLine items here</p>
-                    </div>
+                        <h4>Timeline</h4>
+                        <div class="timeline">
+                            <p>TimeLine items here</p>
+                        </div>
+                    </form>
                 </div>
 
                 <div id="edit">
-                    <a href="/editprofile?id={{ request.user.id }}">Edit Profile</a>
-                    <button type="submit" name="editProfile">Edit Profile</button>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="editProfile">Save Changes</button>
+                    </form>
                 </div>
 
             </div>
@@ -136,7 +153,7 @@
         <!-- END BODY CONTENT -->
   	</div>
 	<!-- END CONTAINER -->
-	
+
 	<!-- FOOTER -->
   	<div id = footer>
         <ul>

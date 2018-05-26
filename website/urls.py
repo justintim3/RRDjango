@@ -18,6 +18,7 @@ urlpatterns = [
     path('character', views.get_character, name = 'character'),
     path('creator', views.get_creator, name = 'creator'),
     path('profile', views.get_profile, name='profile'),
+    path('editprofile', views.get_editprofile, name='editprofile'),
     path('signup',views.signup, name = 'signup'),
     path('about', views.get_about, name = 'about'),
     path('contact', views.get_contact, name = 'contact'),

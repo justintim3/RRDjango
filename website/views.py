@@ -257,6 +257,26 @@ def get_profile(request):
     return render(request, 'profile.html', {'following': following, 'profile': profile[0]})
 
 
+def get_editprofile(request):
+    userId = request.user.id
+    profileId = request.GET.get('id')
+    profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
+
+    print(userId)
+    if "editProfile" in request.POST:
+        fname = request.POST.get("firstname", None)
+        print("helloworld")
+        print(fname)
+        print(type(request.POST.get("firstname", None)))
+        lname = request.POST.get("lastname", None)
+        useremail = request.POST.get("email", None)
+        profile = Users("UPDATE auth_user SET first_name = %s WHERE id = %s;", fname, userId)
+        profile.save()
+        return render(request, 'profile.html', {'profile': profile[0]})
+
+    return render(request, 'editprofile.html', {'profile': profile[0]})
+
+
 def get_signuppage(request):
     return render(request, 'signup.html')
 
