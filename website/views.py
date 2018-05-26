@@ -264,6 +264,8 @@ def get_signuppage(request):
 def get_about(request):
     return render(request, 'about.html')
 
+def get_contact(request):
+    return render(request, 'contact.html')
 
 def get_publisherpage(request):
     publisherId = request.GET.get('id')
@@ -295,11 +297,11 @@ def get_seriespage(request):
 def search(request):
     if 'search' in request.GET:
         form = request.GET.get('search', None)
-        comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
-        characterList = Character.objects.raw('SELECT CharacterID, CharacterName FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
-        creatorList = Creator.objects.raw('SELECT CreatorID, CreatorName FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
-        seriesList = Series.objects.raw('SELECT SeriesID, SeriesName FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
-        publisherList = Publishers.objects.raw('SELECT PublisherID, PublisherName FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
-        newsList = NewsFeed.objects.raw('SELECT ID, Title FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
+        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
+        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
+        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
+        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
+        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
+        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
     return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
                                            'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})
