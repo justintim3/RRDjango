@@ -1,0 +1,23 @@
+table {
+    width: 100%;
+    //border: 2px solid blue;
+}
+
+#tableHeader {
+    background-color: var(--main_theme_color);
+    color: white;
+    height: 30px;
+}
+
+.number {
+    width: 20%;
+}
+
+td, th {
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+#image {
+    height: 150px;
+}
