@@ -1,19 +1,18 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Comics</title>
+    <title>Contact</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{% static 'css/header.css' %}" rel="stylesheet">
     <link href="{% static 'css/container.css' %}" rel="stylesheet">
     <link href="{% static 'css/footer.css' %}" rel="stylesheet">
-    <link href= "{% static 'css/comic.css' %}" rel="stylesheet">
 </head>
 <body>
-	<!-- CONTAINER -->
+    <!-- CONTAINER -->
 	<div id="container">
-	
+
 		<!-- HEADER -->
         <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
@@ -47,32 +46,30 @@
 			    </div>
             </nav>
         </div>
-    	
+
     	<!-- BODY CONTENT -->
     	<div id="content">
-			
-    		<table class="table table-bordered">
-    			<tr>
-    				<th id="id">Number</th>
-                    <th id="series">Series</th>
-					<th id="name">Title</th>
-    				<th id="rating">Rating</th>
-    			</tr>
-                {% for comic in comics %}
-				<tr>
-  					<td>{{ forloop.counter }}</td>
-                    <td><a href="seriespage?id={{comic.SeriesID}}">{{ comic.SeriesName }}</a></td>
-                    <td><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    				<td>{{ comic.ComicRating }}</td>
-    			</tr>
-                {% endfor %}
-    		</table>
-
+            <h2><b>Contact Us</b></h2>
+            <p>Tel: 626-XXX-XXXX</p>
+            <p>Fax: 626-XXX-XXXX</p>
+            <br/>
+            <p>3801 West Temple Avenue</p>
+            <p>Pomona, CA 91768</p>
+            <br/>
+            <br/>
+            <h2><b>Team Members</b></h2>
+            <ul>
+                <li><p>Oakar Kyaw - cell - (626) 560 - 0601</p></li>
+                <li><p>Justin Lin - cell - ( 626 ) 384 - 7790</p></li>
+                <li><p>Patrick Quach - cell - ( 909 ) 395 - 6612</p></li>
+                <li><p>Colby Le - cell - (626) 560 - 0601</p></li>
+                <li><p>Ulices Esqueda - cell - ( 209 ) 471 - 2360</p></li>
+            </ul>
     	</div>
-    	
+
 	</div>
 	<!-- END CONTAINER -->
-	
+
 	<!-- FOOTER -->
     <div id = footer>
         <ul>
@@ -81,6 +78,6 @@
     	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
-    
+
 </body>
 </html>
