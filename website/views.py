@@ -269,7 +269,6 @@ def get_editprofile(request):
     print(userId)
     if "editProfile" in request.POST:
         fname = request.POST.get("firstname", None)
-        print("helloworld")
         print(fname)
         print(type(request.POST.get("firstname", None)))
         lname = request.POST.get("lastname", None)
