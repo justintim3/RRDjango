@@ -15,10 +15,9 @@
 	<div id="container">
 	
 		<!-- HEADER -->
-    	<div id="header">
+        <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
@@ -33,14 +32,19 @@
                     {% endblock %}
                 </div>
 
-            </div> 
+            </div>
             <nav>
                 <a href={% url 'homepage' %}>Home</a>
                 <a href={% url 'comic' %}>Comics</a>
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
             </nav>
         </div>
     	
@@ -82,11 +86,8 @@
                 <p><b>Series:</b>
                      <a href="seriespage?id={{ series.SeriesID }}">{{ series.SeriesName }}</a>
                 </p>
-
                 <p><b>Issue Title:</b> {{ comic.ComicIssueTitle }}</p>
-
-				        <p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
-
+                <p><b>Issue Number:</b> {{ comic.ComicIssueNumber }}</p>
                 <p><b>Publisher:</b>
                     <a href="publisherpage?id={{ publisher.PublisherID }}">{{ publisher.PublisherName }}</a>
                 </p>
@@ -99,11 +100,8 @@
                 </p>
 
                 <p><b></b> {{ storyArc.StoryArcTitle }}</p>
-
-				        <p><b>Price:</b> {{ comic.ComicPrice }} </p>
-
-				        <p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
-
+                <p><b>Price:</b> {{ comic.ComicPrice }} </p>
+                <p><b>Cover Date:</b> {{ comic.ComicCoverDate }}</p>
                 <p><b>Cover Format:</b> {{ comic.ComicFormat }}</p>
 
                 <p><b>Characters:</b>
@@ -168,8 +166,10 @@
                 <div id="Review">
                     <h4 style="text-align: center">Reviews</h4>
                     {% for review in reviewList %}
+                        <div id = "Review{{ review.id }}">
                         <p>
                             {% for user in userList %}
+
                                 {% if review.UserID == user.id %}
                                     {% if user.user_picture %}
                                         <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
@@ -180,6 +180,7 @@
                             {% endfor %}
                             <a href="profile?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b></p>
                         <p> {{ review.ReviewText }} </p>
+                        </div>
                     {% endfor %}
                     <div id="WriteReview">
                         {% if request.user.username %}
@@ -203,9 +204,7 @@
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
   		    <li><a href={% url 'about' %}>About</a></li>
-    	    <li><a href="#contacts">Contacts</a></li>
-    	    <li><a href="#faq">FAQ</a></li>
-            <li><a href="#privacy">Privacy</a></li>	
+    	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
 </body>

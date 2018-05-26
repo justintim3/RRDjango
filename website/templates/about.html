@@ -18,7 +18,6 @@
         <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
@@ -40,28 +39,25 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
             </nav>
         </div>
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-            <h2><b>Contact Us</b></h2>
-            <p>Tel: 626-XXX-XXXX</p>
-            <p>Fax: 626-XXX-XXXX</p>
-            <br/>
-            <p>3801 West Temple Avenue</p>
-            <p>Pomona, CA 91768</p>
-            <br/>
-            <br/>
-            <h2><b>Team Members</b></h2>
-            <ul>
-                <li><p>Oakar Kyaw - cell - (626) 560 - 0601 - oakkar8@gmail.com</p></li>
-                <li><p>Justin Lin - cell - ( 626 ) 384 - 7790</p></li>
-                <li><p>Patrick Quach - cell - ( 909 ) 395 - 6612</p></li>
-                <li><p>Colby Le - cell - (626) 560 - 0601</p></li>
-                <li><p>Ulices Esqueda - cell - ( 209 ) 471 - 2360</p></li>
-            </ul>
+            <h1 style="text-align: center">About Us</h1>
+                <h4>
+                    We are a group of incredible students from Cal Poly Pomona.
+                    This website is a quarter long project from <u><b>CS480: Software Engineering</b></u>
+                    taught by one of the best Computer Science professor ever alive. The one and only one
+                    <span><h3>Edwin Rodr<b style="color: red">í</b>guez</h3></span>!!!
+                </h4>
+                <img id="prof" src="static/images/edwin.jpg">
     	</div>
 
 	</div>
@@ -72,9 +68,7 @@
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
   		    <li><a href={% url 'about' %}>About</a></li>
-    	    <li><a href="#contacts">Contacts</a></li>
-    	    <li><a href="#faq">FAQ</a></li>
-            <li><a href="#privacy">Privacy</a></li>
+    	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
 

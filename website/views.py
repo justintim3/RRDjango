@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
+from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
@@ -23,15 +24,16 @@ def get_comicpage(request):
     if 'rate' in request.POST:
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
+        ratingDate = timezone.now()
         try:
-            UserRatings.objects.get(id=userId, ComicID=comicId)
+            UserRatings.objects.get(UserID=userId, ComicID=comicId)
             cursor = connection.cursor()
-            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE id = %s AND ComicID = %s;", (userRating, userId, comicId))
+            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
             cursor.close()
         except:
-            UserRatings.objects.create(id=userId, ComicID=comicId, UserRating=userRating)
+            UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
 
-        raters = UserRatings.objects.raw('SELECT id, ComicID, UserRating FROM website_userratings '
+        raters = UserRatings.objects.raw('SELECT * FROM website_userratings '
                                          'WHERE ComicID = %s;', [comicId])
         comic.ComicNumberOfRaters = len(list(raters))
         totalRating = 0
@@ -42,8 +44,9 @@ def get_comicpage(request):
             comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
         else:
             comic.ComicRating = 0
-
         comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
+        TimelineItemTypeId = UserRatings.objects.get(UserID=userId, ComicID=comicId).UserRatingID
+        TimelineItems.objects.create(UserID=userId, TimelineItemTypeName="Rating", TimelineItemTypeID=TimelineItemTypeId, TimelineItemDatePosted=ratingDate)
 
 
     #Reviews
@@ -51,12 +54,15 @@ def get_comicpage(request):
                                      'WHERE ComicID = %s ORDER BY ReviewDate DESC', [comicId])
     userList = Users.objects.raw('SELECT * FROM auth_user')
     if "review" in request.POST:
-        reviewtext = request.POST.get("textfield", None)
-        revDate = timezone.now()
+        reviewText = request.POST.get("textfield", None)
+        reviewDate = timezone.now()
         user = request.user.username
-        review = Reviews(ComicID=comicId, UserID=userId, username=user, ReviewDate=revDate,
-                         ReviewText=reviewtext)
+        review = Reviews(ComicID=comicId, UserID=userId, username=user, ReviewDate=reviewDate,
+                         ReviewText=reviewText)
         review.save()
+        timelineItemTypeId = Reviews.objects.latest('id').id
+        TimelineItems.objects.create(UserID=userId, TimelineItemTypeName="Review",
+                                     TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=reviewDate)
 
     comicList = Comic.objects.raw('select * from website_comic where ComicID = %s', [comicId])
     characterList = Character.objects.raw('SELECT DISTINCT Characters.CharacterID, CharacterName FROM website_comic '
@@ -248,7 +254,7 @@ def get_profile(request):
         pass
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
-    return render(request, 'profile.html', {'profile': profile[0], 'following': following})
+    return render(request, 'profile.html', {'following': following, 'profile': profile[0]})
 
 
 def get_signuppage(request):
@@ -258,6 +264,8 @@ def get_signuppage(request):
 def get_about(request):
     return render(request, 'about.html')
 
+def get_contact(request):
+    return render(request, 'contact.html')
 
 def get_publisherpage(request):
     publisherId = request.GET.get('id')
@@ -286,3 +294,14 @@ def get_seriespage(request):
                                            'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
+def search(request):
+    if 'search' in request.GET:
+        form = request.GET.get('search', None)
+        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
+        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
+        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
+        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
+        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
+        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
+    return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
+                                           'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})

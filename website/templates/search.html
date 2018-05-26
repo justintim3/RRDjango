@@ -1,0 +1,199 @@
+<DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="{% static 'css/header.css' %}" rel="stylesheet">
+    <link href="{% static 'css/container.css' %}" rel="stylesheet">
+    <link href="{% static 'css/footer.css' %}" rel="stylesheet">
+    <link href="{% static 'css/search.css' %}" rel="stylesheet">
+</head>
+<body>
+	<!-- CONTAINER -->
+	<div id="container">
+
+		<!-- HEADER -->
+        <div id="header">
+            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="acc_info">
+                <div id="login_part">
+                    {% block authentication %}
+
+                    {% if request.user.username %}
+                    <a id="username" href="/profile?id={{ request.user.id }}">{{request.user.username}}</a>
+                    <a id="logout" href={% url 'logout' %}>Log Out</a>
+
+                    {% else %}
+                    <a id="login" href={% url 'login' %}>Log In</a>
+                    <a id="signup" href={% url 'signup' %}>Sign up</a>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+
+            </div>
+            <nav>
+                <a href={% url 'homepage' %}>Home</a>
+                <a href={% url 'comic' %}>Comics</a>
+                <a href={% url 'character' %}>Characters</a>
+                <a href={% url 'creator' %}>Creators</a>
+                <a href={% url 'newsfeed' %}>News</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
+            </nav>
+        </div>
+
+    	<!-- BODY CONTENT -->
+    	<div id="content">
+            <h3><b>Search Results</b></h3>
+            <br>
+            {% for series in seriesList|slice:":1" %}
+                <h1><b>Series</b></h1>
+                <table id="seriesTable">
+                    <tr id="tableHeader">
+                        <th class="number">ID</th>
+                        <th>Series Name</th>
+                    </tr>
+                {% for series in seriesList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="../seriespage?id={{series.SeriesID}}">{{ series.SeriesName }}</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for comic in comicList|slice:":1" %}
+                <h1><b>Comic Issues</b></h1>
+                <table>
+                    <tr id="tableHeader">
+                        <th class="number">ID</th>
+                        <th>Comic Cover</th>
+                        <th>Comic Title</th>
+                    </tr>
+                {% for comic in comicList %}
+				    <tr>
+  				    	<td>{{ forloop.counter }}</td>
+                        <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
+                        <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
+    			    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for character in characterList|slice:":1" %}
+                <h1><b>Characters</b></h1>
+                <table>
+                    <tr id="tableHeader">
+                        <th class="number">ID</th>
+                        <th>Character Picture</th>
+                        <th>Character Name</th>
+                    </tr>
+                {% for character in characterList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if character.CharacterPicture %}
+                            <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                            {% else %}
+                            <img id="image" src="static/images/default-batman.jpg">
+                            {% endif %}
+                        </td>
+                        <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for creator in creatorList|slice:":1" %}
+                <h1><b>Creators</b></h1>
+                <table>
+                    <tr id="tableHeader">
+                        <th class="number">ID</th>
+                        <th>Creator Picture</th>
+                        <th>Creator Name</th>
+                    </tr>
+                {% for creator in creatorList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if creator.CreatorPicture %}
+                            <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
+                            {% else %}
+                            <img id="image" src="static/images/default-profile.png">
+                            {% endif %}
+                        </td>
+                        <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for publisher in publisherList|slice:":1" %}
+                <h1><b>Publishers</b></h1>
+                <table>
+                    <tr id="tableHeader">
+                        <th class="number">ID</th>
+                        <th>Publisher Logo</th>
+                        <th>Publisher Name</th>
+                    </tr>
+                {% for publisher in publisherList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if publisher.PublisherPicture %}
+                            <img id="image" src="static/images/PublishersImages/{{publisher.PublisherPicture }}">
+                            {% else %}
+                            <img id="image" src="static/images/default-batman.png">
+                            {% endif %}
+                        </td>
+                        <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+
+            {% for news in newsList|slice:":1" %}
+            <h1><b>News</b></h1>
+                <table>
+                    <tr id="tableHeader">
+                        <th class="number">ID</th>
+                        <th>News Title</th>
+                        <th>Preview</th>
+                    </tr>
+                {% for news in newsList %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="../newsfeedpage?id={{news.ID}}">{{ news.Title }}</a></td>
+                        <td>{{ news.Preview }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% empty %}
+            {% endfor %}
+    	</div>
+
+	</div>
+	<!-- END CONTAINER -->
+
+	<!-- FOOTER -->
+    <div id = footer>
+        <ul>
+  	    	<li><a href={% url 'homepage'  %}>Home</a></li>
+  		    <li><a href={% url 'about' %}>About</a></li>
+    	    <li><a href={% url 'contact' %}>Contacts</a></li>
+    	</ul>
+    </div>
+
+</body>
+</html>

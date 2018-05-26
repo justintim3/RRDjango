@@ -15,10 +15,9 @@
 	<div id="container">
 
 		<!-- HEADER -->
-    	<div id="header">
+        <div id="header">
             <div id="logo"><img src="static/images/logo.png"></div>
             <div id="acc_info">
-
                 <div id="login_part">
                     {% block authentication %}
 
@@ -40,7 +39,12 @@
                 <a href={% url 'character' %}>Characters</a>
                 <a href={% url 'creator' %}>Creators</a>
                 <a href={% url 'newsfeed' %}>News</a>
-                <a href="">Search</a>
+                <div id="search_bar">
+                    <form type="GET" action="/search" id="search">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <button type="submit" id="search_button">Submit</button>
+                    </form>
+			    </div>
             </nav>
         </div>
 
@@ -92,9 +96,7 @@
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
   		    <li><a href={% url 'about' %}>About</a></li>
-    	    <li><a href="#contacts">Contacts</a></li>
-    	    <li><a href="#faq">FAQ</a></li>
-            <li><a href="#privacy">Privacy</a></li>
+    	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
 </body>
