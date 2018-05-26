@@ -68,7 +68,11 @@
                             <p>
                             <form method="POST">
                                 {% csrf_token %}
+                            {% if profile.id != request.user.id %}
                                 <button type="submit" name="message" id="profileButtons">Message</button>
+                            {% else %}
+                                <button type="submit" name="message" id="profileButtons" disabled>Message</button>
+                            {% endif %}
                             </form>
                             {% if profile.id != request.user.id %}
                                 {% if not following %}

@@ -63,31 +63,6 @@
                             <img id="profileImage" src="static/images/default-profile.png">
                         {% endif %}
                     </div>
-                    {% if request.user.username %}
-                        <div id = "leftButtons">
-                            <p>
-                            <form method="POST">
-                                {% csrf_token %}
-                                <button type="submit" name="message" id="profileButtons">Message</button>
-                            </form>
-                            {% if profile.id != request.user.id %}
-                                {% if not following %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit" name="follow" id="profileButtons">Follow</button>
-                                    </form>
-                                {% else %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
-                                    </form>
-                                {% endif %}
-                            {% else %}
-                                <button type="submit" name="follow" id="profileButtons" disabled>Follow</button>
-                            {% endif %}
-                            </p>
-                        </div>
-                    {% endif %}
                     <p><b>Date Joined: </b>{{ profile.date_joined }}</p>
                     <p><b>Last Login: </b>{{ profile.last_login }}</p>
 
@@ -107,17 +82,22 @@
                             <ul style="list-style-type: none">
                                 <li>
                                     <p><b>First Name: </b>
-                                        <input type="text" name="firstname">
+                                        <input type="text" name="firstname" value="{{ profile.first_name }}">
                                     </p>
                                 </li>
                                 <li>
                                     <p><b>Last Name: </b>
-                                        <input type="text" name="lastname">
+                                        <input type="text" name="lastname" value="{{ profile.last_name }}">
                                     </p>
                                 </li>
                                 <li>
                                     <p><b>Email: </b>
-                                        <input type="text" name="email">
+                                        <input type="text" name="email" value="{{ profile.email }}">
+                                    </p>
+                                </li>
+                                <li>
+                                    <p><b>Address: </b>
+                                        <input type="text" name="address" value="{{ profile.address }}">
                                     </p>
                                 </li>
                                 <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
@@ -128,7 +108,9 @@
                         <div class="bio">
                             <ul style="list-style-type:none">
                                 <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
-                                <li><p><b>Interest: </b></p></li>
+                                    <textarea name="biography" style="width:100%; height: 200px; resize:none" value="{{ profile.biography }}">{{ profile.biography }}</textarea>
+                                <li><p><b>Interests: </b></p></li>
+                                    <input type="text" name="interests" value="{{ profile.interests }}">
                                 <li><p><b>Favorite Comic: </b></p></li>
                                 <li><p><b>Favorite Character: </b></p></li>
                             </ul>
