@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
-from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
+from .forms import UploadFileForm
+from django.http import HttpResponseRedirect
+
 
 # Create your views here.
 
@@ -233,6 +235,17 @@ def get_profile(request):
     userId = request.user.id
     profileId = request.GET.get('id')
 
+    if "saveProfile" in request.POST:
+        fname = request.POST.get("firstname", None)
+        lname = request.POST.get("lastname", None)
+        useremail = request.POST.get("email", None)
+        address = request.POST.get("address", None)
+        interests = request.POST.get("interests", None)
+        biography = request.POST.get("biography", None)
+        cursor = connection.cursor()
+        cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, biography = %s WHERE id = %s;", (fname, lname, useremail, address, userId, interests, biography))
+        cursor.close()
+
     following = True
     try:
         UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
@@ -250,11 +263,20 @@ def get_profile(request):
     #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
     if 'message' in request.POST:
         pass
-    if 'editProfile' in request.POST:
-        pass
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
-    return render(request, 'profile.html', {'following': following, 'profile': profile[0]})
+    timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
+    ratingList = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s', [profileId])
+    reviewList = Reviews.objects.raw('SELECT * FROM website_reviews WHERE UserID = %s', [profileId])
+
+    return render(request, 'profile.html', {'following': following, 'profile': profile[0], 'timelineItemList': timelineItemList, 'ratingList': ratingList, 'reviewList': reviewList})
+
+
+def get_editprofile(request):
+    userId = request.user.id
+    profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [userId])
+
+    return render(request, 'editprofile.html', {'profile': profile[0]})
 
 
 def get_signuppage(request):
@@ -264,6 +286,8 @@ def get_signuppage(request):
 def get_about(request):
     return render(request, 'about.html')
 
+def get_contact(request):
+    return render(request, 'contact.html')
 
 def get_publisherpage(request):
     publisherId = request.GET.get('id')
@@ -295,11 +319,11 @@ def get_seriespage(request):
 def search(request):
     if 'search' in request.GET:
         form = request.GET.get('search', None)
-        comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
-        characterList = Character.objects.raw('SELECT CharacterID, CharacterName FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
-        creatorList = Creator.objects.raw('SELECT CreatorID, CreatorName FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
-        seriesList = Series.objects.raw('SELECT SeriesID, SeriesName FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
-        publisherList = Publishers.objects.raw('SELECT PublisherID, PublisherName FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
-        newsList = NewsFeed.objects.raw('SELECT ID, Title FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
+        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
+        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
+        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
+        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
+        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
+        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
     return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
                                            'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})

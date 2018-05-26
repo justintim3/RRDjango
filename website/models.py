@@ -116,7 +116,8 @@ class Users(models.Model):
     id = models.IntegerField(db_column='id', primary_key=True)
     last_login = models.DateField()
     is_superuser = models.BinaryField()
-    username = models.CharField(max_length = 200)
+    username = models.CharField(max_length=200)
+    password = models.CharField(max_length=255)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
@@ -125,9 +126,8 @@ class Users(models.Model):
     DOB = models.DateField()
     biography = models.TextField()
     user_picture = models.CharField(max_length=255)
-    #UserAddress = models.CharField(max_length=255)
-    #UserInterest = models.CharField(max_length=255)
-    #UserPassword = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    interest = models.CharField(max_length=255)
 
     def __str__(self):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName

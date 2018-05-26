@@ -58,9 +58,9 @@
 
                     <div id="profilepic">
                         {% if profile.user_picture %}
-                            <img id="image" src="static/images/UserImages/{{ profile.user_picture }}">
+                            <img id="profileImage" src="static/images/UserImages/{{ profile.user_picture }}">
                         {% else %}
-                            <img id="image" src="static/images/default-profile.png">
+                            <img id="profileImage" src="static/images/default-profile.png">
                         {% endif %}
                     </div>
                     {% if request.user.username %}
@@ -68,7 +68,11 @@
                             <p>
                             <form method="POST">
                                 {% csrf_token %}
+                            {% if profile.id != request.user.id %}
                                 <button type="submit" name="message" id="profileButtons">Message</button>
+                            {% else %}
+                                <button type="submit" name="message" id="profileButtons" disabled>Message</button>
+                            {% endif %}
                             </form>
                             {% if profile.id != request.user.id %}
                                 {% if not following %}
@@ -122,14 +126,42 @@
 
                     <h4>Timeline</h4>
                     <div class="timeline">
+                        {% for timelineItem in timelineItemList %}
+                            <div id = "TimelineItem{{ timelineItem.TimelineItemID }}">
+                                {% if timelineItem.UserID == profile.id %}
+                                    {% if profile.user_picture %}
+                                        <img id="timelineImage" src="static/images/UserImages/{{ profile.user_picture }}">
+                                    {% else %}
+                                        <img id="timelineImage" src="static/images/default-profile.png">
+                                    {% endif %}
+                                {% endif %}
+
+                                <a href="profile?id={{ timelineItem.UserID }}"><b>{{ timelineItem.UserName }}</b></a>
+                                    {% if timelineItem.TimelineItemTypeName == "Rating"%}
+                                        rated a <a href="comicpage?id={% for rating in ratingList %}{% if rating.UserRatingID == timelineItem.TimelineItemTypeID %}{{ rating.ComicID }}{% endif %}{% endfor %}">comic.</a>
+                                    {% elif timelineItem.TimelineItemTypeName == "Review" %}
+                                        reviewed a <a href="comicpage?id={% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}{{ review.ComicID }}{% endif %}{% endfor %}#Review{{ timelineItem.TimelineItemTypeID }}">comic.</a>
+                                    {% elif timelineItem.TimelineItemTypeName == "Follow" %}
+                                    {% elif timelineItem.TimelineItemTypeName == "Comment" %}
+                                    {% elif timelineItem.TimelineItemTypeName == "Thumbs" %}
+                                    {% else %}
+                                        fail
+                                    {% endif %}
+                                <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
+                            </div>
+                        {% endfor %}
                         <p>TimeLine items here</p>
-                    </div>
+
                 </div>
 
                 <div id="edit">
-                    <form method="POST">{% csrf_token %}<button type="submit" name="editProfile">Edit Profile</button></form>
+                    {% if request.user.id %}
+                        <form action="{% url 'editprofile' %}">
+                            <button type="submit">Edit Profile</button>
+                        </form>
+                    {% endif %}
                 </div>
-
+                </div>
             </div>
         </div>
         <!-- END BODY CONTENT -->
@@ -141,9 +173,7 @@
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
   		    <li><a href={% url 'about' %}>About</a></li>
-    	    <li><a href="#contacts">Contacts</a></li>
-    	    <li><a href="#faq">FAQ</a></li>
-            <li><a href="#privacy">Privacy</a></li>	
+    	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
 
