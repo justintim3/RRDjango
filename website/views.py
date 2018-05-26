@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import *
-from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
@@ -301,20 +300,11 @@ def get_seriespage(request):
 def search(request):
     if 'search' in request.GET:
         form = request.GET.get('search', None)
-<<<<<<< HEAD
-        comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
-        characterList = Character.objects.raw('SELECT CharacterID, CharacterName FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
-        creatorList = Creator.objects.raw('SELECT CreatorID, CreatorName FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
-        seriesList = Series.objects.raw('SELECT SeriesID, SeriesName FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
-        publisherList = Publishers.objects.raw('SELECT PublisherID, PublisherName FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
-        newsList = NewsFeed.objects.raw('SELECT ID, Title FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
-=======
         comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
         characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
         creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
         seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
         publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
         newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
     return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
                                            'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})

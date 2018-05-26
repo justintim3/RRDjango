@@ -8,11 +8,7 @@
     <link href="{% static 'css/header.css' %}" rel="stylesheet">
     <link href="{% static 'css/container.css' %}" rel="stylesheet">
     <link href="{% static 'css/footer.css' %}" rel="stylesheet">
-<<<<<<< HEAD
-    <link href= "{% static 'css/comic.css' %}" rel="stylesheet">
-=======
     <link href="{% static 'css/search.css' %}" rel="stylesheet">
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
 </head>
 <body>
 	<!-- CONTAINER -->
@@ -57,25 +53,16 @@
             <h3><b>Search Results</b></h3>
             <br>
             {% for series in seriesList|slice:":1" %}
-<<<<<<< HEAD
-                <h4><b>Series</b></h4>
-                <table class="table">
-=======
                 <h1><b>Series</b></h1>
                 <table id="seriesTable">
                     <tr id="tableHeader">
                         <th class="number">ID</th>
                         <th>Series Name</th>
                     </tr>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
                 {% for series in seriesList %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td><a href="../seriespage?id={{series.SeriesID}}">{{ series.SeriesName }}</a></td>
-<<<<<<< HEAD
-                        <td>{{ series.SeriesName }}</td>
-=======
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
                     </tr>
                 {% endfor %}
                 </table>
@@ -83,16 +70,6 @@
             {% endfor %}
 
             {% for comic in comicList|slice:":1" %}
-<<<<<<< HEAD
-                <h4><b>Comic Issues</b></h4>
-                <table class="table">
-                {% for comic in comicList %}
-				    <tr>
-  				    	<td>{{ forloop.counter }}</td>
-                        <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    			    	<td>{{ comic.ComicRating }}</td>
-    			    </tr>
-=======
                 <h1><b>Comic Issues</b></h1>
                 <table>
                     <tr id="tableHeader">
@@ -101,27 +78,17 @@
                         <th>Comic Title</th>
                     </tr>
                 {% for comic in comicList %}
-				        <tr>
-  				    	<td>{{ forloop.counter }}</td>
-                <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
-                <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    			      </tr>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
+                        <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
+                    </tr>
                 {% endfor %}
                 </table>
             {% empty %}
             {% endfor %}
 
             {% for character in characterList|slice:":1" %}
-<<<<<<< HEAD
-                <h4><b>Characters</b></h4>
-                <table class="table">
-                {% for character in characterList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
-                        <td>{{ character.CharacterName }}</td>
-=======
                 <h1><b>Characters</b></h1>
                 <table>
                     <tr id="tableHeader">
@@ -134,13 +101,12 @@
                         <td>{{ forloop.counter }}</td>
                         <td>
                             {% if character.CharacterPicture %}
-                            <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                                <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
                             {% else %}
-                            <img id="image" src="static/images/default-batman.jpg">
+                                <img id="image" src="static/images/default-batman.jpg">
                             {% endif %}
                         </td>
                         <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
                     </tr>
                 {% endfor %}
                 </table>
@@ -148,15 +114,6 @@
             {% endfor %}
 
             {% for creator in creatorList|slice:":1" %}
-<<<<<<< HEAD
-                <h4><b>Creators</b></h4>
-                <table class="table">
-                {% for creator in creatorList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
-                        <td>{{ creator.CreatorName }}</td>
-=======
                 <h1><b>Creators</b></h1>
                 <table>
                     <tr id="tableHeader">
@@ -175,7 +132,6 @@
                             {% endif %}
                         </td>
                         <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
                     </tr>
                 {% endfor %}
                 </table>
@@ -183,15 +139,6 @@
             {% endfor %}
 
             {% for publisher in publisherList|slice:":1" %}
-<<<<<<< HEAD
-                <h4><b>Publishers</b></h4>
-                <table class="table">
-                {% for publisher in publisherList %}
-                    <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
-                            <td>{{ publisher.PublisherName }}</td>
-=======
                 <h1><b>Publishers</b></h1>
                 <table>
                     <tr id="tableHeader">
@@ -210,7 +157,6 @@
                             {% endif %}
                         </td>
                         <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
                     </tr>
                 {% endfor %}
                 </table>
@@ -218,10 +164,6 @@
             {% endfor %}
 
             {% for news in newsList|slice:":1" %}
-<<<<<<< HEAD
-            <h4><b>News</b></h4>
-                <table class="table">
-=======
             <h1><b>News</b></h1>
                 <table>
                     <tr id="tableHeader">
@@ -229,7 +171,6 @@
                         <th>News Title</th>
                         <th>Preview</th>
                     </tr>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
                 {% for news in newsList %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
@@ -241,7 +182,6 @@
             {% empty %}
             {% endfor %}
     	</div>
-
 	</div>
 	<!-- END CONTAINER -->
 
@@ -250,17 +190,8 @@
         <ul>
   	    	<li><a href={% url 'homepage'  %}>Home</a></li>
   		    <li><a href={% url 'about' %}>About</a></li>
-<<<<<<< HEAD
-    	    <li><a href="#contacts">Contacts</a></li>
-    	    <li><a href="#faq">FAQ</a></li>
-            <li><a href="#privacy">Privacy</a></li>
-    	</ul>
-    </div>
-
-=======
     	    <li><a href={% url 'contact' %}>Contacts</a></li>
     	</ul>
     </div>
->>>>>>> f7e2b725218ec3e841ddcfeda410f1b71441c664
 </body>
 </html>
