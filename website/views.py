@@ -4,8 +4,6 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
-from .forms import UploadFileForm
-from django.http import HttpResponseRedirect
 
 
 # Create your views here.
