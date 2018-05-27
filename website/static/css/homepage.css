@@ -3,15 +3,33 @@
 #left_col {
 	float: left;
 	border: 1px solid black;
-	width: 75%;
+	border-top: none;
+	width: 70%;
 	padding: 5px;
+
 }
 
 #right_col {
 	float: right;
-	border: 1px solid gray;
-	width: 25%;
+	//border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	width: 30%;
 	padding: 10px;
+}
+
+#right_col h3 {
+	margin-top: 0px;
+	padding: 5px;
+	border-bottom: 1px solid black;
+}
+
+#right_col td {
+	padding: 4px;
+}
+
+#right_col #image {
+	height: 80px;
 }
 
 #comic_title {

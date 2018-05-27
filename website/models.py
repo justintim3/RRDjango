@@ -127,7 +127,7 @@ class Users(models.Model):
     biography = models.TextField()
     user_picture = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    interest = models.CharField(max_length=255)
+    interests = models.CharField(max_length=255)
 
     def __str__(self):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
@@ -153,13 +153,16 @@ class UserRatings(models.Model):
 
 
 class UserFollowings(models.Model):
-    UserID = models.IntegerField(db_column='UserID', primary_key=True)
+    UserFollowingID = models.AutoField(db_column='UserFollowingID', primary_key=True)
+    UserID = models.IntegerField(db_column='UserID')
     FollowedUserID = models.IntegerField(db_column='FollowedUserID')
+    FollowStatus = models.BooleanField()
 
 
 class TimelineItems(models.Model):
     TimelineItemID = models.AutoField(db_column='TimelineItemID', primary_key=True)
     UserID = models.IntegerField()
+    UserName = models.CharField(max_length=255)
     TimelineItemTypeName = models.CharField(max_length = 255)
     TimelineItemTypeID = models.IntegerField()
     TimelineItemDatePosted = models.DateTimeField()
