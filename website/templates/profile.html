@@ -97,28 +97,67 @@
                         <p><b>User Type: </b>Normal</p>
                     {% endif %}
 
+                    <h3>Following</h3>
+                    <div class="following">
+                        <table>
+                            {% for userfollow in userFollowingList %}
+                                {% if profile.id == userfollow.UserID %}
+                                    <tr>
+                                        <td>{{ userfollow.FollowedUserName }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
 
                 <div id="rightCol">
                     <h3>About</h3>
                     <div class="about">
-                        <ul style="list-style-type: none">
-                            <li><p><b>First Name: </b>{{ profile.first_name }}</p></li>
-                            <li><p><b>Last Name: </b>{{ profile.last_name }}</p></li>
-                            <li><p><b>Email: </b>{{ profile.email }}</p></li>
-                            <li><p><b>Address: </b>{{ profile.address }}</p></li>
-                            <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
-                        </ul>
+                        <table>
+                            <tr>
+                                <td class="datainfo"><b>First Name: </b></td>
+                                <td>{{ profile.first_name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Last Name: </b></td>
+                                <td>{{ profile.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Email: </b></td>
+                                <td>{{ profile.email }}</td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Address: </b></td>
+                                <td>{{ profile.address }}</td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Birth Date: </b></td>
+                                <td>{{ profile.DOB }}</td>
+                            </tr>
+                        </table>
                     </div>
 
                     <h3>Biography</h3>
                     <div class="bio">
-                        <ul style="list-style-type:none">
-                            <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
-                            <li><p><b>Interests: </b>{{ profile.interests }}</p></li>
-                            <li><p><b>Favorite Comic: </b></p></li>
-                            <li><p><b>Favorite Character: </b></p></li>
-                        </ul>
+                        <table>
+                            <tr>
+                                <td class="datainfo"><b>Biography: </b></td>
+                                <td>{{ profile.biography }}</td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Interests: </b></td>
+                                <td>{{ profile.interests }}</td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Favorite Comic: </b></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="datainfo"><b>Favorite Character: </b></td>
+                                <td></td>
+                            </tr>
+                        </table>
                     </div>
 
                     <h3>Timeline</h3>

@@ -164,9 +164,9 @@
 				</div>
 
                 <div id="Review">
-                    <h4 style="text-align: center">Reviews</h4>
+                    <h4>Reviews</h4>
                     {% for review in reviewList %}
-                        <div id = "Review{{ review.id }}">
+                        <div class="ReviewItem" id = "Review{{ review.id }}">
                         <p>
                             {% for user in userList %}
 
@@ -184,11 +184,11 @@
                     {% endfor %}
                     <div id="WriteReview">
                         {% if request.user.username %}
-                            <h5>Write a Review</h5>
+                            <h4>Write a Review</h4>
                             <form method="POST">
                                 {% csrf_token %}
                                 <textarea name="textfield" style="width:100%; height: 200px; resize:none"></textarea>
-                                <button type="submit" name="review">Submit</button>
+                                <button type="submit" name="review" style="margin: 5pxf">Submit</button>
                             </form>
                         {% endif %}
                     </div>
