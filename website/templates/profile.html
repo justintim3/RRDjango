@@ -164,7 +164,7 @@
                                         {% endif %}
                                         <a href="profile?id={% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}{{ user.id }}{% endif %}{% endfor %}">
                                         {% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}
-                                            {% for userFollowing in userFollowingList %}{% if user.id == userFollowing.FollowedUserID %}{{ user.username }}
+                                            {% for userFollowing in userFollowingList %}{% if user.id == userFollowing.FollowedUserID and request.user.id == userFollowing.UserID %}{{ user.username }}
                                             {% endif %}
                                             {% endfor %}
                                         {% endif %}

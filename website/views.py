@@ -63,7 +63,7 @@ def get_comicpage(request):
                          ReviewText=reviewText)
         review.save()
         timelineItemTypeId = Reviews.objects.latest('id').id
-        TimelineItems.objects.create(UserID=userId, UserName=userName, userTimelineItemTypeName="Review",
+        TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Review",
                                      TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=date)
 
     comicList = Comic.objects.raw('select * from website_comic where ComicID = %s', [comicId])
