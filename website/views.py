@@ -4,8 +4,6 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
-from .forms import UploadFileForm
-from django.http import HttpResponseRedirect
 
 
 
@@ -249,42 +247,44 @@ def get_profile(request):
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
                        "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
-        
+
     following = False
+
     if userId:
         cursor = connection.cursor()
         try:
-            UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-            following = True
+            following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
             if 'follow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = TRUE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
                 #TimelineItemTypeId = UserFollowings.objects.get(UserID=userId, FollowedUserID=).UserRatingID
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = True
+
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+                #following = True
             if 'unfollow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = FALSE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = False
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         except:
             if 'follow' in request.POST:
-                following = True
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, True))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+            elif userId == int(profileId):
+                pass
             else:
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, False))
-                following = False
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         cursor.close()
-    #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
-    #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
     timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
@@ -293,8 +293,6 @@ def get_profile(request):
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
-
-    print('before loop')
 
     for id in timelineItemList:
         if 'thumbup'+str(id.TimelineItemID) in request.POST:
@@ -366,12 +364,13 @@ def get_seriespage(request):
 
 def search(request):
     if 'search' in request.GET:
-        form = request.GET.get('search', None)
-        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
-        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
-        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
-        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
-        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
-        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
+        searchString = request.GET.get('search', None)
+        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + searchString + "%"])
+        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + searchString + "%"])
+        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + searchString + "%"])
+        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + searchString + "%"])
+        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + searchString + "%"])
+        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + searchString + "%"])
     return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
-                                           'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})
+                                           'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList,
+                                           'searchString': searchString})
