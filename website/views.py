@@ -249,43 +249,47 @@ def get_profile(request):
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
                        "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
+
     following = False
+
     if userId:
         cursor = connection.cursor()
         try:
-            UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-            following = True
+            following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
             if 'follow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = TRUE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
                 #TimelineItemTypeId = UserFollowings.objects.get(UserID=userId, FollowedUserID=).UserRatingID
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = True
+
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+                #following = True
             if 'unfollow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = FALSE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = False
+
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         except:
             if 'follow' in request.POST:
-                following = True
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, True))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+            elif userId == int(profileId):
+                pass
             else:
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, False))
-                following = False
+
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         cursor.close()
-    #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
-    #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
-    if 'message' in request.POST:
-        pass
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
     timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
@@ -294,6 +298,20 @@ def get_profile(request):
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
+
+    for id in timelineItemList:
+        if 'thumbup'+str(id.TimelineItemID) in request.POST:
+            cursor = connection.cursor()
+            cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1 "
+                           "WHERE TimelineItemID = %s", [id.TimelineItemID])
+            cursor.close()
+            break
+        if 'thumbdown'+str(id.TimelineItemID) in request.POST:
+            cursor = connection.cursor()
+            cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown + 1 "
+                           "WHERE TimelineItemID = %s", [id.TimelineItemID])
+            cursor.close()
+            break
 
     return render(request, 'profile.html', {'following': following, 'profile': profile[0],
                                             'timelineItemList': timelineItemList, 'ratingList': ratingList,
@@ -315,8 +333,10 @@ def get_signuppage(request):
 def get_about(request):
     return render(request, 'about.html')
 
+
 def get_contact(request):
     return render(request, 'contact.html')
+
 
 def get_publisherpage(request):
     publisherId = request.GET.get('id')
@@ -345,6 +365,8 @@ def get_seriespage(request):
                                            'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
+
+
 def search(request):
     if 'search' in request.GET:
         form = request.GET.get('search', None)

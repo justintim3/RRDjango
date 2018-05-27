@@ -1,3 +1,4 @@
+
 #leftCol {
     float: left;
     //border: 1px solid #11519B;
@@ -9,9 +10,17 @@
 
 #rightCol {
     float: left;
-    width: 70%;
+    width: 75%;
     padding-left: 10px;
     //border: 2px solid #11519B;
+}
+
+h3 {
+    text-align: center;
+    background-color: var(--main_theme_color);
+    color: white;
+    padding: 5px;
+    margin-bottom: 0px;
 }
 
 #profileImage {
@@ -34,6 +43,16 @@
 	background-color: white;
 }
 
+#thumb_section {
+    //display: inline;
+    //border: 1px solid black;
+}
+
+#thumbImage {
+    height: 25px;
+    margin: 0 auto;
+}
+
 .about {
     border: 1px solid #11519B;
 }
@@ -45,6 +64,13 @@
 .timeline {
     border: 1px solid #11519B;
     min-height: 300px;
+}
+
+#TimelineItem {
+    margin: 5px;
+    margin-bottom: 20px;
+    padding: 5px;
+    border: 2px inset;
 }
 
 #edit {
