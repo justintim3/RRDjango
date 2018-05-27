@@ -182,11 +182,11 @@
                                 <div id="thumb_section">
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <button type="submit" name="thumbup">
+                                        <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}">
                                             <img id="thumbImage" src="static/images/thumbup.png">
                                         </button>
                                         {{ timelineItem.TimelineThumbsUp }}
-                                        <button type="submit" name="thumbdown">
+                                        <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}">
                                             <img id="thumbImage" src="static/images/thumbdown.png">
                                         </button>
                                         {{ timelineItem.TimelineThumbsDown }}
