@@ -164,8 +164,10 @@
                                         {% endif %}
                                         <a href="profile?id={% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}{{ user.id }}{% endif %}{% endfor %}">
                                         {% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}
-                                            {% for userFollowing in userFollowingList %}{% if user.id == userFollowing.FollowedUserID %}{{ user.username }}
-                                            {% endif %}
+                                            {% for userFollowing in userFollowingList|slice:":1" %}
+                                                {% if user.id == userFollowing.FollowedUserID%}
+                                                    {{ user.username }}
+                                                {% endif %}
                                             {% endfor %}
                                         {% endif %}
                                         {% endfor %}
@@ -178,10 +180,17 @@
                                 <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
 
                                 <div id="thumb_section">
-                                    <img id="thumbImage" src="static/images/thumbup.png">
-                                    {{ timelineItem.TimelineThumbsUp }}
-                                    <img id="thumbImage" src="static/images/thumbdown.png">
-                                    {{ timelineItem.TimelineThumbsDown }}
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" name="thumbup">
+                                            <img id="thumbImage" src="static/images/thumbup.png">
+                                        </button>
+                                        {{ timelineItem.TimelineThumbsUp }}
+                                        <button type="submit" name="thumbdown">
+                                            <img id="thumbImage" src="static/images/thumbdown.png">
+                                        </button>
+                                        {{ timelineItem.TimelineThumbsDown }}
+                                    </form>
                                 </div>
                             </div>
                         {% endfor %}

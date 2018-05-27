@@ -45,11 +45,12 @@ h3 {
 
 #thumb_section {
     //display: inline;
-    border: 1px solid black;
+    //border: 1px solid black;
 }
 
 #thumbImage {
     height: 25px;
+    margin: 0 auto;
 }
 
 .about {
@@ -67,6 +68,7 @@ h3 {
 
 #TimelineItem {
     margin: 5px;
+    margin-bottom: 20px;
     padding: 5px;
     border: 2px inset;
 }
