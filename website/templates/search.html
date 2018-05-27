@@ -50,137 +50,141 @@
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-            <h3><b>Search Results</b></h3>
-            <br>
-            {% for series in seriesList|slice:":1" %}
-                <h1><b>Series</b></h1>
-                <table id="seriesTable">
-                    <tr id="tableHeader">
-                        <th class="number">ID</th>
-                        <th>Series Name</th>
-                    </tr>
-                {% for series in seriesList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="../seriespage?id={{series.SeriesID}}">{{ series.SeriesName }}</a></td>
-                    </tr>
+            {% if searchString %}
+                <h3><b>Search results for '{{ searchString }}'</b></h3>
+                <br>
+                {% for series in seriesList|slice:":1" %}
+                    <h1><b>Series</b></h1>
+                    <table id="seriesTable">
+                        <tr id="tableHeader">
+                            <th class="number">ID</th>
+                            <th>Series Name</th>
+                        </tr>
+                    {% for series in seriesList %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="../seriespage?id={{series.SeriesID}}">{{ series.SeriesName }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                {% empty %}
                 {% endfor %}
-                </table>
-            {% empty %}
-            {% endfor %}
 
-            {% for comic in comicList|slice:":1" %}
-                <h1><b>Comic Issues</b></h1>
-                <table>
-                    <tr id="tableHeader">
-                        <th class="number">ID</th>
-                        <th>Comic Cover</th>
-                        <th>Comic Title</th>
-                    </tr>
-                {% for comic in comicList %}
-                    <tr>
-  				    	<td>{{ forloop.counter }}</td>
-                        <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
-                        <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    			    </tr>
+                {% for comic in comicList|slice:":1" %}
+                    <h1><b>Comic Issues</b></h1>
+                    <table>
+                        <tr id="tableHeader">
+                            <th class="number">ID</th>
+                            <th>Comic Cover</th>
+                            <th>Comic Title</th>
+                        </tr>
+                    {% for comic in comicList %}
+                        <tr>
+  			    	    	<td>{{ forloop.counter }}</td>
+                            <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
+                            <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
+    		    	    </tr>
+                    {% endfor %}
+                    </table>
+                {% empty %}
                 {% endfor %}
-                </table>
-            {% empty %}
-            {% endfor %}
 
-            {% for character in characterList|slice:":1" %}
-                <h1><b>Characters</b></h1>
-                <table>
-                    <tr id="tableHeader">
-                        <th class="number">ID</th>
-                        <th>Character Picture</th>
-                        <th>Character Name</th>
-                    </tr>
-                {% for character in characterList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            {% if character.CharacterPicture %}
-                                <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
-                            {% else %}
-                                <img id="image" src="static/images/default-batman.jpg">
-                            {% endif %}
-                        </td>
-                        <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
-                    </tr>
+                {% for character in characterList|slice:":1" %}
+                    <h1><b>Characters</b></h1>
+                    <table>
+                        <tr id="tableHeader">
+                            <th class="number">ID</th>
+                            <th>Character Picture</th>
+                            <th>Character Name</th>
+                        </tr>
+                    {% for character in characterList %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {% if character.CharacterPicture %}
+                                    <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                                {% else %}
+                                    <img id="image" src="static/images/default-batman.jpg">
+                                {% endif %}
+                            </td>
+                            <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                {% empty %}
                 {% endfor %}
-                </table>
-            {% empty %}
-            {% endfor %}
 
-            {% for creator in creatorList|slice:":1" %}
-                <h1><b>Creators</b></h1>
-                <table>
-                    <tr id="tableHeader">
-                        <th class="number">ID</th>
-                        <th>Creator Picture</th>
-                        <th>Creator Name</th>
-                    </tr>
-                {% for creator in creatorList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            {% if creator.CreatorPicture %}
-                            <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
-                            {% else %}
-                            <img id="image" src="static/images/default-profile.png">
-                            {% endif %}
-                        </td>
-                        <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
-                    </tr>
+                {% for creator in creatorList|slice:":1" %}
+                    <h1><b>Creators</b></h1>
+                    <table>
+                        <tr id="tableHeader">
+                            <th class="number">ID</th>
+                            <th>Creator Picture</th>
+                            <th>Creator Name</th>
+                        </tr>
+                    {% for creator in creatorList %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {% if creator.CreatorPicture %}
+                                <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
+                                {% else %}
+                                <img id="image" src="static/images/default-profile.png">
+                                {% endif %}
+                            </td>
+                            <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                {% empty %}
                 {% endfor %}
-                </table>
-            {% empty %}
-            {% endfor %}
 
-            {% for publisher in publisherList|slice:":1" %}
-                <h1><b>Publishers</b></h1>
-                <table>
-                    <tr id="tableHeader">
-                        <th class="number">ID</th>
-                        <th>Publisher Logo</th>
-                        <th>Publisher Name</th>
-                    </tr>
-                {% for publisher in publisherList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            {% if publisher.PublisherPicture %}
-                            <img id="image" src="static/images/PublishersImages/{{publisher.PublisherPicture }}">
-                            {% else %}
-                            <img id="image" src="static/images/default-batman.png">
-                            {% endif %}
-                        </td>
-                        <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
-                    </tr>
+                {% for publisher in publisherList|slice:":1" %}
+                    <h1><b>Publishers</b></h1>
+                    <table>
+                        <tr id="tableHeader">
+                            <th class="number">ID</th>
+                            <th>Publisher Logo</th>
+                            <th>Publisher Name</th>
+                        </tr>
+                    {% for publisher in publisherList %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {% if publisher.PublisherPicture %}
+                                <img id="image" src="static/images/PublishersImages/{{publisher.PublisherPicture }}">
+                                {% else %}
+                                <img id="image" src="static/images/default-batman.png">
+                                {% endif %}
+                            </td>
+                            <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                {% empty %}
                 {% endfor %}
-                </table>
-            {% empty %}
-            {% endfor %}
 
-            {% for news in newsList|slice:":1" %}
-            <h1><b>News</b></h1>
-                <table>
-                    <tr id="tableHeader">
-                        <th class="number">ID</th>
-                        <th>News Title</th>
-                        <th>Preview</th>
-                    </tr>
-                {% for news in newsList %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="../newsfeedpage?id={{news.ID}}">{{ news.Title }}</a></td>
-                        <td>{{ news.Preview }}</td>
-                    </tr>
+                {% for news in newsList|slice:":1" %}
+                <h1><b>News</b></h1>
+                    <table>
+                        <tr id="tableHeader">
+                            <th class="number">ID</th>
+                            <th>News Title</th>
+                            <th>Preview</th>
+                        </tr>
+                    {% for news in newsList %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="../newsfeedpage?id={{news.ID}}">{{ news.Title }}</a></td>
+                            <td>{{ news.Preview }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                {% empty %}
                 {% endfor %}
-                </table>
-            {% empty %}
-            {% endfor %}
+            {% else %}
+                <h3><b>No search terms entered. Please retry.</b></h3>
+            {% endif %}
     	</div>
 	</div>
 	<!-- END CONTAINER -->
