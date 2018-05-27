@@ -4,6 +4,9 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
+from .forms import UploadFileForm
+from django.http import HttpResponseRedirect
+
 
 
 # Create your views here.
@@ -246,6 +249,7 @@ def get_profile(request):
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
                        "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
+        
     following = False
     if userId:
         cursor = connection.cursor()
