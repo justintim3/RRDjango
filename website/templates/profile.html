@@ -103,7 +103,7 @@
                             {% for userfollow in userFollowingList %}
                                 {% if profile.id == userfollow.UserID %}
                                     <tr>
-                                        <td>{{ userfollow.FollowedUserID }}</td>
+                                        <td>{{ userfollow.FollowedUserName }}</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
