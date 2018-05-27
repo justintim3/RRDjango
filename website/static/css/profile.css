@@ -4,7 +4,7 @@
     //border: 1px solid #11519B;
     width: 25%;
     text-align: left;
-    padding-left: 10px;
+    //padding-left: 10px;
     padding-right: 10px;
 }
 
@@ -38,7 +38,7 @@ h3 {
     clear: both;
 	//width: 100%;
 	height: 60px;
-	border: 1px solid #11519B;
+	border: hidden;
 	//margin: 10px;
 	background-color: white;
 }
@@ -71,6 +71,7 @@ h3 {
     margin-bottom: 20px;
     padding: 5px;
     border: 2px inset;
+    background-color: #ddeaff;
 }
 
 #edit {
