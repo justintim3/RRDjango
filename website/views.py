@@ -243,7 +243,8 @@ def get_profile(request):
         interests = request.POST.get("interests", None)
         biography = request.POST.get("biography", None)
         cursor = connection.cursor()
-        cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, biography = %s WHERE id = %s;", (fname, lname, useremail, address, userId, interests, biography))
+        cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
+                       "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
 
     following = True

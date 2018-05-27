@@ -110,6 +110,7 @@
                             <li><p><b>First Name: </b>{{ profile.first_name }}</p></li>
                             <li><p><b>Last Name: </b>{{ profile.last_name }}</p></li>
                             <li><p><b>Email: </b>{{ profile.email }}</p></li>
+                            <li><p><b>Address: </b>{{ profile.address }}</p></li>
                             <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
                         </ul>
                     </div>
@@ -118,7 +119,7 @@
                     <div class="bio">
                         <ul style="list-style-type:none">
                             <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
-                            <li><p><b>Interest: </b></p></li>
+                            <li><p><b>Interests: </b>{{ profile.interests }}</p></li>
                             <li><p><b>Favorite Comic: </b></p></li>
                             <li><p><b>Favorite Character: </b></p></li>
                         </ul>
@@ -155,7 +156,7 @@
                 </div>
 
                 <div id="edit">
-                    {% if request.user.id %}
+                    {% if request.user.id == profile.id %}
                         <form action="{% url 'editprofile' %}">
                             <button type="submit">Edit Profile</button>
                         </form>
