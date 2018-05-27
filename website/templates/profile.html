@@ -70,8 +70,6 @@
                                 {% csrf_token %}
                             {% if profile.id != request.user.id %}
                                 <button type="submit" name="message" id="profileButtons">Message</button>
-                            {% else %}
-                                <button type="submit" name="message" id="profileButtons" disabled>Message</button>
                             {% endif %}
                             </form>
                             {% if profile.id != request.user.id %}
@@ -86,8 +84,6 @@
                                         <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
                                     </form>
                                 {% endif %}
-                            {% else %}
-                                <button type="submit" name="follow" id="profileButtons" disabled>Follow</button>
                             {% endif %}
                             </p>
                         </div>
@@ -164,7 +160,7 @@
                                         {% endif %}
                                         <a href="profile?id={% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}{{ user.id }}{% endif %}{% endfor %}">
                                         {% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}
-                                            {% for userFollowing in userFollowingList %}{% if user.id == userFollowing.FollowedUserID and request.user.id == userFollowing.UserID %}{{ user.username }}
+                                            {% for userFollowing in userFollowingList %}{% if user.id == userFollowing.FollowedUserID and profile.id == userFollowing.UserID %}{{ user.username }}
                                             {% endif %}
                                             {% endfor %}
                                         {% endif %}
