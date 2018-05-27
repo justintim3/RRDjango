@@ -70,6 +70,10 @@ nav a {
 	background-color: var(--main_theme_color);
 }
 
+nav a:visited{
+	color: white;
+}
+
 nav a:hover {
 	background-color: #8dafdd;
 	color: black;
@@ -87,7 +91,7 @@ nav a:hover {
 
 #search_bar button {
 	border: none;
-	background-color: #3982f0;
+	background-color: #8dafdd;
 	margin: 0px;
 	width: 32px;
 	height: 30px;
