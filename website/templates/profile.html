@@ -97,6 +97,18 @@
                         <p><b>User Type: </b>Normal</p>
                     {% endif %}
 
+                    <h3>Following</h3>
+                    <div class="following">
+                        <table>
+                            {% for userfollow in userFollowingList %}
+                                {% if profile.id == userfollow.UserID %}
+                                    <tr>
+                                        <td>{{ userfollow.FollowedUserID }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
 
                 <div id="rightCol">

@@ -63,14 +63,24 @@ h3 {
 	background-color: white;
 }
 
-#thumb_section {
-    //display: inline;
-    //border: 1px solid black;
-}
-
 #thumbImage {
     height: 25px;
     margin: 0 auto;
+}
+
+.following {
+    border: 1px solid #11519B;
+}
+
+.following table {
+    width: 100%;
+    //border: 1px solid black;
+}
+
+.following td {
+    text-align: center;
+    width: 100%;
+    //border: 1px solid black;
 }
 
 .about {
@@ -111,19 +121,4 @@ form {
 
 #profileButtons {
     width: 100px;
-}
-
-button {
-	//background-color: var(--main_theme_color);
-    //height: 25px;
-	//border: none;
-	//color: white;
-	//font-weight: bold;
-}
-
-button:hover {
-	//background-color: #444;
-    //border: none;
-	//color: white;
-	//text-decoration: none;
 }
