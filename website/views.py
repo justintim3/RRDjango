@@ -4,6 +4,8 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
+from .forms import UploadFileForm
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
@@ -247,6 +249,7 @@ def get_profile(request):
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
                        "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
+
     following = False
     if userId:
         cursor = connection.cursor()
@@ -282,8 +285,7 @@ def get_profile(request):
         cursor.close()
     #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
     #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
-    if 'message' in request.POST:
-        pass
+
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
     timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
@@ -292,6 +294,22 @@ def get_profile(request):
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
+
+    print('before loop')
+
+    for id in timelineItemList:
+        if 'thumbup'+str(id.TimelineItemID) in request.POST:
+            cursor = connection.cursor()
+            cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1 "
+                           "WHERE TimelineItemID = %s", [id.TimelineItemID])
+            cursor.close()
+            break
+        if 'thumbdown'+str(id.TimelineItemID) in request.POST:
+            cursor = connection.cursor()
+            cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown + 1 "
+                           "WHERE TimelineItemID = %s", [id.TimelineItemID])
+            cursor.close()
+            break
 
     return render(request, 'profile.html', {'following': following, 'profile': profile[0],
                                             'timelineItemList': timelineItemList, 'ratingList': ratingList,
@@ -313,8 +331,10 @@ def get_signuppage(request):
 def get_about(request):
     return render(request, 'about.html')
 
+
 def get_contact(request):
     return render(request, 'contact.html')
+
 
 def get_publisherpage(request):
     publisherId = request.GET.get('id')
@@ -343,6 +363,8 @@ def get_seriespage(request):
                                            'WHERE Series.SeriesID = %s ORDER BY Publishers.PublisherName ASC', [seriesId])
     return render(request, 'seriespage.html', {'series': seriesList[0], 'comics': comicList,
                                                'publisher': publisherList[0]})
+
+
 def search(request):
     if 'search' in request.GET:
         form = request.GET.get('search', None)
