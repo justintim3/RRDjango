@@ -110,6 +110,7 @@
                             <li><p><b>First Name: </b>{{ profile.first_name }}</p></li>
                             <li><p><b>Last Name: </b>{{ profile.last_name }}</p></li>
                             <li><p><b>Email: </b>{{ profile.email }}</p></li>
+                            <li><p><b>Address: </b>{{ profile.address }}</p></li>
                             <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
                         </ul>
                     </div>
@@ -118,7 +119,7 @@
                     <div class="bio">
                         <ul style="list-style-type:none">
                             <li><p><b>Biography: </b>{{ profile.biography }}</p></li>
-                            <li><p><b>Interest: </b></p></li>
+                            <li><p><b>Interests: </b>{{ profile.interests }}</p></li>
                             <li><p><b>Favorite Comic: </b></p></li>
                             <li><p><b>Favorite Character: </b></p></li>
                         </ul>
@@ -138,9 +139,23 @@
 
                                 <a href="profile?id={{ timelineItem.UserID }}"><b>{{ timelineItem.UserName }}</b></a>
                                     {% if timelineItem.TimelineItemTypeName == "Rating"%}
-                                        rated a <a href="comicpage?id={% for rating in ratingList %}{% if rating.UserRatingID == timelineItem.TimelineItemTypeID %}{{ rating.ComicID }}{% endif %}{% endfor %}">comic.</a>
+                                        rated <a href="comicpage?id={% for rating in ratingList %}{% if rating.UserRatingID == timelineItem.TimelineItemTypeID %}{{ rating.ComicID }}{% endif %}{% endfor %}">
+                                        {% for rating in ratingList %}{% if rating.UserRatingID == timelineItem.TimelineItemTypeID %}
+                                            {% for comic in comicList %}{% if rating.ComicID == comic.ComicID %}{{ comic.ComicIssueTitle }}
+                                            {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% endfor %}
+                                    </a>.
                                     {% elif timelineItem.TimelineItemTypeName == "Review" %}
-                                        reviewed a <a href="comicpage?id={% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}{{ review.ComicID }}{% endif %}{% endfor %}#Review{{ timelineItem.TimelineItemTypeID }}">comic.</a>
+                                        reviewed <a href="comicpage?id={% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}{{ review.ComicID }}{% endif %}{% endfor %}#Review{{ timelineItem.TimelineItemTypeID }}">
+                                        {% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}
+                                            {% for comic in comicList %}{% if review.ComicID == comic.ComicID %}{{ comic.ComicIssueTitle }}
+                                            {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% endfor %}
+                                        </a>.
                                     {% elif timelineItem.TimelineItemTypeName == "Follow" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Comment" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Thumbs" %}
@@ -150,17 +165,15 @@
                                 <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
                             </div>
                         {% endfor %}
-                        <p>TimeLine items here</p>
+                    </div>
 
-                </div>
-
-                <div id="edit">
-                    {% if request.user.id %}
-                        <form action="{% url 'editprofile' %}">
-                            <button type="submit">Edit Profile</button>
-                        </form>
-                    {% endif %}
-                </div>
+                    <div id="edit">
+                        {% if request.user.id == profile.id %}
+                            <form action="{% url 'editprofile' %}">
+                                <button type="submit">Edit Profile</button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

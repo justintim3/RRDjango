@@ -243,7 +243,8 @@ def get_profile(request):
         interests = request.POST.get("interests", None)
         biography = request.POST.get("biography", None)
         cursor = connection.cursor()
-        cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, biography = %s WHERE id = %s;", (fname, lname, useremail, address, userId, interests, biography))
+        cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
+                       "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
 
     following = True
@@ -268,8 +269,9 @@ def get_profile(request):
     timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
     ratingList = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s', [profileId])
     reviewList = Reviews.objects.raw('SELECT * FROM website_reviews WHERE UserID = %s', [profileId])
+    comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
 
-    return render(request, 'profile.html', {'following': following, 'profile': profile[0], 'timelineItemList': timelineItemList, 'ratingList': ratingList, 'reviewList': reviewList})
+    return render(request, 'profile.html', {'following': following, 'profile': profile[0], 'timelineItemList': timelineItemList, 'ratingList': ratingList, 'reviewList': reviewList, 'comicList': comicList})
 
 
 def get_editprofile(request):
