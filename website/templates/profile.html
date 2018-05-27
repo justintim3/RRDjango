@@ -163,6 +163,13 @@
                                         fail
                                     {% endif %}
                                 <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
+
+                                <div id="thumb_section">
+                                    <img id="thumbImage" src="static/images/thumbup.png">
+                                    {{ timelineItem.TimelineThumbsUp }}
+                                    <img id="thumbImage" src="static/images/thumbdown.png">
+                                    {{ timelineItem.TimelineThumbsDown }}
+                                </div>
                             </div>
                         {% endfor %}
                     </div>

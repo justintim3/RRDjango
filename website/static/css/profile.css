@@ -43,6 +43,15 @@ h3 {
 	background-color: white;
 }
 
+#thumb_section {
+    //display: inline;
+    border: 1px solid black;
+}
+
+#thumbImage {
+    height: 25px;
+}
+
 .about {
     border: 1px solid #11519B;
 }
