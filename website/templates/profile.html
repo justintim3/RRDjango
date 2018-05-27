@@ -156,7 +156,20 @@
                                         {% endif %}
                                         {% endfor %}
                                         </a>.
-                                    {% elif timelineItem.TimelineItemTypeName == "Follow" %}
+                                    {% elif timelineItem.TimelineItemTypeName == "Follow" or timelineItem.TimelineItemTypeName == "Unfollow"%}
+                                        {% if timelineItem.TimelineItemTypeName == "Follow" %}
+                                             followed
+                                        {% else %}
+                                             unfollowed
+                                        {% endif %}
+                                        <a href="profile?id={% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}{{ user.id }}{% endif %}{% endfor %}">
+                                        {% for user in userList %}{% if user.id == timelineItem.TimelineItemTypeID %}
+                                            {% for userFollowing in userFollowingList %}{% if user.id == userFollowing.FollowedUserID %}{{ user.username }}
+                                            {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% endfor %}
+                                        </a>.
                                     {% elif timelineItem.TimelineItemTypeName == "Comment" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Thumbs" %}
                                     {% else %}
@@ -173,7 +186,6 @@
                             </div>
                         {% endfor %}
                     </div>
-
 
                     <div id="edit">
                         {% if request.user.id == profile.id %}
