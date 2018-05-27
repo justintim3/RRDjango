@@ -160,6 +160,7 @@ class UserFollowings(models.Model):
 class TimelineItems(models.Model):
     TimelineItemID = models.AutoField(db_column='TimelineItemID', primary_key=True)
     UserID = models.IntegerField()
+    UserName = models.CharField(max_length=255)
     TimelineItemTypeName = models.CharField(max_length = 255)
     TimelineItemTypeID = models.IntegerField()
     TimelineItemDatePosted = models.DateTimeField()

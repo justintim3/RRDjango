@@ -21,12 +21,13 @@ def homepage(request):
 def get_comicpage(request):
     comicId = request.GET.get('id')
     userId = request.user.id
+    date = timezone.now()
+    userName = request.user.username
 
     #Rating
     if 'rate' in request.POST:
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
-        ratingDate = timezone.now()
         try:
             UserRatings.objects.get(UserID=userId, ComicID=comicId)
             cursor = connection.cursor()
@@ -48,7 +49,8 @@ def get_comicpage(request):
             comic.ComicRating = 0
         comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
         TimelineItemTypeId = UserRatings.objects.get(UserID=userId, ComicID=comicId).UserRatingID
-        TimelineItems.objects.create(UserID=userId, TimelineItemTypeName="Rating", TimelineItemTypeID=TimelineItemTypeId, TimelineItemDatePosted=ratingDate)
+        TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
+                                     TimelineItemTypeID=TimelineItemTypeId, TimelineItemDatePosted=date)
 
 
     #Reviews
@@ -57,14 +59,12 @@ def get_comicpage(request):
     userList = Users.objects.raw('SELECT * FROM auth_user')
     if "review" in request.POST:
         reviewText = request.POST.get("textfield", None)
-        reviewDate = timezone.now()
-        user = request.user.username
-        review = Reviews(ComicID=comicId, UserID=userId, username=user, ReviewDate=reviewDate,
+        review = Reviews(ComicID=comicId, UserID=userId, username=userName, ReviewDate=date,
                          ReviewText=reviewText)
         review.save()
         timelineItemTypeId = Reviews.objects.latest('id').id
-        TimelineItems.objects.create(UserID=userId, TimelineItemTypeName="Review",
-                                     TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=reviewDate)
+        TimelineItems.objects.create(UserID=userId, UserName=userName, userTimelineItemTypeName="Review",
+                                     TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=date)
 
     comicList = Comic.objects.raw('select * from website_comic where ComicID = %s', [comicId])
     characterList = Character.objects.raw('SELECT DISTINCT Characters.CharacterID, CharacterName FROM website_comic '
@@ -232,8 +232,11 @@ def signup(request):
 
 
 def get_profile(request):
-    userId = request.user.id
     profileId = request.GET.get('id')
+    userId = request.user.id
+    userName = request.user.username
+    date = timezone.now()
+
 
     if "saveProfile" in request.POST:
         fname = request.POST.get("firstname", None)
@@ -255,10 +258,14 @@ def get_profile(request):
             cursor.execute("DELETE FROM website_userfollowings WHERE UserID = %s AND FollowedUserID = %s;",
                            (userId, profileId))
             cursor.close()
+            TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
+                                         TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
     except:
         following = False
         if 'follow' in request.POST:
             UserFollowings.objects.create(UserID=userId, FollowedUserID=profileId)
+            TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
+                                         TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
 
     #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
     #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
@@ -270,8 +277,13 @@ def get_profile(request):
     ratingList = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s', [profileId])
     reviewList = Reviews.objects.raw('SELECT * FROM website_reviews WHERE UserID = %s', [profileId])
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
+    userList = Users.objects.raw('SELECT id, username FROM auth_user')
+    userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
 
-    return render(request, 'profile.html', {'following': following, 'profile': profile[0], 'timelineItemList': timelineItemList, 'ratingList': ratingList, 'reviewList': reviewList, 'comicList': comicList})
+    return render(request, 'profile.html', {'following': following, 'profile': profile[0],
+                                            'timelineItemList': timelineItemList, 'ratingList': ratingList,
+                                            'reviewList': reviewList, 'comicList': comicList, 'userList': userList,
+                                            'userFollowingList': userFollowingList})
 
 
 def get_editprofile(request):
