@@ -78,11 +78,11 @@
                         <th>Comic Title</th>
                     </tr>
                 {% for comic in comicList %}
-				        <tr>
+                    <tr>
   				    	<td>{{ forloop.counter }}</td>
-                <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
-                <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    			      </tr>
+                        <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
+                        <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
+    			    </tr>
                 {% endfor %}
                 </table>
             {% empty %}
