@@ -4,8 +4,6 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
-from .forms import UploadFileForm
-from django.http import HttpResponseRedirect
 
 
 # Create your views here.
@@ -257,6 +255,7 @@ def get_profile(request):
             if 'follow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = TRUE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
+                #TimelineItemTypeId = UserFollowings.objects.get(UserID=userId, FollowedUserID=).UserRatingID
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
                 following = True
