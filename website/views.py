@@ -8,7 +8,6 @@ from .forms import UploadFileForm
 from django.http import HttpResponseRedirect
 
 
-
 # Create your views here.
 
 
@@ -238,6 +237,7 @@ def get_profile(request):
     userName = request.user.username
     date = timezone.now()
 
+
     if "saveProfile" in request.POST:
         fname = request.POST.get("firstname", None)
         lname = request.POST.get("lastname", None)
@@ -249,42 +249,44 @@ def get_profile(request):
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
                        "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
-        
+
     following = False
+
     if userId:
         cursor = connection.cursor()
         try:
-            UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-            following = True
+            following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
             if 'follow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = TRUE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
                 #TimelineItemTypeId = UserFollowings.objects.get(UserID=userId, FollowedUserID=).UserRatingID
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = True
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+                #following = True
             if 'unfollow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = FALSE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = False
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+
         except:
             if 'follow' in request.POST:
-                following = True
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, True))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+            elif userId == int(profileId):
+                pass
             else:
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, False))
-                following = False
+                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         cursor.close()
-    #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
-    #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
 
     profile = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])
     timelineItemList = TimelineItems.objects.raw('SELECT * FROM website_timelineitems WHERE UserID = %s ORDER BY TimelineItemDatePosted DESC', [profileId])
@@ -293,8 +295,6 @@ def get_profile(request):
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
-
-    print('before loop')
 
     for id in timelineItemList:
         if 'thumbup'+str(id.TimelineItemID) in request.POST:

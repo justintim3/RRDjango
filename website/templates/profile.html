@@ -73,15 +73,15 @@
                             {% endif %}
                             </form>
                             {% if profile.id != request.user.id %}
-                                {% if not following %}
+                                {% if following.FollowStatus %}
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <button type="submit" name="follow" id="profileButtons">Follow</button>
+                                        <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
                                     </form>
                                 {% else %}
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
+                                        <button type="submit" name="follow" id="profileButtons">Follow</button>
                                     </form>
                                 {% endif %}
                             {% endif %}
