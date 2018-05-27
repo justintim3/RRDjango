@@ -15,6 +15,26 @@
     //border: 2px solid #11519B;
 }
 
+#rightCol table {
+    margin-left: 5px;
+    //width: 100%;
+}
+
+#rightCol td{
+    padding: 5px;
+    //border: 1px solid black;
+    vertical-align: top;
+}
+
+.datainfo {
+    width: 150px;
+    min-width: 150px;
+}
+
+.datainput {
+    width: 600px;
+}
+
 h3 {
     text-align: center;
     background-color: var(--main_theme_color);
