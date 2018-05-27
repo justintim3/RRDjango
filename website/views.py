@@ -235,7 +235,6 @@ def get_profile(request):
     userName = request.user.username
     date = timezone.now()
 
-
     if "saveProfile" in request.POST:
         fname = request.POST.get("firstname", None)
         lname = request.POST.get("lastname", None)
@@ -260,6 +259,7 @@ def get_profile(request):
                 #TimelineItemTypeId = UserFollowings.objects.get(UserID=userId, FollowedUserID=).UserRatingID
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
                 #following = True
             if 'unfollow' in request.POST:
@@ -268,7 +268,6 @@ def get_profile(request):
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-
         except:
             if 'follow' in request.POST:
                 cursor.execute(
