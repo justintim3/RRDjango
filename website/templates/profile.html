@@ -155,7 +155,7 @@
                 </div>
 
                 <div id="edit">
-                    {% if request.user.id %}
+                    {% if request.user.id == profile.id %}
                         <form action="{% url 'editprofile' %}">
                             <button type="submit">Edit Profile</button>
                         </form>
