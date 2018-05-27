@@ -63,7 +63,7 @@ def get_comicpage(request):
                          ReviewText=reviewText)
         review.save()
         timelineItemTypeId = Reviews.objects.latest('id').id
-        TimelineItems.objects.create(UserID=userId, UserName=userName, userTimelineItemTypeName="Review",
+        TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Review",
                                      TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=date)
 
     comicList = Comic.objects.raw('select * from website_comic where ComicID = %s', [comicId])
@@ -291,6 +291,7 @@ def get_profile(request):
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
 
+    print('before loop')
 
     for id in timelineItemList:
         if 'thumbup'+str(id.TimelineItemID) in request.POST:
@@ -302,7 +303,7 @@ def get_profile(request):
         if 'thumbdown'+str(id.TimelineItemID) in request.POST:
             cursor = connection.cursor()
             cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown + 1 "
-                           "WHERE TimelineItemID = %s",[id.TimelineItemID])
+                           "WHERE TimelineItemID = %s", [id.TimelineItemID])
             cursor.close()
             break
 

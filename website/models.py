@@ -166,5 +166,3 @@ class TimelineItems(models.Model):
     TimelineItemTypeName = models.CharField(max_length = 255)
     TimelineItemTypeID = models.IntegerField()
     TimelineItemDatePosted = models.DateTimeField()
-    TimelineThumbsUp = models.IntegerField()
-    TimelineThumbsDown = models.IntegerField()
