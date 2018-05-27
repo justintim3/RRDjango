@@ -153,8 +153,10 @@ class UserRatings(models.Model):
 
 
 class UserFollowings(models.Model):
-    UserID = models.IntegerField(db_column='UserID', primary_key=True)
+    UserFollowingID = models.AutoField(db_column='UserFollowingID', primary_key=True)
+    UserID = models.IntegerField(db_column='UserID')
     FollowedUserID = models.IntegerField(db_column='FollowedUserID')
+    FollowStatus = models.BooleanField()
 
 
 class TimelineItems(models.Model):

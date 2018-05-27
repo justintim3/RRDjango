@@ -249,24 +249,38 @@ def get_profile(request):
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
                        "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
         cursor.close()
-
-    following = True
-    try:
-        UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-        if 'unfollow' in request.POST:
-            cursor = connection.cursor()
-            cursor.execute("DELETE FROM website_userfollowings WHERE UserID = %s AND FollowedUserID = %s;",
-                           (userId, profileId))
-            cursor.close()
-            TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
-                                         TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-    except:
-        following = False
-        if 'follow' in request.POST:
-            UserFollowings.objects.create(UserID=userId, FollowedUserID=profileId)
-            TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
-                                         TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-
+    following = False
+    if userId:
+        cursor = connection.cursor()
+        try:
+            UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
+            following = True
+            if 'follow' in request.POST:
+                cursor.execute("UPDATE website_userfollowings SET FollowStatus = TRUE WHERE UserID=%s AND FollowedUserID=%s;",
+                               (userId, profileId))
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
+                                             TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+                following = True
+            if 'unfollow' in request.POST:
+                cursor.execute("UPDATE website_userfollowings SET FollowStatus = FALSE WHERE UserID=%s AND FollowedUserID=%s;",
+                               (userId, profileId))
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
+                                             TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+                following = False
+        except:
+            if 'follow' in request.POST:
+                following = True
+                cursor.execute(
+                    "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
+                    (userId, profileId, True))
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
+                                             TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+            else:
+                cursor.execute(
+                    "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
+                    (userId, profileId, False))
+                following = False
+        cursor.close()
     #followedUser = UserFollowings.objects.raw('SELECT UserID, FollowedUserID FROM UserFollowings '
     #                           'WHERE UserID = %s AND FollowedUserID = %s', (userId, profileId))
     if 'message' in request.POST:
