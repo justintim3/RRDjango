@@ -4,8 +4,6 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
-from .forms import UploadFileForm
-from django.http import HttpResponseRedirect
 
 
 # Create your views here.
@@ -270,7 +268,6 @@ def get_profile(request):
                                (userId, profileId))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unfollow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         except:
             if 'follow' in request.POST:
@@ -279,7 +276,6 @@ def get_profile(request):
                     (userId, profileId, True))
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
             elif userId == int(profileId):
                 pass
@@ -287,7 +283,6 @@ def get_profile(request):
                 cursor.execute(
                     "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
                     (userId, profileId, False))
-
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         cursor.close()
 
@@ -369,12 +364,13 @@ def get_seriespage(request):
 
 def search(request):
     if 'search' in request.GET:
-        form = request.GET.get('search', None)
-        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + form + "%"])
-        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + form + "%"])
-        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + form + "%"])
-        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + form + "%"])
-        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + form + "%"])
-        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + form + "%"])
+        searchString = request.GET.get('search', None)
+        comicList = Comic.objects.raw('SELECT * FROM website_comic WHERE ComicIssueTitle LIKE %s', ["%" + searchString + "%"])
+        characterList = Character.objects.raw('SELECT * FROM Characters WHERE CharacterName LIKE %s', ["%" + searchString + "%"])
+        creatorList = Creator.objects.raw('SELECT * FROM Creators WHERE CreatorName LIKE %s', ["%" + searchString + "%"])
+        seriesList = Series.objects.raw('SELECT * FROM Series WHERE SeriesName LIKE %s', ["%" + searchString + "%"])
+        publisherList = Publishers.objects.raw('SELECT * FROM Publishers WHERE PublisherName LIKE %s', ["%" + searchString + "%"])
+        newsList = NewsFeed.objects.raw('SELECT * FROM website_newsfeed WHERE Title LIKE %s', ["%" + searchString + "%"])
     return render(request, 'search.html', {'seriesList': seriesList, 'comicList': comicList, 'characterList': characterList,
-                                           'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList})
+                                           'creatorList': creatorList, 'publisherList': publisherList, 'newsList': newsList,
+                                           'searchString': searchString})
