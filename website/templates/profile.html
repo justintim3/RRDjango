@@ -166,6 +166,7 @@
                                         {% endif %}
                                         {% endfor %}
                                         </a>.
+                                    {% elif timelineItem.TimelineItemTypeName == "EditProfile" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Comment" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Thumbs" %}
                                     {% else %}
