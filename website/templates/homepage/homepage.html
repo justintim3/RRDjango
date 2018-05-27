@@ -69,14 +69,19 @@
                     {% endfor %}
                 </table>
             </div>
+
             <div id="right_col">
                 <div>
                     <h3 id="comic_title">Top 10 Comic Issues</h3>
-                    <ol class="top_comic">
+                    <table class="top_comic">
                         {% for comic in comics  %}
-                        <li><a href="/comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></li>
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
+                            <td><a style="text-decoration: none" href="/comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></td>
+                        </tr>
                         {% endfor %}
-                    </ol>
+                    </table>
                 </div>
             </div>
         </div>
