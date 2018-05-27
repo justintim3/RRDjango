@@ -127,7 +127,7 @@ class Users(models.Model):
     biography = models.TextField()
     user_picture = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    interest = models.CharField(max_length=255)
+    interests = models.CharField(max_length=255)
 
     def __str__(self):
         return "ID: " + str(self.UserID) + "\tUserName: " + self.UserDisplayName
