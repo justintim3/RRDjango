@@ -293,74 +293,73 @@ def get_profile(request):
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings ORDER BY FollowedUserName ASC')
 
-    for timelineItem in timelineItemList:
-        if 'thumbup'+str(timelineItem.TimelineItemID) in request.POST:  #Found timelineItem
-            try:
-                timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                    'SELECT * FROM TimelineItemLikeDislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
-                if timelineItemLikeDislike.LikeDislikeStatus == 1:
 
-                    cursor = connection.cursor()
-                    cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1 "
-                                   "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                    cursor.execute(
-                        "DELETE FROM TimelineItemLikeDislikes WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                    cursor.close()
-                    break
-                elif timelineItemLikeDislike.LikeDislikeStatus == 0:
-                    cursor = connection.cursor()
-                    cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1, "
-                                   "TimelineThumbsDown = TimelineThumbsDown - 1 WHERE TimelineItemID = %s",
-                                   [timelineItem.TimelineItemID])
-                    cursor.execute("UPDATE TimelineItemLikeDislikes SET LikeDislikeStatus = 1 "
-                                   "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                    cursor.close()
-                    break
-            except:
-                cursor = connection.cursor()
+
+    cursor = connection.cursor()
+    for timelineItem in timelineItemList:
+        print(str(timelineItem.TimelineItemID) + "         " + str(userId))
+        try:
+            TimelineItemLikeDislikes.objects.get(TimelineItemID=timelineItem.TimelineItemID, UserID=userId)
+            print("try")
+        except:
+            print("except")
+            cursor.execute(
+                "INSERT INTO website_timelineitemlikedislikes (TimelineItemID, UserID, LikeDislikeStatus)"
+                " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
+
+        if 'thumbup'+str(timelineItem.TimelineItemID) in request.POST:  #Found timelineItem
+            timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
+                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
+            if timelineItemLikeDislike.LikeDislikeStatus == 1:
+                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1 "
+                               "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
+                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 0 "
+                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
+                break
+            elif timelineItemLikeDislike.LikeDislikeStatus == -1:
+                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1, "
+                               "TimelineThumbsDown = TimelineThumbsDown - 1 WHERE TimelineItemID = %s",
+                               [timelineItem.TimelineItemID])
+                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 1 "
+                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
+                break
+            elif timelineItemLikeDislike.LikeDislikeStatus == 0:
                 cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1 "
                                "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                cursor.execute(
-                    "INSERT INTO TimelineItemLikeDislikes (TimelineItemID, UserID, LikeDislikeStatus)"
-                    " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 1))
-                cursor.close()
+                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 1 "
+                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
                 break
         if 'thumbdown'+str(timelineItem.TimelineItemID) in request.POST:
-            try:
-                timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                    'SELECT * FROM TimelineItemLikeDislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
-                if timelineItemLikeDislike.LikeDislikeStatus == 1:
-                    cursor = connection.cursor()
-                    cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1, "
-                                   "TimelineThumbsDown = TimelineThumbsDown + 1 WHERE TimelineItemID = %s",
-                                   [timelineItem.TimelineItemID])
-                    cursor.execute("UPDATE TimelineItemLikeDislikes SET LikeDislikeStatus = 0 "
-                                   "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                    cursor.close()
-                    break
-                elif timelineItemLikeDislike.LikeDislikeStatus == 0:
-                    cursor = connection.cursor()
-                    cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown - 1 "
-                                   "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                    cursor.execute(
-                        "DELETE FROM TimelineItemLikeDislikes WHERE TimelineItemID = %s AND UserID = %s",
-                        (timelineItem.TimelineItemID, userId))
-                    cursor.close()
-                    break
-            except:
-                cursor = connection.cursor()
+            timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
+                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
+            if timelineItemLikeDislike.LikeDislikeStatus == 1:
+                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1, "
+                               "TimelineThumbsDown = TimelineThumbsDown + 1 WHERE TimelineItemID = %s",
+                               [timelineItem.TimelineItemID])
+                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = -1 "
+                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
+                break
+            elif timelineItemLikeDislike.LikeDislikeStatus == -1:
+                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown - 1 "
+                               "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
+                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 0 "
+                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
+                break
+            elif timelineItemLikeDislike.LikeDislikeStatus == 0:
                 cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown + 1 "
                                "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                cursor.execute(
-                    "INSERT INTO TimelineItemLikeDislikes (TimelineItemID, UserID, LikeDislikeStatus)"
-                    " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
-                cursor.close()
+                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = -1 "
+                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
                 break
-    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM TimelineItemLikeDislikes WHERE UserID = %s', [userId])
+    cursor.close()
+    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM website_timelineitemlikedislikes WHERE UserID = %s', [userId])
+    tILDLLength = len(list(timelineItemLikeDislikeList))
+    print(tILDLLength)
     return render(request, 'profile.html', {'following': following, 'profile': profile[0],
                                             'timelineItemList': timelineItemList, 'ratingList': ratingList,
                                             'reviewList': reviewList, 'comicList': comicList, 'userList': userList,
-                                            'userFollowingList': userFollowingList, 'timelineItemLikeDislikeList': timelineItemLikeDislikeList})
+                                            'userFollowingList': userFollowingList, 'timelineItemLikeDislikeList': timelineItemLikeDislikeList,
+                                            'tILDLLength': tILDLLength})
 
 
 def get_editprofile(request):
