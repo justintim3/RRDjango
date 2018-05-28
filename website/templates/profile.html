@@ -212,20 +212,70 @@
                                         fail
                                     {% endif %}
                                 <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
+                                {% if request.user.username %}
+                                    <div id="thumb_section">
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            {{ timelineItemLikeDislikeList.0|length }}
+                                            {% if timelineItemLikeDislikeList|length > 0 %}
 
-                                <div id="thumb_section">
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}">
-                                            <img id="thumbImage" src="static/images/thumbup.png">
-                                        </button>
-                                        {{ timelineItem.TimelineThumbsUp }}
-                                        <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}">
-                                            <img id="thumbImage" src="static/images/thumbdown.png">
-                                        </button>
-                                        {{ timelineItem.TimelineThumbsDown }}
-                                    </form>
-                                </div>
+                                            {% for timelineItemLikeDislike in timelineItemLikeDislikeList %}
+                                                {% if timelineItemLikeDislike.TimelineItemID == timelineItem.TimelineItemID and timelineItemLikeDislike.LikeDislikeStatus == 1 %}
+                                                    11111
+                                                    <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}" style="background-color: #8dafdd">
+                                                        <img id="thumbImage" src="static/images/thumbup.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsUp }}
+                                                    <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}">
+                                                        <img id="thumbImage" src="static/images/thumbdown.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsDown }}
+                                                {% elif timelineItemLikeDislike.TimelineItemID == timelineItem.TimelineItemID and timelineItemLikeDislike.LikeDislikeStatus == 0 %}
+                                                    22222
+                                                    <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}">
+                                                        <img id="thumbImage" src="static/images/thumbup.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsUp }}
+                                                    <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}" style="background-color: #8dafdd">
+                                                        <img id="thumbImage" src="static/images/thumbdown.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsDown }}
+                                                {% else %}
+                                                    3333
+                                                    <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}">
+                                                        <img id="thumbImage" src="static/images/thumbup.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsUp }}
+                                                    <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}">
+                                                        <img id="thumbImage" src="static/images/thumbdown.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsDown }}
+                                                {% endif %}
+                                                2323
+                                            {% endfor %}
+                                                555
+                                            {% else %}
+                                                <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}">
+                                                        <img id="thumbImage" src="static/images/thumbup.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsUp }}
+                                                    <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}">
+                                                        <img id="thumbImage" src="static/images/thumbdown.png">
+                                                    </button>
+                                                    {{ timelineItem.TimelineThumbsDown }}
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <button type="submit" name="thumbup{{ timelineItem.TimelineItemID }}" disabled>
+                                        <img id="thumbImage" src="static/images/thumbup.png">
+                                    </button>
+                                    {{ timelineItem.TimelineThumbsUp }}
+                                    <button type="submit" name="thumbdown{{ timelineItem.TimelineItemID }}" disabled>
+                                        <img id="thumbImage" src="static/images/thumbdown.png">
+                                    </button>
+                                    {{ timelineItem.TimelineThumbsDown }}
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>

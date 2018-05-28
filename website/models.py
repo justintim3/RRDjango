@@ -168,3 +168,8 @@ class TimelineItems(models.Model):
     TimelineItemTypeName = models.CharField(max_length = 255)
     TimelineItemTypeID = models.IntegerField()
     TimelineItemDatePosted = models.DateTimeField()
+
+class TimelineItemLikeDislikes(models.Model):
+    TimelineItemID = models.IntegerField(db_column='TimelineItemID', primary_key=True)
+    UserID = models.IntegerField()
+    LikeDislikeStatus = models.IntegerField()
