@@ -163,7 +163,7 @@
                     <h3>Timeline</h3>
                     <div class="timeline">
                         {% for timelineItem in timelineItemList %}
-                            <div id = "TimelineItem" name="Timeline{{ timelineItem.TimelineItemID }}">
+                            <div class ="TimelineItem" id = "Timeline{{ timelineItem.TimelineItemID }}" name="Timeline{{ timelineItem.TimelineItemID }}">
                                 {% if timelineItem.UserID == profile.id %}
                                     {% if profile.user_picture %}
                                         <img id="timelineImage" src="static/images/UserImages/{{ profile.user_picture }}">
@@ -205,7 +205,6 @@
                                         {% endif %}
                                         {% endfor %}
                                         </a>.
-                                    {% elif timelineItem.TimelineItemTypeName == "EditProfile" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Comment" %}
                                     {% elif timelineItem.TimelineItemTypeName == "Thumbs" %}
                                     {% else %}
@@ -214,7 +213,7 @@
                                 <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
                                 {% if request.user.username %}
                                     <div id="thumb_section">
-                                        <form method="POST">
+                                        <form method="POST" action="/profile?id={{profile.id}}#Timeline{{ timelineItem.TimelineItemID }}">
                                             {% csrf_token %}
                                             {% for timelineItemLikeDislike in timelineItemLikeDislikeList %}
                                                 {% if timelineItemLikeDislike.TimelineItemID == timelineItem.TimelineItemID and timelineItemLikeDislike.LikeDislikeStatus == 1 %}
