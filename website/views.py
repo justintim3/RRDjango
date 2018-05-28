@@ -137,14 +137,27 @@ def get_comicpage(request):
                                  'INNER JOIN CreatorTypes ON ComicCreators.CreatorTypeID = CreatorTypes.CreatorTypeID '
                                  'INNER JOIN Creators ON ComicCreators.CreatorID = Creators.CreatorID '
                                  'WHERE website_comic.ComicID = %s AND CreatorTypeName = "Cover Artist";', [comicId])
+    try:
+        userRating = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s AND ComicID = %s',
+                                             (userId, comicId))[0]
+        return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
+                                                  'series': series[0], 'publisher': publisher[0],
+                                                  'storyArcList': storyArcList, 'writerList': writerList,
+                                                  'pencillerList': pencillerList, 'inkerList': inkerList,
+                                                  'coloristList': coloristList, 'lettererList': lettererList,
+                                                  'editorList': editorList, 'coverArtistList': coverArtistList,
+                                                  'reviewList': reviewList, 'userList': userList,
+                                                  'userRating': userRating})
 
-    return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
-                                              'series': series[0], 'publisher': publisher[0],
-                                              'storyArcList': storyArcList, 'writerList': writerList,
-                                              'pencillerList': pencillerList, 'inkerList': inkerList,
-                                              'coloristList': coloristList, 'lettererList': lettererList,
-                                              'editorList': editorList, 'coverArtistList': coverArtistList,
-                                              'reviewList': reviewList, 'userList': userList})
+    except:
+        return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
+                                                  'series': series[0], 'publisher': publisher[0],
+                                                  'storyArcList': storyArcList, 'writerList': writerList,
+                                                  'pencillerList': pencillerList, 'inkerList': inkerList,
+                                                  'coloristList': coloristList, 'lettererList': lettererList,
+                                                  'editorList': editorList, 'coverArtistList': coverArtistList,
+                                                  'reviewList': reviewList, 'userList': userList})
+
 
   
 def get_characterpage(request):

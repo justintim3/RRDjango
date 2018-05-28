@@ -41,7 +41,7 @@
                 <a href={% url 'newsfeed' %}>News</a>
                 <div id="search_bar">
                     <form type="GET" action="/search" id="search">
-                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, issues, more...">
                         <button type="submit"><img id="search_button" src="static/images/searchbutton.png"></button>
                     </form>
 			    </div>
@@ -164,6 +164,14 @@
                         </table>
                     </div>
 
+                    <div id="edit">
+                        {% if request.user.id == profile.id %}
+                            <form action="{% url 'editprofile' %}">
+                                <button type="submit">Edit Profile</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
                     <h3>Timeline</h3>
                     <div class="timeline">
                         {% for timelineItem in timelineItemList %}
@@ -177,18 +185,17 @@
                                 {% endif %}
 
                                 <a href="profile?id={{ timelineItem.UserID }}"><b>{{ timelineItem.UserName }}</b></a>
-                                    {% if timelineItem.TimelineItemTypeName == "Rating"%}
-                                        rated <a href="comicpage?id={{ timelineItem.TimelineItemTypeID }}">
+                                    {% if timelineItem.TimelineItemTypeName == "Rating" or timelineItem.TimelineItemTypeName == "Unrating" %}
+                                        {% if timelineItem.TimelineItemTypeName == "Rating" %}
+                                            rated
+                                        {% else %}
+                                            unrated
+                                        {% endif %}
+                                        <a href="comicpage?id={{ timelineItem.TimelineItemTypeID }}">
                                         {% for comic in comicList %}{% if timelineItem.TimelineItemTypeID == comic.ComicID %}{{ comic.ComicIssueTitle }}
                                             {% endif %}
                                         {% endfor %}
-                                    </a>.
-                                    {% elif timelineItem.TimelineItemTypeName == "Unrating" %}
-                                        unrated <a href="comicpage?id={{ timelineItem.TimelineItemTypeID }}">
-                                        {% for comic in comicList %}{% if timelineItem.TimelineItemTypeID == comic.ComicID %}{{ comic.ComicIssueTitle }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </a>.
+                                        </a>.
                                     {% elif timelineItem.TimelineItemTypeName == "Review" %}
                                         reviewed <a href="comicpage?id={% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}{{ review.ComicID }}{% endif %}{% endfor %}#Review{{ timelineItem.TimelineItemTypeID }}">
                                         {% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}
@@ -262,14 +269,6 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
-                    </div>
-
-                    <div id="edit">
-                        {% if request.user.id == profile.id %}
-                            <form action="{% url 'editprofile' %}">
-                                <button type="submit">Edit Profile</button>
-                            </form>
-                        {% endif %}
                     </div>
                 </div>
             </div>
