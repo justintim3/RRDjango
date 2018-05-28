@@ -240,11 +240,12 @@ def get_profile(request):
         lname = request.POST.get("lastname", None)
         useremail = request.POST.get("email", None)
         address = request.POST.get("address", None)
+        birthdate = request.POST.get("dob", None)
         interests = request.POST.get("interests", None)
         biography = request.POST.get("biography", None)
         cursor = connection.cursor()
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
-                       "biography = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, userId))
+                       "biography = %s, DOB = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, birthdate, userId))
         cursor.close()
 
     following = False
