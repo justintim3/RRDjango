@@ -273,14 +273,12 @@ def get_profile(request):
             else:
                 profileName = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])[0].username
                 if 'follow' in request.POST:
-                    pass
                     cursor.execute(
                         "INSERT INTO website_userfollowings (UserID, UserName, FollowedUserID, FollowedUserName, FollowStatus)"
                         " VALUES (%s, %s, %s, %s, %s);", (userId, userName, profileId, profileName, True))
                     TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                                  TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
                 else:
-                    pass
                     cursor.execute(
                         "INSERT INTO website_userfollowings (UserID, UserName, FollowedUserID, FollowedUserName, FollowStatus)"
                         " VALUES (%s, %s, %s, %s, %s);", (userId, userName, profileId, profileName, False))
