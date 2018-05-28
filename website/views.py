@@ -12,7 +12,7 @@ from django.db import connection
 def homepage(request):
     newsFeed = NewsFeed.objects.raw('SELECT * FROM website_newsfeed ORDER BY DATE DESC limit 10')
     comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic '
-                               'ORDER BY ComicRating DESC LIMIT 10;')
+                               'ORDER BY ComicRating DESC, ComicNumberOfRaters DESC LIMIT 10;')
     return render(request, 'homepage/homepage.html', {'newsFeeds': newsFeed , 'comics': comics })
 
 
@@ -27,28 +27,51 @@ def get_comicpage(request):
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
         try:
-            UserRatings.objects.get(UserID=userId, ComicID=comicId)
+            prevRating = UserRatings.objects.get(UserID=userId, ComicID=comicId)
+            print("try")
             cursor = connection.cursor()
-            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
+            if userRating > 0:
+                print(">0")
+                cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
+                comic.ComicTotalRating = comic.ComicTotalRating - prevRating.UserRating + userRating
+                comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
+                                             TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
+            elif userRating == 0:
+                print("0")
+                cursor.execute("DELETE FROM website_userratings WHERE UserID = %s AND ComicID = %s;", (userId, comicId))
+                comic.ComicNumberOfRaters = comic.ComicNumberOfRaters - 1
+                comic.ComicTotalRating = comic.ComicTotalRating - prevRating.UserRating
+                if comic.ComicNumberOfRaters == 0:
+                    comic.ComicRating = 0
+                else:
+                    comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unrating",
+                                             TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
+            comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
             cursor.close()
-        except:
-            UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
 
-        raters = UserRatings.objects.raw('SELECT * FROM website_userratings '
-                                         'WHERE ComicID = %s;', [comicId])
-        comic.ComicNumberOfRaters = len(list(raters))
-        totalRating = 0
-        for rating in raters:
-            totalRating = totalRating + rating.UserRating
-        comic.ComicTotalRating = totalRating
-        if comic.ComicNumberOfRaters != 0:
-            comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
-        else:
-            comic.ComicRating = 0
-        comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
-        TimelineItemTypeId = UserRatings.objects.get(UserID=userId, ComicID=comicId).UserRatingID
-        TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
-                                     TimelineItemTypeID=TimelineItemTypeId, TimelineItemDatePosted=date)
+        except:
+            print("except")
+            if userRating > 0:
+                print(">0")
+                newRating = UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
+                if comic.ComicNumberOfRaters:
+                    comic.ComicNumberOfRaters = comic.ComicNumberOfRaters + 1
+                else:
+                    comic.ComicNumberOfRaters = 1
+                if comic.ComicTotalRating:
+                    comic.ComicTotalRating = comic.ComicTotalRating + userRating
+                else:
+                    comic.ComicTotalRating = userRating
+                comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
+                comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
+                print(newRating.UserRatingID)
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
+                                             TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
+            elif userRating == 0:
+                print("Do nothing")
+                pass
 
 
     #Reviews
