@@ -53,25 +53,27 @@
             <div id="info_section">
                 <div id="leftCol">
                     <h3 class="usernameBar">
-                        {{profile.username}}'s Profile
+                        {{profile.username}}
                     </h3>
-
-                    <div id="profilepic">
-                        {% if profile.user_picture %}
-                            <img id="profileImage" src="static/images/UserImages/{{ profile.user_picture }}">
-                        {% else %}
-                            <img id="profileImage" src="static/images/default-profile.png">
-                        {% endif %}
+                    <div class="user_info">
+                        <table>
+                            <div id="profilepic">
+                                {% if profile.user_picture %}
+                                    <img id="profileImage" src="static/images/UserImages/{{ profile.user_picture }}">
+                                {% else %}
+                                    <img id="profileImage" src="static/images/default-profile.png">
+                                {% endif %}
+                            </div>
+                            <div id="infoCol">
+                            <p><b>Date Joined: </b>{{ profile.date_joined }}</p><p><b>Last Login: </b>{{ profile.last_login }}</p>
+                            {% if profile.is_staff %}
+                                <p><b>User Type: </b>Admin</p>
+                                {% else %}
+                                <p><b>User Type: </b>Normal</p>
+                                {% endif %}
+                            </div>
+                        </table>
                     </div>
-                    <p><b>Date Joined: </b>{{ profile.date_joined }}</p>
-                    <p><b>Last Login: </b>{{ profile.last_login }}</p>
-
-                    {% if profile.is_staff %}
-                        <p><b>User Type: </b>Admin</p>
-                    {% else %}
-                        <p><b>User Type: </b>Normal</p>
-                    {% endif %}
-
                 </div>
 
                 <div id="rightCol">
