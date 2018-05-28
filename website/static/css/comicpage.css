@@ -66,17 +66,18 @@
 
 #Review {
 	border: 1px solid #11519B;
-	min-height: 300px;
+	//min-height: 300px;
 	//padding: 10px;
 	margin: 10px;
 }
 
 #WriteReview {
+	//border: 1px solid #11519B;
+	margin: 10px;
 	text-align: center;
-	margin: 5px;
 }
 
-#Review h4 {
+#Review h4, #WriteReview h4 {
 	text-align: center;
     background-color: var(--main_theme_color);
     color: white;
