@@ -62,9 +62,7 @@ h3 {
 	//margin: 10px;
 	background-color: white;
 }
-#thumb_section button {
-    background-color: var(--main_theme_color);
-}
+
 #thumbImage {
     height: 25px;
     margin: 0 auto;
