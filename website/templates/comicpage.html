@@ -182,17 +182,17 @@
                         <p> {{ review.ReviewText }} </p>
                         </div>
                     {% endfor %}
-                    <div id="WriteReview">
-                        {% if request.user.username %}
-                            <h4>Write a Review</h4>
-                            <form method="POST">
-                                {% csrf_token %}
-                                <textarea name="textfield" style="width:100%; height: 200px; resize:none"></textarea>
-                                <button type="submit" name="review" style="margin: 5px">Submit</button>
-                            </form>
-                        {% endif %}
-                    </div>
 			    </div>
+                <div id="WriteReview">
+                    {% if request.user.username %}
+                        <h4>Write a Review</h4>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <textarea name="textfield" style="width:100%; height: 200px; resize:none"></textarea>
+                            <button type="submit" name="review" style="margin: 5pxf">Submit</button>
+                        </form>
+                    {% endif %}
+                </div>
 			</div>
     	</div>
     </div>

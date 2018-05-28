@@ -93,7 +93,7 @@ h3 {
 
 .timeline {
     border: 1px solid #11519B;
-    min-height: 300px;
+    min-height: 100px;
 }
 
 #TimelineItem {

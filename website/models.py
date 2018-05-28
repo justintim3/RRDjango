@@ -155,7 +155,9 @@ class UserRatings(models.Model):
 class UserFollowings(models.Model):
     UserFollowingID = models.AutoField(db_column='UserFollowingID', primary_key=True)
     UserID = models.IntegerField(db_column='UserID')
+    UserName = models.CharField(max_length=255)
     FollowedUserID = models.IntegerField(db_column='FollowedUserID')
+    FollowedUserName = models.CharField(max_length=255)
     FollowStatus = models.BooleanField()
 
 
@@ -166,3 +168,8 @@ class TimelineItems(models.Model):
     TimelineItemTypeName = models.CharField(max_length = 255)
     TimelineItemTypeID = models.IntegerField()
     TimelineItemDatePosted = models.DateTimeField()
+
+class TimelineItemLikeDislikes(models.Model):
+    TimelineItemID = models.IntegerField(db_column='TimelineItemID', primary_key=True)
+    UserID = models.IntegerField()
+    LikeDislikeStatus = models.IntegerField()
