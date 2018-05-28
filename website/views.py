@@ -235,6 +235,7 @@ def get_profile(request):
     userName = request.user.username
     date = timezone.now()
 
+    #Save profile
     if "saveProfile" in request.POST:
         fname = request.POST.get("firstname", None)
         lname = request.POST.get("lastname", None)
@@ -248,8 +249,8 @@ def get_profile(request):
                        "biography = %s, DOB = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, birthdate, userId))
         cursor.close()
 
+    #User following
     following = False
-
     if userId:
         cursor = connection.cursor()
         try:
@@ -293,24 +294,21 @@ def get_profile(request):
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings ORDER BY FollowedUserName ASC')
+    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM website_timelineitemlikedislikes WHERE UserID = %s', [userId])
 
-
-
+    #Likes/Dislikes
     cursor = connection.cursor()
     for timelineItem in timelineItemList:
-        print(str(timelineItem.TimelineItemID) + "         " + str(userId))
         try:
             TimelineItemLikeDislikes.objects.get(TimelineItemID=timelineItem.TimelineItemID, UserID=userId)
-            print("try")
         except:
-            print("except")
             cursor.execute(
                 "INSERT INTO website_timelineitemlikedislikes (TimelineItemID, UserID, LikeDislikeStatus)"
                 " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
 
         if 'thumbup'+str(timelineItem.TimelineItemID) in request.POST:  #Found timelineItem
             timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
+                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s AND UserID = %s', (timelineItem.TimelineItemID, userId))[0]
             if timelineItemLikeDislike.LikeDislikeStatus == 1:
                 cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1 "
                                "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
@@ -332,7 +330,7 @@ def get_profile(request):
                 break
         if 'thumbdown'+str(timelineItem.TimelineItemID) in request.POST:
             timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
+                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s AND UserID = %s', (timelineItem.TimelineItemID, userId))[0]
             if timelineItemLikeDislike.LikeDislikeStatus == 1:
                 cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1, "
                                "TimelineThumbsDown = TimelineThumbsDown + 1 WHERE TimelineItemID = %s",
@@ -353,14 +351,11 @@ def get_profile(request):
                                "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
                 break
     cursor.close()
-    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM website_timelineitemlikedislikes WHERE UserID = %s', [userId])
-    tILDLLength = len(list(timelineItemLikeDislikeList))
-    print(tILDLLength)
+
     return render(request, 'profile.html', {'following': following, 'profile': profile[0],
                                             'timelineItemList': timelineItemList, 'ratingList': ratingList,
                                             'reviewList': reviewList, 'comicList': comicList, 'userList': userList,
-                                            'userFollowingList': userFollowingList, 'timelineItemLikeDislikeList': timelineItemLikeDislikeList,
-                                            'tILDLLength': tILDLLength})
+                                            'userFollowingList': userFollowingList, 'timelineItemLikeDislikeList': timelineItemLikeDislikeList})
 
 
 def get_editprofile(request):
