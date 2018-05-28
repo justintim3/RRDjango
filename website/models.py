@@ -155,7 +155,9 @@ class UserRatings(models.Model):
 class UserFollowings(models.Model):
     UserFollowingID = models.AutoField(db_column='UserFollowingID', primary_key=True)
     UserID = models.IntegerField(db_column='UserID')
+    UserName = models.CharField(max_length=255)
     FollowedUserID = models.IntegerField(db_column='FollowedUserID')
+    FollowedUserName = models.CharField(max_length=255)
     FollowStatus = models.BooleanField()
 
 
