@@ -79,44 +79,52 @@
                         {% csrf_token %}
                         <h3>About</h3>
                         <div class="about">
-                            <ul style="list-style-type: none">
-                                <li>
-                                    <p><b>First Name: </b>
-                                        <input type="text" name="firstname" value="{{ profile.first_name }}">
-                                    </p>
-                                </li>
-                                <li>
-                                    <p><b>Last Name: </b>
-                                        <input type="text" name="lastname" value="{{ profile.last_name }}">
-                                    </p>
-                                </li>
-                                <li>
-                                    <p><b>Email: </b>
-                                        <input type="text" name="email" value="{{ profile.email }}">
-                                    </p>
-                                </li>
-                                <li>
-                                    <p><b>Address: </b>
-                                        <input type="text" name="address" value="{{ profile.address }}">
-                                    </p>
-                                </li>
-                                <li><p><b>Birth Date: </b>{{ profile.DOB }}</p></li>
-                            </ul>
+                            <table>
+                                <tr>
+                                    <td class="datainfo"><b>First Name: </b></td>
+                                    <td><input class="datainput" type="text" name="firstname" value="{{ profile.first_name }}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Last Name: </b></td>
+                                    <td><input class="datainput" type="text" name="lastname" value="{{ profile.last_name }}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Email: </b></td>
+                                    <td><input class="datainput" type="text" name="email" value="{{ profile.email }}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Address: </b></td>
+                                    <td><input class="datainput" type="text" name="address" value="{{ profile.address }}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Birth Date: </b></td>
+                                    <td>{{ profile.DOB }}</td>
+                                </tr>
+                            </table>
                         </div>
 
                         <h3>Biography</h3>
                         <div class="bio">
-                            <ul style="list-style-type:none">
-                                <li><p><b>Biography: </b></p></li>
-                                    <textarea name="biography" style="width:100%; height: 200px; resize:none" value="{{ profile.biography }}">{{ profile.biography }}</textarea>
-                                <li><p><b>Interests: </b>
-                                    <input type="text" name="interests" value="{{ profile.interests }}">
-                                </p></li>
-                                <li><p><b>Favorite Comic: </b>
-                                </p></li>
-                                <li><p><b>Favorite Character: </b>
-                                </p></li>
-                            </ul>
+                            <table>
+                                <tr>
+                                    <td class="datainfo"><b>Biography: </b></td>
+                                    <td><textarea name="biography" style="width:600px; height: 100px; resize:none"
+                                                  value="{{ profile.biography }}">{{ profile.biography }}</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Interests: </b></td>
+                                    <td><textarea name="interests" style="width:600px; height: 100px; resize:none"
+                                                  value="{{ profile.interests }}">{{ profile.interests }}</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Favorite Comic: </b></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="datainfo"><b>Favorite Character: </b></td>
+                                    <td></td>
+                                </tr>
+                            </table>
                         </div>
 
                         <div id="edit">
