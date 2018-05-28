@@ -100,10 +100,10 @@
                     <h3>Following</h3>
                     <div class="following">
                         <table>
-                            {% for userfollow in userFollowingList %}
-                                {% if profile.id == userfollow.UserID %}
+                            {% for userFollow in userFollowingList %}
+                                {% if profile.id == userFollow.UserID and userFollow.FollowStatus %}
                                     <tr>
-                                        <td>{{ userfollow.FollowedUserName }}</td>
+                                        <td><a href="profile?id={{ userFollow.FollowedUserID }}">{{ userFollow.FollowedUserName }}</a></td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}

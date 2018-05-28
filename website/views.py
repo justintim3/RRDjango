@@ -256,12 +256,10 @@ def get_profile(request):
             if 'follow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = TRUE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
-                #TimelineItemTypeId = UserFollowings.objects.get(UserID=userId, FollowedUserID=).UserRatingID
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
 
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-                #following = True
             if 'unfollow' in request.POST:
                 cursor.execute("UPDATE website_userfollowings SET FollowStatus = FALSE WHERE UserID=%s AND FollowedUserID=%s;",
                                (userId, profileId))
@@ -269,19 +267,23 @@ def get_profile(request):
                                              TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         except:
-            if 'follow' in request.POST:
-                cursor.execute(
-                    "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
-                    (userId, profileId, True))
-                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
-                                             TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
-                following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
-            elif userId == int(profileId):
+            if userId == int(profileId):
                 pass
             else:
-                cursor.execute(
-                    "INSERT INTO website_userfollowings (UserID, FollowedUserID, FollowStatus) VALUES (%s, %s, %s);",
-                    (userId, profileId, False))
+                profileName = Users.objects.raw('SELECT * FROM auth_user WHERE id = %s', [profileId])[0].username
+                if 'follow' in request.POST:
+                    pass
+                    cursor.execute(
+                        "INSERT INTO website_userfollowings (UserID, UserName, FollowedUserID, FollowedUserName, FollowStatus)"
+                        " VALUES (%s, %s, %s, %s, %s);", (userId, userName, profileId, profileName, True))
+                    TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Follow",
+                                                 TimelineItemTypeID=profileId, TimelineItemDatePosted=date)
+                else:
+                    pass
+                    cursor.execute(
+                        "INSERT INTO website_userfollowings (UserID, UserName, FollowedUserID, FollowedUserName, FollowStatus)"
+                        " VALUES (%s, %s, %s, %s, %s);", (userId, userName, profileId, profileName, False))
+
                 following = UserFollowings.objects.get(UserID=userId, FollowedUserID=profileId)
         cursor.close()
 
@@ -291,7 +293,7 @@ def get_profile(request):
     reviewList = Reviews.objects.raw('SELECT * FROM website_reviews WHERE UserID = %s', [profileId])
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
-    userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings')
+    userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings ORDER BY FollowedUserName ASC')
 
     for id in timelineItemList:
         if 'thumbup'+str(id.TimelineItemID) in request.POST:
