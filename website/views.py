@@ -28,17 +28,14 @@ def get_comicpage(request):
         comic = Comic.objects.get(ComicID=comicId)
         try:
             prevRating = UserRatings.objects.get(UserID=userId, ComicID=comicId)
-            print("try")
             cursor = connection.cursor()
             if userRating > 0:
-                print(">0")
                 cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
                 comic.ComicTotalRating = comic.ComicTotalRating - prevRating.UserRating + userRating
                 comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
                                              TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
             elif userRating == 0:
-                print("0")
                 cursor.execute("DELETE FROM website_userratings WHERE UserID = %s AND ComicID = %s;", (userId, comicId))
                 comic.ComicNumberOfRaters = comic.ComicNumberOfRaters - 1
                 comic.ComicTotalRating = comic.ComicTotalRating - prevRating.UserRating
@@ -52,9 +49,7 @@ def get_comicpage(request):
             cursor.close()
 
         except:
-            print("except")
             if userRating > 0:
-                print(">0")
                 newRating = UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
                 if comic.ComicNumberOfRaters:
                     comic.ComicNumberOfRaters = comic.ComicNumberOfRaters + 1
@@ -66,12 +61,8 @@ def get_comicpage(request):
                     comic.ComicTotalRating = userRating
                 comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
                 comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
-                print(newRating.UserRatingID)
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
                                              TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
-            elif userRating == 0:
-                print("Do nothing")
-                pass
 
 
     #Reviews
