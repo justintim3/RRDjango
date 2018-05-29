@@ -50,23 +50,16 @@
     	
     	<!-- BODY CONTENT -->
     	<div id="content">
-			
-    		<table class="table table-bordered">
-    			<tr>
-    				<th id="id">Number</th>
-                    <th id="series">Series</th>
-					<th id="name">Title</th>
-    				<th id="rating">Rating</th>
-    			</tr>
-                {% for comic in comics %}
-				<tr>
-  					<td>{{ forloop.counter }}</td>
-                    <td><a href="seriespage?id={{comic.SeriesID}}">{{ comic.SeriesName }}</a></td>
-                    <td><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
-    				<td>{{ comic.ComicRating }}</td>
-    			</tr>
-                {% endfor %}
-    		</table>
+			{% for comic in comics %}
+                <div id="comicitem">
+                    <a href="comicpage?id={{comic.ComicID}}"><img class="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a>
+                    <h4><b><a href="seriespage?id={{comic.SeriesID}}">{{ comic.SeriesName }}</a></b></h4>
+                    <h5><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></h5>
+                    <h6>Rating: {{ comic.ComicRating }}</h6>
+                </div>
+            {% endfor %}
+
+
 
     	</div>
     	
