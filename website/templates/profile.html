@@ -16,7 +16,7 @@
 
   		<!-- HEADER -->
         <div id="header">
-            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="logo"><a href={% url 'homepage' %}><img src="static/images/logo.png"></a></div>
             <div id="acc_info">
                 <div id="login_part">
                     {% block authentication %}
@@ -41,7 +41,7 @@
                 <a href={% url 'newsfeed' %}>News</a>
                 <div id="search_bar">
                     <form type="GET" action="/search" id="search">
-                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, issues, more...">
                         <button type="submit"><img id="search_button" src="static/images/searchbutton.png"></button>
                     </form>
 			    </div>
@@ -55,48 +55,52 @@
                     <h3 class="usernameBar">
                         {{profile.username}}
                     </h3>
-
-                    <div id="profilepic">
-                        {% if profile.user_picture %}
-                            <img id="profileImage" src="static/images/UserImages/{{ profile.user_picture }}">
-                        {% else %}
-                            <img id="profileImage" src="static/images/default-profile.png">
-                        {% endif %}
-                    </div>
-                    {% if request.user.username %}
-                        <div id = "leftButtons">
-                            <p>
-                            <form method="POST">
-                                {% csrf_token %}
-                            {% if profile.id != request.user.id %}
-                                <button type="submit" name="message" id="profileButtons">Message</button>
+                    <div class="user_info">
+                        <table>
+                        <div id="profilepic">
+                            {% if profile.user_picture %}
+                                <img id="profileImage" src="static/images/UserImages/{{ profile.user_picture }}">
+                            {% else %}
+                                <img id="profileImage" src="static/images/default-profile.png">
                             {% endif %}
-                            </form>
-                            {% if profile.id != request.user.id %}
-                                {% if following.FollowStatus %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
-                                    </form>
-                                {% else %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit" name="follow" id="profileButtons">Follow</button>
-                                    </form>
-                                {% endif %}
-                            {% endif %}
-                            </p>
                         </div>
-                    {% endif %}
-                    <p><b>Date Joined: </b>{{ profile.date_joined }}</p>
-                    <p><b>Last Login: </b>{{ profile.last_login }}</p>
+                        <div id="infoCol">
+                            {% if request.user.username %}
+                            <div id="leftButtons">
+                                <p>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                {% if profile.id != request.user.id %}
+                                    <button type="submit" name="message" id="profileButtons">Message</button>
+                                {% endif %}
+                                </form>
+                                {% if profile.id != request.user.id %}
+                                    {% if following.FollowStatus %}
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
+                                        </form>
+                                    {% else %}
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" name="follow" id="profileButtons">Follow</button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                                </p>
+                            </div>
+                        {% endif %}
+                            <p><b>Date Joined: </b>{{ profile.date_joined }}</p>
+                            <p><b>Last Login: </b>{{ profile.last_login }}</p>
 
-                    {% if profile.is_staff %}
-                        <p><b>User Type: </b>Admin</p>
-                    {% else %}
-                        <p><b>User Type: </b>Normal</p>
-                    {% endif %}
-
+                            {% if profile.is_staff %}
+                                <p><b>User Type: </b>Admin</p>
+                            {% else %}
+                                <p><b>User Type: </b>Normal</p>
+                            {% endif %}
+                            </div>
+                        </table>
+                    </div>
                     <h3>Following</h3>
                     <div class="following">
                         <table>
@@ -160,10 +164,18 @@
                         </table>
                     </div>
 
+                    <div id="edit">
+                        {% if request.user.id == profile.id %}
+                            <form action="{% url 'editprofile' %}">
+                                <button type="submit">Edit Profile</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
                     <h3>Timeline</h3>
                     <div class="timeline">
                         {% for timelineItem in timelineItemList %}
-                            <div id = "TimelineItem" name="Timeline{{ timelineItem.TimelineItemID }}">
+                            <div class ="TimelineItem" id = "Timeline{{ timelineItem.TimelineItemID }}" name="Timeline{{ timelineItem.TimelineItemID }}">
                                 {% if timelineItem.UserID == profile.id %}
                                     {% if profile.user_picture %}
                                         <img id="timelineImage" src="static/images/UserImages/{{ profile.user_picture }}">
@@ -173,15 +185,17 @@
                                 {% endif %}
 
                                 <a href="profile?id={{ timelineItem.UserID }}"><b>{{ timelineItem.UserName }}</b></a>
-                                    {% if timelineItem.TimelineItemTypeName == "Rating"%}
-                                        rated <a href="comicpage?id={% for rating in ratingList %}{% if rating.UserRatingID == timelineItem.TimelineItemTypeID %}{{ rating.ComicID }}{% endif %}{% endfor %}">
-                                        {% for rating in ratingList %}{% if rating.UserRatingID == timelineItem.TimelineItemTypeID %}
-                                            {% for comic in comicList %}{% if rating.ComicID == comic.ComicID %}{{ comic.ComicIssueTitle }}
-                                            {% endif %}
-                                            {% endfor %}
+                                    {% if timelineItem.TimelineItemTypeName == "Rating" or timelineItem.TimelineItemTypeName == "Unrating" %}
+                                        {% if timelineItem.TimelineItemTypeName == "Rating" %}
+                                            rated
+                                        {% else %}
+                                            unrated
                                         {% endif %}
+                                        <a href="comicpage?id={{ timelineItem.TimelineItemTypeID }}">
+                                        {% for comic in comicList %}{% if timelineItem.TimelineItemTypeID == comic.ComicID %}{{ comic.ComicIssueTitle }}
+                                            {% endif %}
                                         {% endfor %}
-                                    </a>.
+                                        </a>.
                                     {% elif timelineItem.TimelineItemTypeName == "Review" %}
                                         reviewed <a href="comicpage?id={% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}{{ review.ComicID }}{% endif %}{% endfor %}#Review{{ timelineItem.TimelineItemTypeID }}">
                                         {% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}
@@ -205,16 +219,11 @@
                                         {% endif %}
                                         {% endfor %}
                                         </a>.
-                                    {% elif timelineItem.TimelineItemTypeName == "EditProfile" %}
-                                    {% elif timelineItem.TimelineItemTypeName == "Comment" %}
-                                    {% elif timelineItem.TimelineItemTypeName == "Thumbs" %}
-                                    {% else %}
-                                        fail
                                     {% endif %}
                                 <p><b>{{ timelineItem.TimelineItemDatePosted }}</b></p>
                                 {% if request.user.username %}
                                     <div id="thumb_section">
-                                        <form method="POST">
+                                        <form method="POST" action="/profile?id={{profile.id}}#Timeline{{ timelineItem.TimelineItemID }}">
                                             {% csrf_token %}
                                             {% for timelineItemLikeDislike in timelineItemLikeDislikeList %}
                                                 {% if timelineItemLikeDislike.TimelineItemID == timelineItem.TimelineItemID and timelineItemLikeDislike.LikeDislikeStatus == 1 %}
@@ -260,14 +269,6 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
-                    </div>
-
-                    <div id="edit">
-                        {% if request.user.id == profile.id %}
-                            <form action="{% url 'editprofile' %}">
-                                <button type="submit">Edit Profile</button>
-                            </form>
-                        {% endif %}
                     </div>
                 </div>
             </div>

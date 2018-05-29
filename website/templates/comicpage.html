@@ -16,7 +16,7 @@
 	
 		<!-- HEADER -->
         <div id="header">
-            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="logo"><a href={% url 'homepage' %}><img src="static/images/logo.png"></a></div>
             <div id="acc_info">
                 <div id="login_part">
                     {% block authentication %}
@@ -41,7 +41,7 @@
                 <a href={% url 'newsfeed' %}>News</a>
                 <div id="search_bar">
                     <form type="GET" action="/search" id="search">
-                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, issues, more...">
                         <button type="submit"><img id="search_button" src="static/images/searchbutton.png"></button>
                     </form>
 			    </div>
@@ -60,17 +60,57 @@
                         <form method="POST">
                             {% csrf_token %}
                             <select name="rating">
-                                <option>Select</option>
-                                <option value="10">10 - Masterpiece</option>
-                                <option value="9">9 - Great</option>
-                                <option value="8">8 - Very Good</option>
-                                <option value="7">7 - Good</option>
-                                <option value="6">6 - Fine</option>
-                                <option value="5">5 - Average</option>
-                                <option value="4">4 - Bad</option>
-                                <option value="3">3 - Very Bad</option>
-                                <option value="2">2 - Horrible</option>
-                                <option value="1">1 - Appalling</option>
+                                <option value="0">Select</option>
+                                {% if userRating.UserRating == 10 %}
+                                    <option value="10" selected="selected">10 - Masterpiece</option>
+                                {% else %}
+                                    <option value="10">10 - Masterpiece</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 9 %}
+                                    <option value="9" selected="selected">9 - Great</option>
+                                {% else %}
+                                    <option value="9">9 - Great</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 8 %}
+                                    <option value="8" selected="selected">8 - Very Good</option>
+                                {% else %}
+                                    <option value="8">8 - Very Good</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 7 %}
+                                    <option value="7" selected="selected">7 - Good</option>
+                                {% else %}
+                                    <option value="7">7 - Good</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 6 %}
+                                    <option value="6" selected="selected">6 - Fine</option>
+                                {% else %}
+                                    <option value="6">6 - Fine</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 5 %}
+                                    <option value="5" selected="selected">5 - Average</option>
+                                {% else %}
+                                    <option value="5">5 - Average</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 4 %}
+                                    <option value="4" selected="selected">4 - Bad</option>
+                                {% else %}
+                                    <option value="4">4 - Bad</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 3 %}
+                                    <option value="3" selected="selected">3 - Very Bad</option>
+                                {% else %}
+                                    <option value="3">3 - Very Bad</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 2 %}
+                                    <option value="2" selected="selected">2 - Horrible</option>
+                                {% else %}
+                                    <option value="2">2 - Horrible</option>
+                                {% endif %}
+                                {% if userRating.UserRating == 1 %}
+                                    <option value="1" selected="selected">1 - Appalling</option>
+                                {% else %}
+                                    <option value="1">1 - Appalling</option>
+                                {% endif %}
                             </select>
 
                             <button type = "submit" name="rate">Rate</button>

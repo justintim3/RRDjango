@@ -16,7 +16,7 @@
     <div id="container">
         <!-- HEADER -->
         <div id="header">
-            <div id="logo"><img src="static/images/logo.png"></div>
+            <div id="logo"><a href={% url 'homepage' %}><img src="static/images/logo.png"></a></div>
             <div id="acc_info">
                 <div id="login_part">
                     {% block authentication %}
@@ -41,7 +41,7 @@
                 <a href={% url 'newsfeed' %}>News</a>
                 <div id="search_bar">
                     <form type="GET" action="/search" id="search">
-                        <input type="text" id="search_field" name = "search" placeholder="Search for series, comics, more...">
+                        <input type="text" id="search_field" name = "search" placeholder="Search for series, issues, more...">
                         <button type="submit"><img id="search_button" src="static/images/searchbutton.png"></button>
                     </form>
 			    </div>

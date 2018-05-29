@@ -12,7 +12,7 @@ from django.db import connection
 def homepage(request):
     newsFeed = NewsFeed.objects.raw('SELECT * FROM website_newsfeed ORDER BY DATE DESC limit 10')
     comics = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic '
-                               'ORDER BY ComicRating DESC LIMIT 10;')
+                               'ORDER BY ComicRating DESC, ComicNumberOfRaters DESC LIMIT 10;')
     return render(request, 'homepage/homepage.html', {'newsFeeds': newsFeed , 'comics': comics })
 
 
@@ -27,28 +27,42 @@ def get_comicpage(request):
         userRating = int(request.POST.get("rating", None))
         comic = Comic.objects.get(ComicID=comicId)
         try:
-            UserRatings.objects.get(UserID=userId, ComicID=comicId)
+            prevRating = UserRatings.objects.get(UserID=userId, ComicID=comicId)
             cursor = connection.cursor()
-            cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
+            if userRating > 0:
+                cursor.execute("UPDATE website_userratings SET UserRating = %s WHERE UserID = %s AND ComicID = %s;", (userRating, userId, comicId))
+                comic.ComicTotalRating = comic.ComicTotalRating - prevRating.UserRating + userRating
+                comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
+                                             TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
+            elif userRating == 0:
+                cursor.execute("DELETE FROM website_userratings WHERE UserID = %s AND ComicID = %s;", (userId, comicId))
+                comic.ComicNumberOfRaters = comic.ComicNumberOfRaters - 1
+                comic.ComicTotalRating = comic.ComicTotalRating - prevRating.UserRating
+                if comic.ComicNumberOfRaters == 0:
+                    comic.ComicRating = 0
+                else:
+                    comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Unrating",
+                                             TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
+            comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
             cursor.close()
-        except:
-            UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
 
-        raters = UserRatings.objects.raw('SELECT * FROM website_userratings '
-                                         'WHERE ComicID = %s;', [comicId])
-        comic.ComicNumberOfRaters = len(list(raters))
-        totalRating = 0
-        for rating in raters:
-            totalRating = totalRating + rating.UserRating
-        comic.ComicTotalRating = totalRating
-        if comic.ComicNumberOfRaters != 0:
-            comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
-        else:
-            comic.ComicRating = 0
-        comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
-        TimelineItemTypeId = UserRatings.objects.get(UserID=userId, ComicID=comicId).UserRatingID
-        TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
-                                     TimelineItemTypeID=TimelineItemTypeId, TimelineItemDatePosted=date)
+        except:
+            if userRating > 0:
+                newRating = UserRatings.objects.create(UserID=userId, ComicID=comicId, UserRating=userRating)
+                if comic.ComicNumberOfRaters:
+                    comic.ComicNumberOfRaters = comic.ComicNumberOfRaters + 1
+                else:
+                    comic.ComicNumberOfRaters = 1
+                if comic.ComicTotalRating:
+                    comic.ComicTotalRating = comic.ComicTotalRating + userRating
+                else:
+                    comic.ComicTotalRating = userRating
+                comic.ComicRating = comic.ComicTotalRating / comic.ComicNumberOfRaters
+                comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
+                                             TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
 
 
     #Reviews
@@ -114,14 +128,27 @@ def get_comicpage(request):
                                  'INNER JOIN CreatorTypes ON ComicCreators.CreatorTypeID = CreatorTypes.CreatorTypeID '
                                  'INNER JOIN Creators ON ComicCreators.CreatorID = Creators.CreatorID '
                                  'WHERE website_comic.ComicID = %s AND CreatorTypeName = "Cover Artist";', [comicId])
+    try:
+        userRating = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s AND ComicID = %s',
+                                             (userId, comicId))[0]
+        return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
+                                                  'series': series[0], 'publisher': publisher[0],
+                                                  'storyArcList': storyArcList, 'writerList': writerList,
+                                                  'pencillerList': pencillerList, 'inkerList': inkerList,
+                                                  'coloristList': coloristList, 'lettererList': lettererList,
+                                                  'editorList': editorList, 'coverArtistList': coverArtistList,
+                                                  'reviewList': reviewList, 'userList': userList,
+                                                  'userRating': userRating})
 
-    return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
-                                              'series': series[0], 'publisher': publisher[0],
-                                              'storyArcList': storyArcList, 'writerList': writerList,
-                                              'pencillerList': pencillerList, 'inkerList': inkerList,
-                                              'coloristList': coloristList, 'lettererList': lettererList,
-                                              'editorList': editorList, 'coverArtistList': coverArtistList,
-                                              'reviewList': reviewList, 'userList': userList})
+    except:
+        return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
+                                                  'series': series[0], 'publisher': publisher[0],
+                                                  'storyArcList': storyArcList, 'writerList': writerList,
+                                                  'pencillerList': pencillerList, 'inkerList': inkerList,
+                                                  'coloristList': coloristList, 'lettererList': lettererList,
+                                                  'editorList': editorList, 'coverArtistList': coverArtistList,
+                                                  'reviewList': reviewList, 'userList': userList})
+
 
   
 def get_characterpage(request):
@@ -235,6 +262,7 @@ def get_profile(request):
     userName = request.user.username
     date = timezone.now()
 
+    #Save profile
     if "saveProfile" in request.POST:
         fname = request.POST.get("firstname", None)
         lname = request.POST.get("lastname", None)
@@ -248,8 +276,8 @@ def get_profile(request):
                        "biography = %s, DOB = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, birthdate, userId))
         cursor.close()
 
+    #User following
     following = False
-
     if userId:
         cursor = connection.cursor()
         try:
@@ -293,24 +321,21 @@ def get_profile(request):
     comicList = Comic.objects.raw('SELECT ComicID, ComicIssueTitle FROM website_comic')
     userList = Users.objects.raw('SELECT id, username FROM auth_user')
     userFollowingList = UserFollowings.objects.raw('SELECT * FROM website_userfollowings ORDER BY FollowedUserName ASC')
+    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM website_timelineitemlikedislikes WHERE UserID = %s', [userId])
 
-
-
+    #Likes/Dislikes
     cursor = connection.cursor()
     for timelineItem in timelineItemList:
-        print(str(timelineItem.TimelineItemID) + "         " + str(userId))
         try:
             TimelineItemLikeDislikes.objects.get(TimelineItemID=timelineItem.TimelineItemID, UserID=userId)
-            print("try")
         except:
-            print("except")
             cursor.execute(
                 "INSERT INTO website_timelineitemlikedislikes (TimelineItemID, UserID, LikeDislikeStatus)"
                 " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
 
         if 'thumbup'+str(timelineItem.TimelineItemID) in request.POST:  #Found timelineItem
             timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
+                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s AND UserID = %s', (timelineItem.TimelineItemID, userId))[0]
             if timelineItemLikeDislike.LikeDislikeStatus == 1:
                 cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1 "
                                "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
@@ -332,7 +357,7 @@ def get_profile(request):
                 break
         if 'thumbdown'+str(timelineItem.TimelineItemID) in request.POST:
             timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
+                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s AND UserID = %s', (timelineItem.TimelineItemID, userId))[0]
             if timelineItemLikeDislike.LikeDislikeStatus == 1:
                 cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1, "
                                "TimelineThumbsDown = TimelineThumbsDown + 1 WHERE TimelineItemID = %s",
@@ -353,14 +378,11 @@ def get_profile(request):
                                "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
                 break
     cursor.close()
-    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM website_timelineitemlikedislikes WHERE UserID = %s', [userId])
-    tILDLLength = len(list(timelineItemLikeDislikeList))
-    print(tILDLLength)
+
     return render(request, 'profile.html', {'following': following, 'profile': profile[0],
                                             'timelineItemList': timelineItemList, 'ratingList': ratingList,
                                             'reviewList': reviewList, 'comicList': comicList, 'userList': userList,
-                                            'userFollowingList': userFollowingList, 'timelineItemLikeDislikeList': timelineItemLikeDislikeList,
-                                            'tILDLLength': tILDLLength})
+                                            'userFollowingList': userFollowingList, 'timelineItemLikeDislikeList': timelineItemLikeDislikeList})
 
 
 def get_editprofile(request):
