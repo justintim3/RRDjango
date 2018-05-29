@@ -63,8 +63,6 @@ def get_comicpage(request):
                 comic.save(update_fields=["ComicRating", "ComicTotalRating", "ComicNumberOfRaters"])
                 TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Rating",
                                              TimelineItemTypeID=comic.ComicID, TimelineItemDatePosted=date)
-            elif userRating == 0:
-                pass
 
 
     #Reviews
