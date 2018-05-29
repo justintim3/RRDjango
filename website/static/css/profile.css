@@ -48,7 +48,7 @@ h3 {
     clear: both;
 	width: 100%;
 	//height: 300px;
-	border: 1px solid #11519B;
+	//border: 1px solid #11519B;
 	//margin: 10px;
 	background-color: white;
 }
@@ -68,11 +68,11 @@ h3 {
     margin: 0 auto;
 }
 
-.following {
+.following, .user_info {
     border: 1px solid #11519B;
 }
 
-.following table {
+.following table, .user_info table {
     width: 100%;
     //border: 1px solid black;
 }
@@ -108,7 +108,7 @@ h3 {
     clear: both;
     //border: 1px solid #11519B;
     text-align: center;
-    padding: 20px;
+    padding-top: 20px;
 }
 
 #leftButtons {
@@ -121,4 +121,8 @@ form {
 
 #profileButtons {
     width: 100px;
+}
+
+#infoCol{
+    padding: 5px;
 }
