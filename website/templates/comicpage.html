@@ -54,7 +54,8 @@
             <div id="info_section">
 
             <div id="leftCol">
-    		    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
+    		    <a href="static/images/ComicsImages/{{ comic.ComicImage }}">
+                    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a>
                 <div id = "rating">
                     {% if request.user.username %}
                         <form method="POST">
