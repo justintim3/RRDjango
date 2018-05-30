@@ -156,43 +156,43 @@
 
             <div id="creatorCol">
                 <div id="creatorTitle"><p><b>Creators</b></p></div>
-                <p><b>Writer(s):</b>
+                <p><b>Writer(s):</b><br>
                     {% for writer in writerList %}
                         <a href="creatorpage?id={{ writer.CreatorID }}">{{ writer.CreatorName }}</a>
                         <br>
                     {% endfor %}
                 </p>
-                <p><b>Penciller(s):</b>
+                <p><b>Penciller(s):</b><br>
                     {% for penciller in pencillerList %}
                         <a href="creatorpage?id={{ penciller.CreatorID }}">{{ penciller.CreatorName }}</a>
                         <br>
                     {% endfor %}
                 </p>
-                <p><b>Inker(s):</b>
+                <p><b>Inker(s):</b><br>
                     {% for inker in inkerList %}
                         <a href="creatorpage?id={{ inker.CreatorID }}">{{ inker.CreatorName }}</a>
                         <br>
                     {% endfor %}
                 </p>
-                <p><b>Colorist(s):</b>
+                <p><b>Colorist(s):</b><br>
                     {% for colorist in coloristList %}
                         <a href="creatorpage?id={{ colorist.CreatorID }}">{{ colorist.CreatorName }}</a>
                         <br>
                     {% endfor %}
                 </p>
-                <p><b>Letterer(s):</b>
+                <p><b>Letterer(s):</b><br>
                     {% for letterer in lettererList %}
                         <a href="creatorpage?id={{ letterer.CreatorID }}">{{ letterer.CreatorName }}</a>
                         <br>
                     {% endfor %}
                 </p>
-                <p><b>Editor(s):</b>
+                <p><b>Editor(s):</b><br>
                     {% for editor in editorList %}
                         <a href="creatorpage?id={{ editor.CreatorID }}">{{ editor.CreatorName }}</a>
                         <br>
                     {% endfor %}
                 </p>
-                <p><b>Cover Artist(s):</b>
+                <p><b>Cover Artist(s):</b><br>
                     {% for coverArtist in coverArtistList %}
                         <a href="creatorpage?id={{ coverArtist.CreatorID }}">{{ coverArtist.CreatorName }}</a>
                         <br>
