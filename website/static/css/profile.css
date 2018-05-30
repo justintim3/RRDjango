@@ -72,6 +72,11 @@ h3 {
     border: 1px solid #11519B;
 }
 
+.following {
+    max-height: 300px;
+    overflow: scroll;
+}
+
 .following table, .user_info table {
     width: 100%;
     //border: 1px solid black;
@@ -94,10 +99,12 @@ h3 {
 .timeline {
     border: 1px solid #11519B;
     min-height: 100px;
+    overflow: scroll;
+    max-height: 600px;
 }
 
 .TimelineItem {
-    margin: 5px;
+    margin: 10px;
     margin-bottom: 20px;
     padding: 5px;
     border: 2px inset;
