@@ -68,24 +68,15 @@
                             {% if request.user.username %}
                             <div id="leftButtons">
                                 <p>
-                                <form method="POST">
-                                    {% csrf_token %}
                                 {% if profile.id != request.user.id %}
-                                    <button type="submit" name="message" id="profileButtons">Message</button>
-                                {% endif %}
-                                </form>
-                                {% if profile.id != request.user.id %}
+                                    <form method="POST" action="/profile?id={{profile.id}}">
+                                        {% csrf_token %}
                                     {% if following.FollowStatus %}
-                                        <form method="POST">
-                                            {% csrf_token %}
-                                            <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
-                                        </form>
+                                        <button type="submit" name="unfollow" id="profileButtons">Unfollow</button>
                                     {% else %}
-                                        <form method="POST">
-                                            {% csrf_token %}
-                                            <button type="submit" name="follow" id="profileButtons">Follow</button>
-                                        </form>
+                                        <button type="submit" name="follow" id="profileButtons">Follow</button>
                                     {% endif %}
+                                    </form>
                                 {% endif %}
                                 </p>
                             </div>
@@ -98,6 +89,13 @@
                             {% else %}
                                 <p><b>User Type: </b>Normal</p>
                             {% endif %}
+                            </div>
+                            <div id="edit">
+                                {% if request.user.id == profile.id %}
+                                    <form action="{% url 'editprofile' %}">
+                                        <button type="submit">Edit Profile</button>
+                                    </form>
+                                {% endif %}
                             </div>
                         </table>
                     </div>
@@ -155,21 +153,13 @@
                             </tr>
                             <tr>
                                 <td class="datainfo"><b>Favorite Comic: </b></td>
-                                <td></td>
+                                <td>{{ profile.favorite_comic }}</td>
                             </tr>
                             <tr>
                                 <td class="datainfo"><b>Favorite Character: </b></td>
-                                <td></td>
+                                <td>{{ profile.favorite_character }}</td>
                             </tr>
                         </table>
-                    </div>
-
-                    <div id="edit">
-                        {% if request.user.id == profile.id %}
-                            <form action="{% url 'editprofile' %}">
-                                <button type="submit">Edit Profile</button>
-                            </form>
-                        {% endif %}
                     </div>
 
                     <h3>Timeline</h3>
