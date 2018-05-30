@@ -227,12 +227,12 @@ def get_comic(request):
 
 
 def get_character(request):
-    characters = Character.objects.raw('SELECT CharacterID, CharacterName FROM Characters ORDER BY CharacterName ASC')
+    characters = Character.objects.raw('SELECT CharacterID, CharacterName, CharacterPicture FROM Characters ORDER BY CharacterName ASC')
     return render(request, 'character.html', {'characters': characters})
 
 
 def get_creator(request):
-    creators = Creator.objects.raw('SELECT CreatorID,CreatorName,CreatorDOB FROM Creators ORDER BY CreatorName ASC')
+    creators = Creator.objects.raw('SELECT CreatorID,CreatorName,CreatorPicture FROM Creators ORDER BY CreatorName ASC')
     return render(request, 'creator.html', {'creators': creators})
 
 
