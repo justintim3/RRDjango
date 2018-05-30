@@ -75,6 +75,7 @@ h3 {
 .following {
     max-height: 300px;
     overflow: scroll;
+    overflow-x: hidden;
 }
 
 .following table, .user_info table {
@@ -100,7 +101,9 @@ h3 {
     border: 1px solid #11519B;
     min-height: 100px;
     overflow: scroll;
+    overflow-x: hidden;
     max-height: 600px;
+    margin-bottom: 20px
 }
 
 .TimelineItem {
