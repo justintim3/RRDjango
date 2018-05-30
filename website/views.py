@@ -271,9 +271,12 @@ def get_profile(request):
         birthdate = request.POST.get("dob", None)
         interests = request.POST.get("interests", None)
         biography = request.POST.get("biography", None)
+        favcomic = request.POST.get("favcomic", None)
+        favchar = request.POST.get("favchar", None)
         cursor = connection.cursor()
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
-                       "biography = %s, DOB = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, birthdate, userId))
+                       "biography = %s, DOB = %s, favorite_comic = %s, favorite_character = %s WHERE id = %s;",
+                       (fname, lname, useremail, address, interests, biography, birthdate, favcomic, favchar, userId))
         cursor.close()
 
     #User following
