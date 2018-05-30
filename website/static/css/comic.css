@@ -1,22 +1,54 @@
 
-#content {
-	//border: 1px solid black;
-}
-
 .table-bordered {
 	margin: 0 auto;
+	margin-top: 30px;
 	text-align: center;
 }
 
-th {
-	font-weight: bold;
-	text-transform: uppercase;
+#comicitem {
+	//float: left;
+	display: inline-block;
+	vertical-align: top;
+	border: 1px solid black;
+	width: 23%;
+	text-align: center;
+	margin: 15px 9px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+table {
+	//margin-top: 30px;
+	width: 100%;
+	height: 350px;
+}
+
+#tableHeader {
+    background-color: var(--main_theme_color);
+    color: white;
+    height: 30px;
+}
+
+tr, td {
+	padding: 0px;
+	margin: 0px;
+	border: 1px solid black;
 	text-align: center;
 }
 
 #id, #rating {
 	width: 10%;
 }
+
+#series {
+	width: 25%;
+}
+
+.image {
+	width: 100%;
+	//height: 150px;
+	margin: 0px;
+}
+
 #name {
 	width: 40%;
 }
