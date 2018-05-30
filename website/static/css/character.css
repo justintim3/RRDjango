@@ -10,8 +10,7 @@
 }
 
 .image {
-	width: 100%;
-	height: 400px;
+	//width: 100%;
+	height: 140px;
 	margin: 0px;
-	object-fit: cover;
 }
