@@ -68,6 +68,10 @@ h3 {
     margin: 0 auto;
 }
 
+#thumb_section button {
+    //background-color: white;
+}
+
 .following, .user_info {
     border: 1px solid #11519B;
 }
