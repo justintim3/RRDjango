@@ -227,12 +227,12 @@ def get_comic(request):
 
 
 def get_character(request):
-    characters = Character.objects.raw('SELECT CharacterID, CharacterName FROM Characters ORDER BY CharacterName ASC')
+    characters = Character.objects.raw('SELECT CharacterID, CharacterName, CharacterPicture FROM Characters ORDER BY CharacterName ASC')
     return render(request, 'character.html', {'characters': characters})
 
 
 def get_creator(request):
-    creators = Creator.objects.raw('SELECT CreatorID,CreatorName,CreatorDOB FROM Creators ORDER BY CreatorName ASC')
+    creators = Creator.objects.raw('SELECT CreatorID,CreatorName,CreatorPicture FROM Creators ORDER BY CreatorName ASC')
     return render(request, 'creator.html', {'creators': creators})
 
 
@@ -271,9 +271,12 @@ def get_profile(request):
         birthdate = request.POST.get("dob", None)
         interests = request.POST.get("interests", None)
         biography = request.POST.get("biography", None)
+        favcomic = request.POST.get("favcomic", None)
+        favchar = request.POST.get("favchar", None)
         cursor = connection.cursor()
         cursor.execute("UPDATE auth_user SET first_name = %s, last_name = %s, email = %s, address = %s, interests = %s, "
-                       "biography = %s, DOB = %s WHERE id = %s;", (fname, lname, useremail, address, interests, biography, birthdate, userId))
+                       "biography = %s, DOB = %s, favorite_comic = %s, favorite_character = %s WHERE id = %s;",
+                       (fname, lname, useremail, address, interests, biography, birthdate, favcomic, favchar, userId))
         cursor.close()
 
     #User following

@@ -49,25 +49,19 @@
         </div>
 
     	<!-- BODY CONTENT -->
-    	<div id="content">
-
-    		<table class="table table-bordered">
-    			<tr>
-    				<th id="id">Number</th>
-					<th id="name">Creator Name</th>
-                    <th id="birthday">Birth Date</th>
-    			</tr>
-                {% for creator in creators %}
-				<tr>
-  					<td>{{ forloop.counter }}</td>
-                    <td><a href="creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
-                    <td>{{ creator.CreatorDOB }}</td>
-    			</tr>
-                {% endfor %}
-    		</table>
-
+        <div id="content">
+			{% for creator in creators %}
+                <div id="creatoritem">
+                    <a href="creatorpage?id={{ creator.CreatorID }}">
+                        {% if creator.CreatorPicture %}
+    		                <img class="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
+                        {% else %}
+                            <img class="image" src="static/images/default-profile.png">
+                        {% endif %}
+                    <h4><b>{{ creator.CreatorName }}</b></h4></a>
+                </div>
+            {% endfor %}
     	</div>
-
 	</div>
 	<!-- END CONTAINER -->
 

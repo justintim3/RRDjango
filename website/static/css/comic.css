@@ -1,22 +1,16 @@
-
-#content {
-	//border: 1px solid black;
-}
-
-.table-bordered {
-	margin: 0 auto;
+#comicitem {
+	//float: left;
+	display: inline-block;
+	vertical-align: top;
+	border: 1px solid black;
+	width: 23%;
 	text-align: center;
+	margin: 15px 9px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-th {
-	font-weight: bold;
-	text-transform: uppercase;
-	text-align: center;
-}
-
-#id, #rating {
-	width: 10%;
-}
-#name {
-	width: 40%;
+.image {
+	width: 100%;
+	//height: 150px;
+	margin: 0px;
 }
