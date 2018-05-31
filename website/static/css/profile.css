@@ -68,6 +68,10 @@ h3 {
     margin: 0 auto;
 }
 
+#thumb_section button {
+    //background-color: white;
+}
+
 .following, .user_info {
     border: 1px solid #11519B;
 }
@@ -75,6 +79,7 @@ h3 {
 .following {
     max-height: 300px;
     overflow: scroll;
+    overflow-x: hidden;
 }
 
 .following table, .user_info table {
@@ -100,7 +105,9 @@ h3 {
     border: 1px solid #11519B;
     min-height: 100px;
     overflow: scroll;
+    overflow-x: hidden;
     max-height: 600px;
+    margin-bottom: 20px
 }
 
 .TimelineItem {
@@ -115,7 +122,7 @@ h3 {
     clear: both;
     //border: 1px solid #11519B;
     text-align: center;
-    padding-top: 20px;
+    margin-bottom: 10px;
 }
 
 #leftButtons {

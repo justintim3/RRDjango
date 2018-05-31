@@ -50,28 +50,18 @@
 
     	<!-- BODY CONTENT -->
     	<div id="content">
-
-    		<table class="table table-bordered">
-    			<tr>
-    				<th id="id">Number</th>
-					<th id="name">Character Name</th>
-    			</tr>
-
-                {% for character in characters %}
-				<tr>
-                    <td>
-                        {% autoescape off %}
-                        {{ forloop.counter }}
-                        {% endautoescape %}
-  					</td>
-                    <td><a href="characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
-
-    			</tr>
-                {% endfor %}
-    		</table>
-
+			{% for character in characters %}
+                <div id="characteritem">
+                    <a href="characterpage?id={{ character.CharacterID }}">
+                        {% if character.CharacterPicture %}
+    		                <img class="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                        {% else %}
+                            <img class="image" src="static/images/default-batman.jpg">
+                        {% endif %}
+                    <h4><b>{{ character.CharacterName }}</b></h4></a>
+                </div>
+            {% endfor %}
     	</div>
-
 	</div>
 	<!-- END CONTAINER -->
 
