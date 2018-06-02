@@ -52,7 +52,11 @@
     	<div id="content">
 			{% for comic in comics %}
                 <div id="comicitem">
-                    <a href="comicpage?id={{comic.ComicID}}"><img class="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a>
+                    {% if comic.ComicImage %}
+                        <a href="comicpage?id={{comic.ComicID}}"><img class="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a>
+                    {% else %}
+                        <a href="comicpage?id={{comic.ComicID}}"><img class="image" src="static/images/ComicsImages/defaultcomic.jpg"></a>
+                    {% endif %}
                     <h4><b><a href="seriespage?id={{comic.SeriesID}}">{{ comic.SeriesName }}</a></b></h4>
                     <h5><a href="comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></h5>
                     <h6>Rating: {{ comic.ComicRating }}</h6>
