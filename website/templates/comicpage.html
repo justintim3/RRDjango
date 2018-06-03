@@ -13,7 +13,10 @@
 <body>
 	<!-- CONTAINER -->
 	<div id="container">
-	
+    <script>
+        function load_home() {
+            document.getElementById("header").innerHTML='<object type="text/html" data="" ></object>';
+        }</script>
 		<!-- HEADER -->
         <div id="header">
             <div id="logo"><a href={% url 'homepage' %}><img src="static/images/logo.png"></a></div>
@@ -55,7 +58,12 @@
 
             <div id="leftCol">
     		    <a href="static/images/ComicsImages/{{ comic.ComicImage }}">
-                    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a>
+                    {% if comic.ComicImage %}
+                        <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
+                    {% else %}
+                        <img id="image" src="static/images/ComicsImages/defaultcomic.jpg">
+                    {% endif %}
+                </a>
                 <div id = "rating">
                     {% if request.user.username %}
                         <form method="POST">
@@ -201,39 +209,94 @@
             </div>
 
 				<div id="syp">
-					<p><b>Synopsis:</b> {{ comic.ComicSynopsis|linebreaksbr }}</p>
+					<p><b>Synopsis:</b> {{ comic.ComicSynopsis|linebreaks }}</p>
 				</div>
 
+                {% if editReview %}
+                    <div id="EditReviewBlock">
+                        <h4>Edit Review</h4>
+                        <div class="ReviewItem">
+                            {% for review in reviewList %}
+                                {% if review.id == editReview %}
+                                    {% for user in userList %}
+                                        {% if review.UserID == user.id %}
+                                            {% if user.user_picture %}
+                                                <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
+                                            {% else %}
+                                                <img id="userimage" src="static/images/default-profile.png">
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <a href="profile?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b></p>
+                                    <div class ="EditReview">
+                                    <form method="POST">
+                                    {% csrf_token %}
+                                        <textarea name="reviewText" style="width:100%; height: 200px; resize:none">{{ review.ReviewText }}</textarea>
+                                        <button id="savereview" type="submit" name="savereview{{ review.id }}">Save Changes</button>
+                                    </form>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
                 <div id="Review">
                     <h4>Reviews</h4>
                     {% for review in reviewList %}
                         <div class="ReviewItem" id = "Review{{ review.id }}">
-                        <p>
-                            {% for user in userList %}
+                            <div id="ReviewHeader">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            {% for user in userList %}
+                                                {% if review.UserID == user.id %}
+                                                    {% if user.user_picture %}
+                                                        <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
+                                                    {% else %}
+                                                        <img id="userimage" src="static/images/default-profile.png">
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% endfor %}
+                                            <a href="profile?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b>
+                                        </td>
+                                        <td id="EditReviewIcons">
+                                            {% if review.UserID == request.user.id %}
+                                            <form method="POST">
+                                            {% csrf_token %}
+                                                <button id="deletereviewbutton" type="submit" name="deletereview{{ review.id }}">
+                                                    <img id="deletereviewimg" src="static/images/delete.png">
+                                                </button>
+                                                <button id="editreviewbutton" type="submit" name="editreview{{ review.id }}">
+                                                    <img id="editreviewimg" src="static/images/edit.png">
+                                                </button>
+                                            </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
 
-                                {% if review.UserID == user.id %}
-                                    {% if user.user_picture %}
-                                        <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
-                                    {% else %}
-                                        <img id="userimage" src="static/images/default-profile.png">
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                            <a href="profile?id={{ review.UserID }}"><b>{{ review.username }}</b></a> on <b>{{ review.ReviewDate }}</b></p>
-                        <p> {{ review.ReviewText }} </p>
+                            <div id="ReviewBody">
+                                <p> {{ review.ReviewText }} </p>
+                            </div>
+                            {% if review.EditDate %}
+                                <p><i> This review was edited on {{ review.EditDate }} </i></p>
+                            {% endif %}
                         </div>
                     {% endfor %}
 			    </div>
+
                 <div id="WriteReview">
                     {% if request.user.username %}
                         <h4>Write a Review</h4>
                         <form method="POST">
                             {% csrf_token %}
                             <textarea name="textfield" style="width:100%; height: 200px; resize:none"></textarea>
-                            <button type="submit" name="review" style="margin: 5pxf">Submit</button>
+                            <button type="submit" name="review" style="margin: 5px">Submit</button>
                         </form>
                     {% endif %}
                 </div>
+                {% endif %}
 			</div>
     	</div>
     </div>

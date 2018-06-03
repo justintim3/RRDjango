@@ -142,6 +142,7 @@ class Reviews(models.Model):
     username = models.CharField(max_length = 255)
     ReviewText = models.TextField()
     ReviewDate = models.DateTimeField()
+    EditDate = models.DateTimeField()
 
     def __str__(self):
         return str(self.user)

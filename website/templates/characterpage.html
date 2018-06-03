@@ -65,8 +65,8 @@
             <div id ="infoCol">
                 <p><b>Name:</b> {{ character.CharacterName }}</p>
                 <p><b>Real Name:</b> {{ character.CharacterRealName }}</p>
-                <p><b>Powers:</b> {{ character.CharacterPowers|linebreaksbr }}</p>
-                <p><b>Weaknesses:</b> {{ character.CharacterWeaknesses|linebreaksbr }}</p>
+                <p><b>Powers:</b> {{ character.CharacterPowers|linebreaks }}</p>
+                <p><b>Weaknesses:</b> {{ character.CharacterWeaknesses|linebreaks }}</p>
                 <p><b>Appearances:</b>
                     {% for comic in comicList %}
                         <a href="comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a>
@@ -76,13 +76,10 @@
             </div>
 
 				<div id="bio">
-					<p><b>Biography:</b> {{ character.CharacterBiography|linebreaksbr }}</p>
+					<p><b>Biography:</b> {{ character.CharacterBiography|linebreaks }}</p>
 				</div>
-
 			</div>
-
     	</div>
-
     </div>
 	<!-- END CONTAINER -->
 
