@@ -55,7 +55,12 @@
 
             <div id="leftCol">
     		    <a href="static/images/ComicsImages/{{ comic.ComicImage }}">
-                    <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a>
+                    {% if comic.ComicImage %}
+                        <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
+                    {% else %}
+                        <img id="image" src="static/images/ComicsImages/defaultcomic.jpg">
+                    {% endif %}
+                </a>
                 <div id = "rating">
                     {% if request.user.username %}
                         <form method="POST">
@@ -210,7 +215,6 @@
                         <div class="ReviewItem" id = "Review{{ review.id }}">
                         <p>
                             {% for user in userList %}
-
                                 {% if review.UserID == user.id %}
                                     {% if user.user_picture %}
                                         <img id="userimage" src="static/images/UserImages/{{ user.user_picture }}">
