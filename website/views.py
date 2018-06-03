@@ -5,10 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db import connection
 
-
-
 # Create your views here.
-
 
 def homepage(request):
     newsFeed = NewsFeed.objects.raw('SELECT * FROM website_newsfeed ORDER BY DATE DESC limit 10')
@@ -75,9 +72,39 @@ def get_comicpage(request):
         review = Reviews(ComicID=comicId, UserID=userId, username=userName, ReviewDate=date,
                          ReviewText=reviewText)
         review.save()
-        timelineItemTypeId = Reviews.objects.latest('id').id
+        #timelineItemTypeId = Reviews.objects.latest('id').id
         TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="Review",
-                                     TimelineItemTypeID=timelineItemTypeId, TimelineItemDatePosted=date)
+                                     TimelineItemTypeID=comicId, TimelineItemDatePosted=date)
+
+    #Edit Reviews
+    editReview = False
+    for review in reviewList:
+        if 'editreview' + str(review.id) in request.POST:  # Found review
+            editReview = review.id
+            break
+        if 'savereview' + str(review.id) in request.POST:  # Found review
+            reviewText = request.POST.get('reviewText', None)
+            try:
+                Reviews.objects.get(id=review.id)
+                cursor = connection.cursor()
+                cursor.execute("UPDATE website_reviews SET ReviewText = %s, EditDate = %s WHERE id = %s;",
+                               (reviewText, date, review.id))
+                cursor.close()
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="EditReview",
+                                             TimelineItemTypeID=comicId, TimelineItemDatePosted=date)
+            except:
+                pass
+            break
+        if 'deletereview' + str(review.id) in request.POST:  # Found review
+            try:
+                cursor = connection.cursor()
+                TimelineItems.objects.create(UserID=userId, UserName=userName, TimelineItemTypeName="DeleteReview",
+                                             TimelineItemTypeID=comicId, TimelineItemDatePosted=date)
+                cursor.execute("DELETE FROM website_reviews WHERE id = %s;)", [review.id])
+                #cursor.close()
+            except:
+                pass
+            break
 
     comicList = Comic.objects.raw('select * from website_comic where ComicID = %s', [comicId])
     characterList = Character.objects.raw('SELECT DISTINCT Characters.CharacterID, CharacterName FROM website_comic '
@@ -129,6 +156,8 @@ def get_comicpage(request):
                                  'INNER JOIN CreatorTypes ON ComicCreators.CreatorTypeID = CreatorTypes.CreatorTypeID '
                                  'INNER JOIN Creators ON ComicCreators.CreatorID = Creators.CreatorID '
                                  'WHERE website_comic.ComicID = %s AND CreatorTypeName = "Cover Artist";', [comicId])
+
+
     try:
         userRating = UserRatings.objects.raw('SELECT * FROM website_userratings WHERE UserID = %s AND ComicID = %s',
                                              (userId, comicId))[0]
@@ -139,7 +168,7 @@ def get_comicpage(request):
                                                   'coloristList': coloristList, 'lettererList': lettererList,
                                                   'editorList': editorList, 'coverArtistList': coverArtistList,
                                                   'reviewList': reviewList, 'userList': userList,
-                                                  'userRating': userRating})
+                                                  'editReview': editReview, 'userRating': userRating})
 
     except:
         return render(request, 'comicpage.html', {'comic': comicList[0], 'characterList': characterList,
@@ -148,7 +177,8 @@ def get_comicpage(request):
                                                   'pencillerList': pencillerList, 'inkerList': inkerList,
                                                   'coloristList': coloristList, 'lettererList': lettererList,
                                                   'editorList': editorList, 'coverArtistList': coverArtistList,
-                                                  'reviewList': reviewList, 'userList': userList})
+                                                  'reviewList': reviewList, 'userList': userList,
+                                                  'editReview': editReview})
 
 
   
@@ -330,12 +360,13 @@ def get_profile(request):
     #Likes/Dislikes
     cursor = connection.cursor()
     for timelineItem in timelineItemList:
-        try:
-            TimelineItemLikeDislikes.objects.get(TimelineItemID=timelineItem.TimelineItemID, UserID=userId)
-        except:
-            cursor.execute(
-                "INSERT INTO website_timelineitemlikedislikes (TimelineItemID, UserID, LikeDislikeStatus)"
-                " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
+        if userId:
+            try:
+                TimelineItemLikeDislikes.objects.get(TimelineItemID=timelineItem.TimelineItemID, UserID=userId)
+            except:
+                cursor.execute(
+                    "INSERT INTO website_timelineitemlikedislikes (TimelineItemID, UserID, LikeDislikeStatus)"
+                    " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
 
         if 'thumbup'+str(timelineItem.TimelineItemID) in request.POST:  #Found timelineItem
             timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
@@ -383,67 +414,6 @@ def get_profile(request):
                 break
     cursor.close()
 
-
-    cursor = connection.cursor()
-    for timelineItem in timelineItemList:
-        print(str(timelineItem.TimelineItemID) + "         " + str(userId))
-        try:
-            TimelineItemLikeDislikes.objects.get(TimelineItemID=timelineItem.TimelineItemID, UserID=userId)
-            print("try")
-        except:
-            print("except")
-            cursor.execute(
-                "INSERT INTO website_timelineitemlikedislikes (TimelineItemID, UserID, LikeDislikeStatus)"
-                " VALUES (%s, %s, %s);", (timelineItem.TimelineItemID, userId, 0))
-
-        if 'thumbup'+str(timelineItem.TimelineItemID) in request.POST:  #Found timelineItem
-            timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
-            if timelineItemLikeDislike.LikeDislikeStatus == 1:
-                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1 "
-                               "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 0 "
-                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                break
-            elif timelineItemLikeDislike.LikeDislikeStatus == -1:
-                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1, "
-                               "TimelineThumbsDown = TimelineThumbsDown - 1 WHERE TimelineItemID = %s",
-                               [timelineItem.TimelineItemID])
-                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 1 "
-                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                break
-            elif timelineItemLikeDislike.LikeDislikeStatus == 0:
-                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp + 1 "
-                               "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 1 "
-                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                break
-        if 'thumbdown'+str(timelineItem.TimelineItemID) in request.POST:
-            timelineItemLikeDislike = TimelineItemLikeDislikes.objects.raw(
-                'SELECT * FROM website_timelineitemlikedislikes WHERE TimelineItemID = %s', [timelineItem.TimelineItemID])[0]
-            if timelineItemLikeDislike.LikeDislikeStatus == 1:
-                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsUp = TimelineThumbsUp - 1, "
-                               "TimelineThumbsDown = TimelineThumbsDown + 1 WHERE TimelineItemID = %s",
-                               [timelineItem.TimelineItemID])
-                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = -1 "
-                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                break
-            elif timelineItemLikeDislike.LikeDislikeStatus == -1:
-                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown - 1 "
-                               "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = 0 "
-                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                break
-            elif timelineItemLikeDislike.LikeDislikeStatus == 0:
-                cursor.execute("UPDATE website_timelineitems SET TimelineThumbsDown = TimelineThumbsDown + 1 "
-                               "WHERE TimelineItemID = %s", [timelineItem.TimelineItemID])
-                cursor.execute("UPDATE website_timelineitemlikedislikes SET LikeDislikeStatus = -1 "
-                               "WHERE TimelineItemID = %s AND UserID = %s", (timelineItem.TimelineItemID, userId))
-                break
-    cursor.close()
-    timelineItemLikeDislikeList = TimelineItemLikeDislikes.objects.raw('SELECT * FROM website_timelineitemlikedislikes WHERE UserID = %s', [userId])
-    tILDLLength = len(list(timelineItemLikeDislikeList))
-    print(tILDLLength)
     return render(request, 'profile.html', {'following': following, 'profile': profile[0],
                                             'timelineItemList': timelineItemList, 'ratingList': ratingList,
                                             'reviewList': reviewList, 'comicList': comicList, 'userList': userList,

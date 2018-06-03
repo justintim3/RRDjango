@@ -186,14 +186,18 @@
                                             {% endif %}
                                         {% endfor %}
                                         </a>.
-                                    {% elif timelineItem.TimelineItemTypeName == "Review" %}
-                                        reviewed <a href="comicpage?id={% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}{{ review.ComicID }}{% endif %}{% endfor %}#Review{{ timelineItem.TimelineItemTypeID }}">
-                                        {% for review in reviewList %}{% if review.id == timelineItem.TimelineItemTypeID %}
-                                            {% for comic in comicList %}{% if review.ComicID == comic.ComicID %}{{ comic.ComicIssueTitle }}
+                                    {% elif timelineItem.TimelineItemTypeName == "Review" or timelineItem.TimelineItemTypeName == "EditReview" or timelineItem.TimelineItemTypeName == "DeleteReview" %}
+                                        {% if timelineItem.TimelineItemTypeName == "Review" %}
+                                            reviewed
+                                        {% elif timelineItem.TimelineItemTypeName == "EditReview" %}
+                                            edited a review of
+                                        {% elif timelineItem.TimelineItemTypeName == "DeleteReview" %}
+                                            deleted a review of
+                                        {% endif %}
+                                        <a href="comicpage?id={{ timelineItem.TimelineItemTypeID }}">
+                                            {% for comic in comicList %}{% if timelineItem.TimelineItemTypeID == comic.ComicID %}{{ comic.ComicIssueTitle }}
                                             {% endif %}
                                             {% endfor %}
-                                        {% endif %}
-                                        {% endfor %}
                                         </a>.
                                     {% elif timelineItem.TimelineItemTypeName == "Follow" or timelineItem.TimelineItemTypeName == "Unfollow"%}
                                         {% if timelineItem.TimelineItemTypeName == "Follow" %}

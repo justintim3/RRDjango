@@ -64,11 +64,15 @@
 	background-color: white;
 }
 
-#Review {
+#Review, #EditReviewBlock {
 	border: 1px solid #11519B;
 	//min-height: 300px;
 	//padding: 10px;
 	margin: 10px;
+}
+
+#EditReviewBlock button{
+	text-align: center;
 }
 
 #WriteReview {
@@ -77,7 +81,7 @@
 	text-align: center;
 }
 
-#Review h4, #WriteReview h4 {
+#Review h4, #WriteReview h4, #EditReviewBlock h4 {
 	text-align: center;
     background-color: var(--main_theme_color);
     color: white;
@@ -89,7 +93,68 @@
 .ReviewItem {
 	border: 2px inset;
 	padding: 5px;
+	padding-bottom: 0px;
 	margin: 5px;
     margin-bottom: 20px;
 	background-color: #ddeaff;
+}
+
+#ReviewBody {
+	border: 2px groove;
+	background-color: white;
+	margin-top: 8px;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+#deletereviewbutton, #deletereviewimg, #editreviewbutton, #editreviewimg {
+	//background-color: #ddeaff;
+	width: 30px;
+	height: 30px;
+	border: 0px;
+	text-align: center;
+	padding: 0px;
+}
+
+#deletereviewbutton, #editreviewbutton {
+	margin: 5px;
+}
+
+#deletereviewbutton, #deletereviewimg {
+	border-radius: 50%;
+}
+
+#deletereviewbutton:hover, #editreviewbutton:hover{
+	background-color: steelblue;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 3px 10px 0 rgba(0, 0, 0, 0.25);
+}
+#editreviewbutton, #editreviewimg {
+	border-radius: 10%;
+}
+
+#ReviewHeader table {
+	width: 100%;
+}
+
+#ReviewHeader td {
+	//border: 1px solid black;
+}
+
+#EditReviewIcons {
+	width: 50px;
+	text-align: right;
+	vertical-align: top;
+}
+
+
+
+
+
+
+.EditReview {
+	text-align: center;
+}
+
+#savereview {
+	margin: 10px;
 }
