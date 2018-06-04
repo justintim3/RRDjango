@@ -81,7 +81,7 @@
                     {% for comic in comicList %}
                         <tr>
   			    	    	<td>{{ forloop.counter }}</td>
-                            <td><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></td>
+                            <td><a href="../comicpage?id={{comic.ComicID}}"><img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}"></a></td>
                             <td><a href="../comicpage?id={{comic.ComicID}}">{{ comic.ComicIssueTitle }}</a></td>
     		    	    </tr>
                     {% endfor %}
@@ -101,11 +101,13 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>
-                                {% if character.CharacterPicture %}
-                                    <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
-                                {% else %}
-                                    <img id="image" src="static/images/default-batman.jpg">
-                                {% endif %}
+                                <a href="../characterpage?id={{character.CharacterID}}">
+                                    {% if character.CharacterPicture %}
+                                        <img id="image" src="static/images/CharactersImages/{{ character.CharacterPicture }}">
+                                    {% else %}
+                                        <img id="image" src="static/images/default-batman.jpg">
+                                    {% endif %}
+                                </a>
                             </td>
                             <td><a href="../characterpage?id={{character.CharacterID}}">{{ character.CharacterName }}</a></td>
                         </tr>
@@ -126,11 +128,13 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>
-                                {% if creator.CreatorPicture %}
-                                <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
-                                {% else %}
-                                <img id="image" src="static/images/default-profile.png">
-                                {% endif %}
+                                <a href="../creatorpage?id={{creator.CreatorID}}">
+                                    {% if creator.CreatorPicture %}
+                                    <img id="image" src="static/images/CreatorsImages/{{ creator.CreatorPicture }}">
+                                    {% else %}
+                                    <img id="image" src="static/images/default-profile.png">
+                                    {% endif %}
+                                </a>
                             </td>
                             <td><a href="../creatorpage?id={{creator.CreatorID}}">{{ creator.CreatorName }}</a></td>
                         </tr>
@@ -151,11 +155,13 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>
-                                {% if publisher.PublisherPicture %}
-                                <img id="image" src="static/images/PublishersImages/{{publisher.PublisherPicture }}">
-                                {% else %}
-                                <img id="image" src="static/images/default-batman.png">
-                                {% endif %}
+                                <a href="../publisherpage?id={{publisher.PublisherID}}">
+                                    {% if publisher.PublisherPicture %}
+                                    <img id="image" src="static/images/PublishersImages/{{publisher.PublisherPicture }}">
+                                    {% else %}
+                                    <img id="image" src="static/images/default-batman.png">
+                                    {% endif %}
+                                </a>
                             </td>
                             <td><a href="../publisherpage?id={{publisher.PublisherID}}">{{ publisher.PublisherName }}</a></td>
                         </tr>
