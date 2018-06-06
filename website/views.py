@@ -253,7 +253,7 @@ def get_comic(request):
                                'FROM website_comic '
                                'INNER JOIN ComicSeries ON website_comic.ComicID = ComicSeries.ComicID '
                                'INNER JOIN Series ON ComicSeries.SeriesID = Series.SeriesID '
-                               'ORDER BY SeriesName ASC, ComicIssueTitle ASC')
+                               'ORDER BY SeriesName ASC, ComicIssueNumber ASC')
     return render(request, 'comic.html',{'comics': comics})
 
 
