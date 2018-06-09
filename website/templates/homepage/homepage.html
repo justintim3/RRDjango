@@ -78,11 +78,14 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>
-                            {% if comic.ComicImage %}
-                                <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
-                            {% else %}
-                                <img id="image" src="static/images/ComicsImages/defaultcomic.jpg">
-                            {% endif %}</td>
+                                <a style="text-decoration: none" href="/comicpage?id={{ comic.ComicID }}">
+                                    {% if comic.ComicImage %}
+                                        <img id="image" src="static/images/ComicsImages/{{ comic.ComicImage }}">
+                                    {% else %}
+                                        <img id="image" src="static/images/ComicsImages/defaultcomic.jpg">
+                                    {% endif %}
+                                </a>
+                            </td>
                             <td><a style="text-decoration: none" href="/comicpage?id={{ comic.ComicID }}">{{ comic.ComicIssueTitle }}</a></td>
                         </tr>
                         {% endfor %}
